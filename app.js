@@ -5,6 +5,10 @@ const io = require("socket.io")(server);
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const ioOps = require("./lib/ioOps");
+const redisOps = require('./lib/redisOps');
+
+
+
 
 //Require routes
 const index = require("./routes/index.js");
@@ -42,13 +46,24 @@ app.use(function(err, req, res, next) {
 
 /////////////////////
 io.on("connection", client => {
-  console.log("New connection!");
-  client.emit("connection");
-  //new room
-  //ioOps.newRoom(name)
+    console.log("New connection!");
+    client.emit("connection");
+    //new room
+    console.log("after the emit connection");
+    //ioOps.newRoom(name)
+    client.on('new room', (data) => {
+        console.log(`data from client ${ data }`);
+        redisOps.createChatRoom(data);
+        //io.emit(new room) tells all the clients to update their rooms
+        
+        let stringOHTML = ioOps.makeNewRoomHTML(data);
+        io.emit('new room', stringOHTML);
+        
+        
+        
+        
 
-  //ioOps.js
-  //redisOps.js
+    });
 });
 
 server.listen(process.env.PORT || 3000);
