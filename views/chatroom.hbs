@@ -3,6 +3,12 @@
 <h2>Chat rooms</h2>
 
 {{#each roomsList as |room|}}
-	<h3>{{room.name}}</h3>
+	<h3 class='room'>{{room.name}}</h3>
 	<p>{{room.numUsers}} members</p>
 {{/each}}
+
+<div id='roommessages' class='hidden'>
+<ul>
+</ul>
+</div>
+

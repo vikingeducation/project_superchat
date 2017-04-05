@@ -43,10 +43,19 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-
+// sockets requirements
+const {getMessages} = require('./lib/redis_client');
 
 io.on("connection", client => {
 	console.log("websockets connection open");
+
+  client.on('show messages', (data) => {
+    let roomName = data.name;
+    getMessages(roomName).then((messages) => {
+      io.emit("show messages", messages);
+    })
+  });
+
 });
 
 

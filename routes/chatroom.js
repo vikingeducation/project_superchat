@@ -4,7 +4,7 @@ const {getRooms} = require('../lib/redis_client');
 
 router.get('/', (req, res) => {
   getRooms().then((roomsObj) => {
-  	let roomsList = objectToArray(roomsObj);
+    let roomsList = (roomsObj) ? objectToArray(roomsObj) : []
   	res.render('chatroom', {title: 'Superchat', roomsList});
   })
 })
