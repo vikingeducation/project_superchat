@@ -39,4 +39,17 @@ app.use(function(err, req, res, next) {
   res.render("error");
 });
 
+/////////////////////
+io.on('connection', (client) => {
+    console.log("New connection!");
+    client.emit('connection');
+    
+    
+    
+});
+
+
+
+
+
 server.listen(process.env.PORT || 3000);
