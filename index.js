@@ -30,15 +30,15 @@ app.get('/', (req, res) => {
   } else {
     let messagesArr = [];
     let roomsArr = [];
-    getValues('messages:*').then(messages => {
+    getValues('room:asdf:message:*').then(messages => {
       messagesArr = messages;
       getValues('rooms:*').then(rooms => {
         roomsArr = rooms;
         res.render('index', {messagesArr, roomsArr})
       })
     })
-    }
-  })
+  }
+})
 
 app.get('/login', (req, res) => {
   if(req.cookies.username) {
