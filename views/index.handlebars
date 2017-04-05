@@ -1,0 +1,41 @@
+<body>
+
+<form method="post" action="/" class="form">
+<input type="text" class="form-control" name="userURL" id="userURL" placeholder="eg google.com">
+<button type="submit" class="btn btn-block submit">Submit</button>
+
+</form>
+
+  <table>
+    <th>Original URL</th>
+    <th>Created</th>
+    <th>Short URL</th>
+    <th>All clicks</th>
+    {{#each allKeys as |key|}}
+    <tr>
+      <td>
+        <a href='http://www.{{key.url}}'>{{key.url}}</a>
+      </td>
+      <td>
+        <p>{{key.creationTime}}</p>
+      </td>
+      <td>
+        <a href='/{{uniqueID}}'>http://{{uniqueID}}</a>
+      </td>
+      <td>
+          <p id="{{uniqueID}}">{{key.count}}</p>
+      </td>
+    </tr>
+    {{/each}}
+  </table>
+</body>
+
+<script>
+var socket = io.connect('http://localhost:3000');
+
+socket.on('new count', function(count, uniqueID) {
+  $('#' + uniqueID).html(count);
+});
+
+</script>
+</html>
