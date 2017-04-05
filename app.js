@@ -7,7 +7,7 @@ const cookieParser = require("cookie-parser");
 const ioOps = require("./lib/ioOps");
 
 //Require routes
-const index = require("./routes/index.js");
+const index = require("./routes/index.js")(io);
 
 // Set up handlebars
 const exphbs = require("express-handlebars");
