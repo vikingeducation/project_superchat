@@ -30,6 +30,12 @@
     "user-3",
   ],
 
+  "rooms": {
+    "roomname": 0,
+    "roomname2": 1,
+    "roomname3": 2,
+  },
+
   "room-1":{
     "name": "roomname",
   } ,

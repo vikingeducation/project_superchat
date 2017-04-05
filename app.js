@@ -5,7 +5,7 @@ const io = require("socket.io")(server);
 
 // Set up handlebars
 const exphbs = require("express-handlebars");
-app.engine("hbs", exphbs({ defaultLayout: "main" }));
+app.engine("hbs", exphbs({ defaultLayout: "main", extname: '.hbs' }));
 app.set("view engine", "hbs");
 
 // Set up body-parser
@@ -24,7 +24,7 @@ const index = require('./routes/index');
 const chatroom = require('./routes/chatroom');
 
 app.use('/', index);
-//app.use('/chatroom', chatroom);
+app.use('/chatroom', chatroom);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
