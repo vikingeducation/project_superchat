@@ -18,19 +18,33 @@ app.use(bodyParser.urlencoded({ extended: true }));
 const hbs = expressHandlebars.create({
   defaultLayout: "main",
 });
+app.use(cp())
 
 app.engine("handlebars", hbs.engine);
 app.set("view engine", "handlebars");
 
+  // redisClient.flushall();
 
 app.get('/', (req, res) => {
-  // redisClient.flushall();
-  getKeysProm()
-  .then(messagesArrayProm)
-  .then(messages => {
-    res.render('index', {messages})
-  });
-  
+  if (!req.cookies.username) {
+    res.redirect("/login")
+  } else {
+    getKeysProm()
+    .then(messagesArrayProm)
+    .then(messages => {
+      res.render('index', {messages})
+    });
+  }
+})
+
+app.get('/login', (req, res) => {
+  res.render('login')
+})
+
+app.post('/login', (req, res) => {
+  let username = req.body.newUser;
+  res.cookie("username", username)
+  res.redirect('/')
 })
 
 app.post('/update', (req, res) => {
