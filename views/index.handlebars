@@ -1,5 +1,26 @@
 <body>
-<div class="container">
+
+<div class="container" id="signUpContainer">
+  <div class="row">
+    <div class="col-xs-6 col-md-3" id="bordered">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Sign Up</h3>
+        </div>
+        <div class="panel-body">
+          <form>
+            <div class="form-group">
+              <input type="text" class="form-control" id="newUser" name="username" placeholder="Enter username">
+            </div>
+            <button type="submit" id="userSubmit" class="btn btn-default">Sign Up</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Chat Room -->
+<div class="container verifiedUser">
       <div class="row">
         <div class="col-xs-6 col-md-3" id="bordered">
           <div class="panel panel-default">
@@ -19,8 +40,8 @@
       </div>
     </div>
 
-
-    <div class="container">
+<!-- Posting Form -->
+    <div class="container verifiedUser">
           <div class="row">
             <div class="col-xs-6 col-md-3" id="bordered">
               <div class="panel panel-default">
@@ -40,31 +61,13 @@
           </div>
         </div>
 
-  <!-- <table>
-    <th>Original URL</th>
-    <th>Created</th>
-    <th>Short URL</th>
-    <th>All clicks</th>
-    {{#each allKeys as |key|}}
-    <tr>
-      <td>
-        <a href='http://www.{{key.url}}'>{{key.url}}</a>
-      </td>
-      <td>
-        <p>{{key.creationTime}}</p>
-      </td>
-      <td>
-        <a href='/{{uniqueID}}'>http://{{uniqueID}}</a>
-      </td>
-      <td>
-          <p id="{{uniqueID}}">{{key.count}}</p>
-      </td>
-    </tr>
-    {{/each}}
-  </table> -->
 </body>
 
 <script>
+
+$( document ).ready() {
+  $(".verifiedUser").hide();
+}
 var socket = io.connect('http://localhost:3000');
 
 socket.on('new message', function(count, uniqueID) {
@@ -75,9 +78,21 @@ socket.on('new message', function(count, uniqueID) {
     $("#count").html(count)
   })
 
+  socket.on('userAccepted', function() {
+    $("#signUpContainer").hide();
+    $(".verifiedUser").show();
+  })
+
   $("#submitBtn").click(function() {
     let newMessage = $("#chatMessage").val();
-    socket.emit('postMessage');
+    $("#chatMessage").val("");
+    socket.emit('postMessage', newMessage);
+  })
+
+  $("#userSubmit").click(function() {
+    let newUser = $("#newUser").val();
+    $("#newUser").val("");
+    socket.emit('signUp', newUser);
   })
 
   $("#decrement").click(function() {

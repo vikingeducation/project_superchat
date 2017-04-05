@@ -1,54 +1,65 @@
-const express = require("express");
+const express = require('express');
 const app = express();
-const server = require("http").createServer(app);
-const io = require("socket.io")(server);
-const redisClient = require("redis").createClient();
-const expressHandlebars = require("express-handlebars");
-const bodyParser = require("body-parser");
-const shortid = require("shortid");
+const server = require('http').createServer(app);
+const io = require('socket.io')(server);
+const redisClient = require('redis').createClient();
+const expressHandlebars = require('express-handlebars');
+const bodyParser = require('body-parser');
+const shortid = require('shortid');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(
-  "/socket.io",
-  express.static(__dirname + "node_modules/socket.io-client/dist/")
+  '/socket.io',
+  express.static(__dirname + 'node_modules/socket.io-client/dist/')
 );
 
 const hbs = expressHandlebars.create({
-  defaultLayout: "main"
+  defaultLayout: 'main'
 });
 
-app.use(express.static(__dirname + "/public"));
+app.use(express.static(__dirname + '/public'));
 
-app.engine("handlebars", hbs.engine);
-app.set("view engine", "handlebars");
+app.engine('handlebars', hbs.engine);
+app.set('view engine', 'handlebars');
 
-//redisClient.flushall();
-
-io.on("connection", client => {
-  console.log("inside io.on ");
-  client.on("postMessage", () => {
-    //let newMessage = req.body.message;
-    console.log("inside client.on ");
-    let messageID = "message_" + shortid.generate();
+io.on('connection', client => {
+  client.on('postMessage', newMessage => {
+    let messageID = 'message_' + shortid.generate();
 
     // DON'T FORGET TO CHANGE THESE GEEEEEZE
-    let user = "anon";
-    let room = "cats";
-
-    //Currently just rewriting the messages hash every time
-
-    // redisClient.hmset(messageID);
+    let user = 'anon';
+    let room = 'cats';
 
     redisClient.hmset(
       messageID,
-      "messageBody",
+      'messageBody',
       newMessage,
-      "username",
+      'username',
       user,
-      "roomName",
+      'roomName',
       room
     );
+  });
+
+  client.on('signUp', newUser => {
+    var p = new Promise(function(resolve, reject) {
+      redisClient.keys('user_*', (err, userList) => {
+        resolve(userList);
+      });
+    });
+
+    p.then(userList => {
+      if (!userList.includes(newUser)) {
+        let userKey = 'user_' + newUser;
+        redisClient.setnx(userKey, newUser);
+        //make sign in box go away, make chat rooms appear
+        //emit userAccepted
+        client.emit('userAccepted');
+      } else {
+        //show error
+      }
+    });
   });
 });
 
@@ -64,6 +75,7 @@ io.on("connection", client => {
 //username can't be duplicated
 // Users
 // Username : username
+// user_joejoe: joejoe
 
 // Rooms: roomname: {
 // Messages : [messages]
@@ -108,11 +120,20 @@ io.on("connection", client => {
 //hashkey contains all information:
 //
 
-app.get("/", (req, res) => {
+app.get('/', (req, res) => {
   let messagesObj = {};
 
+  redisClient.keys('user_*', (err, users) => {
+    users.forEach(user => {
+      redisClient.get(user, (err, result) => {
+        console.log('UserKey: ' + user);
+        console.log('Username:' + result);
+      });
+    });
+  });
+
   var p = new Promise(function(resolve, reject) {
-    redisClient.keys("message_*", (err, keys) => {
+    redisClient.keys('message_*', (err, keys) => {
       //console.log(keys);
       if (keys.length === 0) {
         resolve(messagesObj);
@@ -132,7 +153,7 @@ app.get("/", (req, res) => {
   });
 
   p.then(messageList => {
-    res.render("index", { messageList });
+    res.render('index', { messageList });
   });
   //need to set this up in a promise or something
 
