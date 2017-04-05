@@ -44,17 +44,24 @@ app.use(function(err, req, res, next) {
 });
 
 // sockets requirements
-const {getMessages} = require('./lib/redis_client');
+const {getMessages, createMessage, getRooms, createRoom} = require('./lib/redis_client');
 
 io.on("connection", client => {
 	console.log("websockets connection open");
 
-  client.on('show messages', (data) => {
-    let roomName = data.name;
+  client.on('show messages', (roomName) => {
     getMessages(roomName).then((messages) => {
-      io.emit("show messages", messages);
+      io.emit("show messages", {roomName, messages});
     })
   });
+
+  client.on('new message', (infoObj) => {
+    var roomName = infoObj.roomName;
+    var body = infoObj.body;
+    createMessage(roomName, 'author', body).then(() => {
+      io.emit("new message", {roomName, author: 'author', body});
+    })
+  }); 
 
 });
 
