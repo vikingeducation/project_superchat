@@ -26,7 +26,7 @@ value: in array {
   room:1 Messages messages <-populate at storePost based on room posted in (by paramaterized url?)
   room:2 
 }
-
+sss
 
 "messages:1" = {body: skdjfksjdf, author: me}
 "messages:2" = {body: sgfshgksjdf, author: me}
