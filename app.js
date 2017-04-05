@@ -56,7 +56,7 @@ io.on("connection", client => {
   });
 
   client.on('create room', (roomName) => {
-    createRoom(roomName.roomName).then((roomName) => {
+    createRoom(roomName).then(() => {
       io.emit("create room", roomName);
     })
   });
