@@ -1,12 +1,22 @@
 const express = require('express');
 let router = express.Router();
+const {getRooms} = require('../lib/redis_client');
 
 router.get('/', (req, res) => {
-  // 1 render a basic chatroom view
-  // 2 do something with it.
-  res.render('chatroom', {title: 'Superchat'})
-
+  getRooms().then((roomsObj) => {
+  	let roomsList = objectToArray(roomsObj);
+  	res.render('chatroom', {title: 'Superchat', roomsList});
+  })
 })
 
 
 module.exports = router;
+
+
+
+function objectToArray(obj) {
+  var keysArray = Object.keys(obj);
+  return keysArray.map((key) => {
+    return {name: key, numUsers: obj[key]}
+  })
+}

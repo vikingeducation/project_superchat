@@ -1,1 +1,8 @@
 <h1>Superchat</h1>
+
+<h2>Chat rooms</h2>
+
+{{#each roomsList as |room|}}
+	<h3>{{room.name}}</h3>
+	<p>{{room.numUsers}} members</p>
+{{/each}}
