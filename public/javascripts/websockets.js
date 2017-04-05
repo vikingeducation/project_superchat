@@ -8,26 +8,36 @@ $(document).ready(function(){
   socket.on('show messages', function(roomObj){
     $('#roommessages').removeClass('hidden');
     $('#message-form').removeClass('hidden');
-    $parentUl = $('#roommessages');
-    $parentUl.html('<ul></ul>');
     var $roomName = $('<h2></h2>')
     .text(roomObj.roomName);
-    $('#roommessages').prepend($roomName);
+    $room = $('#roommessages');
+    $room.html('');
+    $room.append($roomName);
+    $room.append('<ul></ul>');
+
+    $list = $('#roommessages ul');
+
     for (let i=0; i<roomObj.messages.length; i++) {
-      addMessage($parentUl, roomObj.messages[i]);
+      addMessage($list, roomObj.messages[i]);
     }
+
   })
 
-  $('#submit-message').click(function(){
-    var body = $('#new-message').text();
+  $('#submit-message').click(function(e){
+    e.preventDefault();
+    var body = $('#new-message').val();
     var roomName = $('#roommessages h2').text();
     socket.emit('new message', {body, roomName});
   })
 
   socket.on('new message', function(messageObj){
-    $parentUl = $('#roommessages ul');
+    $parent = $('#roommessages ul');
+    var message = {
+      author: messageObj.author,
+      body: messageObj.body
+    }
+    addMessage($parent, message)
   })
-
 
 })
 
@@ -40,7 +50,7 @@ function addMessage(parent, message) {
   .append($author)
   .append($body);
 
-  parent.append($messageLi);
+  parent.prepend($messageLi);
 }
 
 

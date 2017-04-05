@@ -8,28 +8,26 @@
   <!-- Example row of columns -->
   <div class="row">
     <div class="col-md-4">
-    	<h2>Chat rooms</h2>
+      <h2>Chat rooms</h2>
 
-		{{#each roomsList as |room|}}
-			<h3 class='room'>{{room.name}}</h3>
-			<p>{{room.numUsers}} members</p>
-		{{/each}}
+    {{#each roomsList as |room|}}
+      <h3 class='room'>{{room.name}}</h3>
+      <p>{{room.numUsers}} members</p>
+    {{/each}}
     </div>
     <div class="col-md-4">
-    	<div id='roommessages' class='hidden'>
-
-		</div>
-   </div>
-    <div class="col-md-4">			
-    	<div class="hidden" id="message-form">
-			<form>
-			  <div class="form-group">
-			    <label for="new-message">NEW POST</label>
-			    <textarea type="text" class="form-control" id="new-message" placeholder="Type your message"></textarea>
-			  </div>
-			  <button type="submit" id="submit-message" class="btn btn-default">Send</button>
-			</form>    
-		</div>	
+      <div id='roommessages' class='hidden'></div>
+    </div>
+    <div class="col-md-4">
+      <div class="hidden" id="message-form">
+        <form>
+          <div class="form-group">
+            <label for="new-message">NEW POST</label>
+            <textarea type="text" class="form-control" id="new-message" placeholder="Type your message"></textarea>
+          </div>
+          <button type="submit" id="submit-message" class="btn btn-default">Send</button>
+        </form>
+      </div>
     </div>
   </div>
 </div>
