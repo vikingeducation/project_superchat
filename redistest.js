@@ -1,6 +1,6 @@
 const redis = require('redis').createClient();
 
-const {createRoom, createMessage} = require('./lib/redis_client');
+const {createRoom, createMessage, getMessages} = require('./lib/redis_client');
 
 
 //createRoom("dogs");
@@ -14,14 +14,20 @@ const {createRoom, createMessage} = require('./lib/redis_client');
 // 	console.log(data);
 // });
 
-createMessage('dogs', 'nicolas', 'i like dogs').then(function(){
-  redis.lrange('room-dogs-messages', 0, -1, (err, data) =>{
-    if(err) throw err
-    console.log(data)
-  })
+// createMessage('dogs', 'tom', 'i like cats').then( () => {
+//   redis.lrange('room-dogs-messages', 0, -1, (err, data) =>{
+//     data.forEach( (message) =>{
+//       redis.hgetall(message, (err1, data1) => {
+//         console.log(data1);
+//       })
+//     })
+//   })
+// })
+
+
+getMessages('cats').then((messages) => {
+  console.log("\n\n\n\nMessages: ", messages);
 })
-
-
 
 
 
