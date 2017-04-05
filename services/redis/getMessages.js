@@ -1,40 +1,39 @@
-function getKeysProm() {
+function getKeysProm(pattern) {
   return new Promise(resolve => {
-    redisClient.keys('messages:*', (err, keys) => {
+    redisClient.keys(pattern, (err, keys) => {
       if (err) throw err;
       resolve(keys)
     })
   })
 }
 
-function messagesArrayProm(keys) { 
-  let messagesArray = [];
+function hashToArrayProm(keys) { 
+  let hashesArray = [];
   return new Promise(resolve => {
-
+    if (keys.length === 0) {
+      resolve(hashesArray);
+    }
     keys.forEach(key => {
-      redisClient.hgetall(key, (err, message) => {
-        messagesArray.push(message);
-        console.log('keys length', keys.length)
-        console.log('messArray length', messagesArray.length)
-        if (keys.length === messagesArray.length) {
-          console.log(messagesArray)
-          resolve(messagesArray)
+      redisClient.hgetall(key, (err, value) => {
+        hashesArray.push(value);
+        if (keys.length === hashesArray.length) {
+          resolve(hashesArray)
         }
       })
     })
   })
 }
 
-function getMessages() {
+function getValues(pattern) {
   return new Promise(resolve => {
-    getKeysProm()
-    .then(messagesArrayProm)
-    .then(messageArray => {
-      resolve(messageArray)
+    getKeysProm(pattern)
+    .then(hashToArrayProm)
+    .then(hashesArray => {
+      resolve(hashesArray)
     })
   }) 
 }
 
-module.exports = getMessages
+module.exports = getValues;
 
 

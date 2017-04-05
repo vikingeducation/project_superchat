@@ -8,7 +8,8 @@ const cp = require('cookie-parser');
 redisClient = require("redis").createClient();
 
 const storePost = require('./services/redis/storePost');
-const getMessages = require('./services/redis/getMessages');
+const getValues = require('./services/redis/getMessages');
+const addRoom = require('./services/redis/addRoom');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -21,17 +22,23 @@ app.set("view engine", "handlebars");
 
 
 
-  // redisClient.flushall();
+  //redisClient.flushall();
 
 app.get('/', (req, res) => {
   if (!req.cookies.username) {
     res.redirect("/login")
   } else {
-    getMessages().then(messages => {
-      res.render('index', {messages})
+    let messagesArr = [];
+    let roomsArr = [];
+    getValues('messages:*').then(messages => {
+      messagesArr = messages;
+      getValues('rooms:*').then(rooms => {
+        roomsArr = rooms;
+        res.render('index', {messagesArr, roomsArr})
+      })
     })
-  }
-})
+    }
+  })
 
 app.get('/login', (req, res) => {
   if(req.cookies.username) {
@@ -59,7 +66,14 @@ app.get('/newroom', (req, res) => {
 })
 
 app.post('/updaterooms', (req, res) => {
+  let room = req.body.newRoom;
+  addRoom(room);
   res.redirect('/')
+})
+
+app.get('/room/:roomName', (req, res) => {
+  let roomName = req.params.roomName;
+  
 })
 
 
