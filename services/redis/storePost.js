@@ -3,7 +3,7 @@
 function storePost(postBody) {
   redisClient.keys("messages:*", (err, keys) => {
     let count = keys.length + 1;
-    redisClient.hset(`messages:${count}`, 'body', postBody);
+    redisClient.hmset(`messages:${count}`, 'body', postBody, 'time', Date.now());
   })
 }
 

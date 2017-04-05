@@ -1,7 +1,26 @@
-<h1>SUPER CHAT!!!</h1>
 
-<form action="/update" method="post">
-  <label for="newPost">NEW POST</label><br>
-  <textarea name="newPost" ></textarea><br>
-  <button class="btn btn-primary">Send</button>
-</form>
+
+<div class="row">
+
+  <div class="col-xs-3">
+    <div>
+      {{#each messages as |message|}}
+      {{message.body}}
+      {{message.time}}
+      <br>
+      {{/each}}
+    </div>
+  </div>
+
+<div class="col-xs-3">
+  <form action="/update" method="post">
+    <label for="newPost">NEW POST</label><br>
+    <textarea name="newPost" ></textarea><br>
+    <button class="btn btn-primary">Send</button>
+  </form>
+</div>
+
+
+
+
+</div>

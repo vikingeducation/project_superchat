@@ -28,9 +28,9 @@ app.get('/', (req, res) => {
   getKeysProm()
   .then(messagesArrayProm)
   .then(messages => {
-    console.log('messages ', messages)
+    res.render('index', {messages})
   });
-  res.render('index')
+  
 })
 
 app.post('/update', (req, res) => {
