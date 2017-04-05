@@ -8,6 +8,7 @@ const cp = require('cookie-parser');
 redisClient = require("redis").createClient();
 
 const storePost = require('./services/redis/storePost');
+const getMessages = require('./services/redis/getMessages');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -24,12 +25,14 @@ app.get('/', (req, res) => {
   //   if (err) throw err;
   //   console.log(keys)
   // })
-  
+  // redisClient.flushall();
+  var messages = getMessages();
+  // console.log('messages ', messages);
   res.render('index')
 })
 
 app.post('/update', (req, res) => {
-  let post = req.body
+  let post = req.body.newPost;
   storePost(post);
   res.redirect('/')
 })
