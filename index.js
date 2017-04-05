@@ -8,10 +8,7 @@ const cp = require('cookie-parser');
 redisClient = require("redis").createClient();
 
 const storePost = require('./services/redis/storePost');
-const {
-  getKeysProm,
-  messagesArrayProm
-} = require('./services/redis/getMessages');
+const getMessages = require('./services/redis/getMessages');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -22,17 +19,17 @@ app.use(cp())
 app.engine("handlebars", hbs.engine);
 app.set("view engine", "handlebars");
 
+
+
   // redisClient.flushall();
 
 app.get('/', (req, res) => {
   if (!req.cookies.username) {
     res.redirect("/login")
   } else {
-    getKeysProm()
-    .then(messagesArrayProm)
-    .then(messages => {
+    getMessages().then(messages => {
       res.render('index', {messages})
-    });
+    })
   }
 })
 

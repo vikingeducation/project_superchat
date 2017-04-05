@@ -2,20 +2,20 @@
 
 <div class="row">
 
-  <div class="col-xs-3">
+  <div class="col-xs-3 messages">
     <div>
       {{#each messages as |message|}}
       Text:
       {{message.body}}
       Username:
       {{message.username}}
-      {{message.time}}
+      <br>
       <br>
       {{/each}}
     </div>
   </div>
 
-<div class="col-xs-3">
+<div class="col-xs-3 new-post">
   <form action="/update" method="post">
     <label for="newPost">NEW POST</label><br>
     <textarea name="newPost" ></textarea><br>
