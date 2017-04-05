@@ -1,7 +1,7 @@
 <form id="newRoom" class="form-inline">
   <div class="form-group">
-    <label for="newRoom">New Chat Room</label>
-    <input type="text" class="form-control" id="message" name="message">
+    <label for="chatroomID">New Chat Room</label>
+    <input type="text" class="form-control" id="chatroomID" name="chatroomID">
   </div>
   <button type="submit" class="btn btn-default">Submit</button>
 </form>
@@ -14,9 +14,6 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>Lorem Ipsum</td>
-        </tr>
       </tbody>
     </table>
 
@@ -48,6 +45,10 @@
     </form>
   </div>
 </div>
+
+
+<!--Bad code don't do this!-->
+<input class="hidden" id="currentChatroom" value="default">
 
 
 

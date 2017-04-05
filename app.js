@@ -43,15 +43,36 @@ app.use(function(err, req, res, next) {
 /////////////////////
 io.on("connection", client => {
   console.log("New connection!");
+  //send the client the data
+  chatOps.buildChatTable()
+  .then(function onFulfilled(htmlString) {
+      client.emit("connection", htmlString);
+  });
+  
+  
   client.emit("connection");
   client.on("new room", data => {
     //io.emit(new room) tells all the clients to update their rooms
-    let stringOHTML = chatOps.makeNewRoom(data);
-    console.log("This is the html " + stringOHTML);
-    if (stringOHTML) {
-      io.emit("new room", stringOHTML);
-    }
+    let pro = chatOps.makeNewRoom(data);
+    pro.
+    then((htmlString) => {
+        if (htmlString) {
+            io.emit("new room", htmlString);
+        }
+    });
+    
   });
+    client.on("new message", data => {
+        //io.emit(new room) tells all the clients to update their rooms
+        let pro = chatOps.makeNewMessage(data);
+        pro.
+        then((htmlString) => {
+            if (htmlString) {
+                io.emit("new message", htmlString);
+            }
+        });
+        
+    });
 });
 
 server.listen(process.env.PORT || 3000);
