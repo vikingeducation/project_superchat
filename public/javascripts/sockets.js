@@ -9,11 +9,6 @@ $(document).ready(function() {
     //data.rooms is an array
     //forEach
     $("#rooms tbody").append(data);
-    
-    
-    
-    
-    
   });
 
   socket.on("new room", stringOHTML => {
@@ -30,19 +25,18 @@ $(document).ready(function() {
     socket.emit("new room", newRoom);
     return false;
   });
-  
+
+  socket.on("new message", stringOHTML => {
+    $("#messages tbody").append(stringOHTML);
+  });
+
   $("#newMessage").submit(event => {
     event.preventDefault();
     let newMessage = $("#message").val();
-    let usersName = $.cookie("user") || "Anon";//Some function to get usersName
+    let usersName = $().cookie("user") || "Anon"; //Some function to get usersName
     let currentChatroom = $("#currentChatroom").val() || "default"; //Some function
-    //name of user and name of current chatroom 
+    //name of user and name of current chatroom
     socket.emit("new message", { newMessage, usersName, currentChatroom });
     return false;
   });
-  
-  
-  
-  
-  
 });
