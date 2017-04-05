@@ -1,6 +1,6 @@
 const shortid = require('shortid')
 
-function storePost(postBody, username, roomName) {
+function storePost(postBody, username) {
   let id = shortid.generate()  
   redisClient.hmset(`messages:${id}`, {
       body: postBody, 
@@ -10,8 +10,8 @@ function storePost(postBody, username, roomName) {
   );
 }
 
-function addMessageToRoom(messageID) {
-  redisClient.hmsetnx()
-} 
+// function addMessageToRoom(messageID) {
+//   let id = shortid.generate() 
+// } 
 
 module.exports = storePost;
