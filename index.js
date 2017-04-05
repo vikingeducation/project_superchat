@@ -21,5 +21,11 @@ app.get('/', (req, res) => {
   res.render('index')
 })
 
+app.post('/update', (req, res) => {
+  let post = req.body
+  // console.log(post)
+  res.redirect('/')
+})
+
 
 server.listen(8000)
