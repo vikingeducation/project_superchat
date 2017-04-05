@@ -15,9 +15,9 @@ function messagesArrayProm(keys) {
         messagesArray.push(message);
         console.log('keys length', keys.length)
         console.log('messArray length', messagesArray.length)
-      if (keys.length === messagesArray.length) {
-        resolve(messagesArray)
-      }
+        if (keys.length === messagesArray.length) {
+          resolve(messagesArray)
+        }
       })
     })
   })
