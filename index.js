@@ -71,6 +71,10 @@ io.on('connection', client => {});
 //hashkey contains all information:
 //
 
+app.get('/', (req, res) => {
+  res.render('index');
+});
+
 // app.get('/', (req, res) => {
 //   var allKeys = [];
 //

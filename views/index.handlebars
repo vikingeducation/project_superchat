@@ -1,12 +1,12 @@
-<body>
+<!-- <body>
 
 <form method="post" action="/" class="form">
 <input type="text" class="form-control" name="userURL" id="userURL" placeholder="eg google.com">
 <button type="submit" class="btn btn-block submit">Submit</button>
 
-</form>
+</form> -->
 
-  <table>
+  <!-- <table>
     <th>Original URL</th>
     <th>Created</th>
     <th>Short URL</th>
@@ -27,13 +27,13 @@
       </td>
     </tr>
     {{/each}}
-  </table>
+  </table> -->
 </body>
 
 <script>
 var socket = io.connect('http://localhost:3000');
 
-socket.on('new count', function(count, uniqueID) {
+socket.on('new message', function(count, uniqueID) {
   $('#' + uniqueID).html(count);
 });
 
