@@ -51,21 +51,28 @@ io.on("connection", client => {
 
   client.on('show messages', (roomName) => {
     getMessages(roomName).then((messages) => {
-      io.emit("show messages", {roomName, messages});
+      client.emit("show messages", {roomName, messages});
     })
   });
+
+  client.on('create room', (roomName) => {
+    createRoom(roomName.roomName).then((roomName) => {
+      io.emit("create room", roomName);
+    })
+  });
+
 
   client.on('join room', (roomName) => {
     enterRoom(roomName).then((number) => {
       io.emit("join room", {roomName, number});
-    }) 
+    })
   });
 
   client.on('leave room', (roomName) => {
     leaveRoom(roomName).then((number) => {
       io.emit("leave room", {roomName, number});
-    }) 
-  });  
+    })
+  });
 
   client.on('new message', (infoObj) => {
     var roomName = infoObj.roomName;
@@ -74,7 +81,7 @@ io.on("connection", client => {
     createMessage(roomName, author, body).then(() => {
       io.emit("new message", {roomName, author, body});
     })
-  }); 
+  });
 
 });
 

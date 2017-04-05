@@ -6,7 +6,11 @@ router.get('/', (req, res) => {
   getRooms().then((roomsObj) => {
     let roomsList = (roomsObj) ? objectToArray(roomsObj) : []
     let user = req.cookies.username;
-  	res.render('chatroom', {title: 'Superchat', roomsList, user});
+    if(user){
+      res.render('chatroom', {title: 'Superchat', roomsList, user});
+    } else {
+      res.render('index', {title: 'Superchat'});
+    }
   })
 })
 

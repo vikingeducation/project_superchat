@@ -36,18 +36,34 @@ $(document).ready(function(){
     var body = $('#new-message').val();
     var roomName = $('#roommessages h2').text();
     var author = $("#logged-in-user").text();
+    $('#new-message').val('');
     socket.emit('new message', {body, author, roomName});
   })
 
   socket.on('new message', function(messageObj){
-    $parent = $('#roommessages ul');
-    var message = {
-      author: messageObj.author,
-      body: messageObj.body
+    var activeRoom = $('#roommessages h2').text();
+    if (activeRoom === messageObj.roomName) {
+      $parent = $('#roommessages ul');
+      var message = {
+        author: messageObj.author,
+        body: messageObj.body
+      }
+      addMessage($parent, message)
     }
-    addMessage($parent, message)
   })
 
+  $('#create-room-submit').click(function(e){
+    e.preventDefault();
+    var roomName = $('#create-room input').val();
+    socket.emit('create room', {roomName});
+  })
+
+  socket.on('create room', function(roomName){
+    var $newRoom = $('<li></li>')
+    var $roomDiv = $(`<div class="${roomName}"></div>`);
+    var $roomName = $(`<h3 class="room">${roomName}</h3>`)
+    var $roomMembers = $('<p>0 members</p>');
+  })
 })
 
 function addMessage(parent, message) {
@@ -57,7 +73,7 @@ function addMessage(parent, message) {
   .text(message.body);
   var $messageDiv = $('<div></div>')
   .append($author)
-  .append($body);  
+  .append($body);
   var $messageLi = $('<li class="list-group-item"></li>')
   .append($messageDiv);
 
