@@ -1,22 +1,31 @@
-function getMessages() {
-  messagesArray = [];
+function getKeysProm() {
+  return new Promise(resolve => {
+    redisClient.keys('messages:*', (err, keys) => {
+      if (err) throw err;
+      resolve(keys)
+    })
+  })
+}
 
-  redisClient.keys('messages:*', (err, keys) => {
-    if (err) throw err;
-    console.log(keys);
+function messagesArrayProm(keys) { 
+  let messagesArray = [];
+  return new Promise(resolve => {
     keys.forEach(key => {
       redisClient.hgetall(key, (err, message) => {
         messagesArray.push(message);
-      })
+        console.log('keys length', keys.length)
+        console.log('messArray length', messagesArray.length)
       if (keys.length === messagesArray.length) {
-        console.log(messagesArray);
-        return messagesArray;
+        resolve(messagesArray)
       }
+      })
     })
-
   })
-
-
 }
 
-module.exports = getMessages;
+
+module.exports = {
+  getKeysProm,
+  messagesArrayProm
+}
+
