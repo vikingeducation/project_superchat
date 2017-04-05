@@ -45,35 +45,33 @@ io.on("connection", client => {
   console.log("New connection!");
   //send the client the data
   //display all message of the default chatroom
-  let pro = Promise.all([chatOps.buildMessageTable("default"), chatOps.buildChatTable()]);
+  let pro = Promise.all([
+    chatOps.buildMessageTable("default"),
+    chatOps.buildChatTable()
+  ]);
   pro.then(function onFulfilled(infoObj) {
-      client.emit("connection", { "messages" : infoObj[0], "rooms" : infoObj[1]});
+    client.emit("connection", { messages: infoObj[0], rooms: infoObj[1] });
   });
-  
-  
+
   client.emit("connection");
   client.on("new room", data => {
     //io.emit(new room) tells all the clients to update their rooms
     let pro = chatOps.makeNewRoom(data);
-    pro.
-    then((htmlString) => {
-        if (htmlString) {
-            io.emit("new room", htmlString);
-        }
+    pro.then(htmlString => {
+      if (htmlString) {
+        io.emit("new room", htmlString);
+      }
     });
-    
   });
-    client.on("new message", data => {
-        //io.emit(new room) tells all the clients to update their rooms
-        let pro = chatOps.makeNewMessage(data);
-        pro.
-        then((htmlString) => {
-            if (htmlString) {
-                io.emit("new message", htmlString);
-            }
-        });
-        
+  client.on("new message", data => {
+    //io.emit(new room) tells all the clients to update their rooms
+    let pro = chatOps.makeNewMessage(data);
+    pro.then(htmlString => {
+      if (htmlString) {
+        io.emit("new message", htmlString);
+      }
     });
+  });
 });
 
 server.listen(process.env.PORT || 3000);
