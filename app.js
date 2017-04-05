@@ -4,6 +4,7 @@ const server = require("http").createServer(app);
 const io = require("socket.io")(server);
 const path = require("path");
 const cookieParser = require("cookie-parser");
+const ioOps = require("./lib/ioOps");
 
 //Require routes
 const index = require("./routes/index.js");
@@ -40,16 +41,14 @@ app.use(function(err, req, res, next) {
 });
 
 /////////////////////
-io.on('connection', (client) => {
-    console.log("New connection!");
-    client.emit('connection');
-    
-    
-    
+io.on("connection", client => {
+  console.log("New connection!");
+  client.emit("connection");
+  //new room
+  //ioOps.newRoom(name)
+
+  //ioOps.js
+  //redisOps.js
 });
-
-
-
-
 
 server.listen(process.env.PORT || 3000);
