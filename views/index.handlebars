@@ -7,14 +7,15 @@
               <h3 class="panel-title">Cats</h3>
             </div>
               <div class="panel-body">
-                <b>{{messageList}}</b>
+                <b>Anon</b>
                 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
                 </p>
                 <hr>
-                <!-- {{#each messageList as |message|}}
-                  {{message.messageBody}}
-                  {{message.username}}
-                {{/each}} -->
+                {{#each messageList as |message|}}
+                  <h4>{{message.username}}</h4>
+                  <p>{{message.messageBody}}</p>
+
+                {{/each}}
                 <hr>
               </div>
           </div>
