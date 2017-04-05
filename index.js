@@ -19,7 +19,6 @@ const hbs = expressHandlebars.create({
   defaultLayout: "main",
 });
 app.use(cp())
-
 app.engine("handlebars", hbs.engine);
 app.set("view engine", "handlebars");
 
@@ -38,7 +37,11 @@ app.get('/', (req, res) => {
 })
 
 app.get('/login', (req, res) => {
-  res.render('login')
+  if(req.cookies.username) {
+    res.redirect('/')
+  } else {
+    res.render('login')
+  }
 })
 
 app.post('/login', (req, res) => {
@@ -49,7 +52,8 @@ app.post('/login', (req, res) => {
 
 app.post('/update', (req, res) => {
   let post = req.body.newPost;
-  storePost(post);
+  let username = req.cookies.username;
+  storePost(post, username);
   res.redirect('/')
 })
 

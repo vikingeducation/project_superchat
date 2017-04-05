@@ -5,7 +5,10 @@
   <div class="col-xs-3">
     <div>
       {{#each messages as |message|}}
+      Text:
       {{message.body}}
+      Username:
+      {{message.username}}
       {{message.time}}
       <br>
       {{/each}}
