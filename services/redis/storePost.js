@@ -1,6 +1,13 @@
-function storePost(postBody) => {
+function storePost(postBody) {
   postObject = {
     body: postBody
   }
-  redisClient.hset("messages", postObject)
+  redisClient.lpush("messages", postObject, (err, data) => {
+    if (err) {
+      throw err;
+    }
+    console.log(data);
+  })
 }
+
+module.exports = storePost;

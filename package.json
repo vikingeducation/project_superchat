@@ -16,5 +16,14 @@
   "bugs": {
     "url": "https://github.com/markmarkyesyes/project_superchat/issues"
   },
-  "homepage": "https://github.com/markmarkyesyes/project_superchat#readme"
+  "homepage": "https://github.com/markmarkyesyes/project_superchat#readme",
+  "dependencies": {
+    "body-parser": "^1.17.1",
+    "cookie-parser": "^1.4.3",
+    "express": "^4.15.2",
+    "express-handlebars": "^3.0.0",
+    "redis": "^2.7.1",
+    "socket.io": "^1.7.3",
+    "socket.io-client": "^1.7.3"
+  }
 }

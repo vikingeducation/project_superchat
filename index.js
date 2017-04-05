@@ -7,6 +7,8 @@ const expressHandlebars = require("express-handlebars");
 const cp = require('cookie-parser');
 redisClient = require("redis").createClient();
 
+const storePost = require('./services/redis/storePost');
+
 app.use(bodyParser.urlencoded({ extended: true }));
 
 const hbs = expressHandlebars.create({
@@ -23,7 +25,7 @@ app.get('/', (req, res) => {
 
 app.post('/update', (req, res) => {
   let post = req.body
-  // console.log(post)
+  storePost(post);
   res.redirect('/')
 })
 
