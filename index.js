@@ -54,5 +54,13 @@ app.post('/update', (req, res) => {
   res.redirect('/')
 })
 
+app.get('/newroom', (req, res) => {
+  res.render('newroom')
+})
+
+app.post('/updaterooms', (req, res) => {
+  res.redirect('/')
+})
+
 
 server.listen(8000)

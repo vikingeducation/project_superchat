@@ -23,7 +23,8 @@ value: in array {
 rooms : [ ]
 key: rooms -
 value: in array {
-  room name: ??message storage??
+  room:1 Messages messages <-populate at storePost based on room posted in (by paramaterized url?)
+  room:2 
 }
 
 
