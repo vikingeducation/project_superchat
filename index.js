@@ -20,6 +20,11 @@ app.set("view engine", "handlebars");
 
 
 app.get('/', (req, res) => {
+  // redisClient.keys('messages:*', (err, keys) => {
+  //   if (err) throw err;
+  //   console.log(keys)
+  // })
+  
   res.render('index')
 })
 

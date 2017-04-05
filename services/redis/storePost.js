@@ -1,13 +1,8 @@
+var count = 1;
+
 function storePost(postBody) {
-  postObject = {
-    body: postBody
-  }
-  redisClient.lpush("messages", postObject, (err, data) => {
-    if (err) {
-      throw err;
-    }
-    console.log(data);
-  })
+  redisClient.hset(`messages:${count}`, 'body', postBody)
+  count++
 }
 
 module.exports = storePost;
