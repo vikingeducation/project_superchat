@@ -3,9 +3,9 @@ Build a realtime multi-room chat application. Make it super.
 
 Mark + Egle
 
-messages: [ {body: content, author: name, room: room}, {}, {}]
-
 messageid: {body:body, author:author}
+
+roomName: [ messages:1, messages2]
 
 key: messages -
 value: (in array){
