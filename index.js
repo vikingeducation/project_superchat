@@ -79,19 +79,22 @@ io.on('connection', client => {});
 //
 
 app.get('/', (req, res) => {
-  let messagesArr = [];
   let messagesObj = {};
 
   var p = new Promise(function(resolve, reject) {
     redisClient.keys('message_*', (err, keys) => {
+      console.log(keys);
+      if (keys.length === 0) {
+        resolve(messagesObj);
+      }
+
       keys.forEach(key => {
         redisClient.hgetall(key, (err, message) => {
-          //  messagesArr.push(message);
-          messagesObj[message.messageID] = message;
-          //add to an object here?
+          messagesObj[key] = message;
+          console.log(Object.keys(messagesObj).length);
+          console.log(keys.length);
           if (Object.keys(messagesObj).length === keys.length) {
             resolve(messagesObj);
-            //resolve(messagesArr);
           }
         });
       });
@@ -99,12 +102,7 @@ app.get('/', (req, res) => {
   });
 
   p.then(messageList => {
-    //console.log(messageList);
-
-    //  console.log('');
-    //objList[obj.messageID] = obj
-    console.log(messageList);
-    res.render('index', messageList);
+    res.render('index', { messageList });
   });
   //need to set this up in a promise or something
 
