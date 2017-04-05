@@ -5,27 +5,21 @@ $(document).ready(function() {
   socket.on("connection", data => {
     console.log("We got connected!");
   });
-  
+
   socket.on("new room", stringOHTML => {
     //create new tr element from data from server
-    
+
     //find the rooms table
     //and append it to the end of the table
     $("#rooms tbody").append(stringOHTML);
-    
-    
   });
-  
-  
-  
-  $('#newRoom').submit((event) => {
+
+  $("#newRoom").submit(event => {
+    console.log("emit event!");
     event.preventDefault();
-    socket.emit('new room', 'bunnies');
+    let newRoom = $(this).filter("input").val();
+    console.log(newRoom);
+    socket.emit("new room", newRoom);
     return false;
   });
-  
-  
-  
-  
-  
 });

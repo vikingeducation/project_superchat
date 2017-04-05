@@ -1,9 +1,9 @@
-let injectedRoute = (io) => {
+let injectedRoute = io => {
   const express = require("express");
   //const router = express.Router();
   const router = express.Router();
-  const ioOps = require("../lib/ioOps");
-        
+  const chatOps = require("../lib/chatOps");
+
   router.get("/", (req, res) => {
     let user = req.cookies.user;
     if (user) {
@@ -13,17 +13,13 @@ let injectedRoute = (io) => {
     }
   });
 
-
-  router.post('/', (req, res) => {
+  router.post("/", (req, res) => {
     let username = req.body.username;
-    res.cookie('user', username);
-    res.redirect('/');
+    res.cookie("user", username);
+    res.redirect("/");
   });
-  
-  return router;
-  
-  
-};
 
+  return router;
+};
 
 module.exports = injectedRoute;

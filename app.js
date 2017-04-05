@@ -4,7 +4,7 @@ const server = require("http").createServer(app);
 const io = require("socket.io")(server);
 const path = require("path");
 const cookieParser = require("cookie-parser");
-const ioOps = require("./lib/ioOps");
+const chatOps = require("./lib/chatOps");
 
 //Require routes
 const index = require("./routes/index.js")(io);
@@ -42,19 +42,16 @@ app.use(function(err, req, res, next) {
 
 /////////////////////
 io.on("connection", client => {
-    console.log("New connection!");
-    client.emit("connection");
-    client.on('new room', (data) => {
-        ioOps.createChatRoom(data);
-        //io.emit(new room) tells all the clients to update their rooms
-        let stringOHTML = ioOps.makeNewRoomHTML(data);
-        io.emit('new room', stringOHTML);
-        
-        
-        
-        
-
-    });
+  console.log("New connection!");
+  client.emit("connection");
+  client.on("new room", data => {
+    //io.emit(new room) tells all the clients to update their rooms
+    let stringOHTML = chatOps.makeNewRoom(data);
+    console.log("This is the html " + stringOHTML);
+    if (stringOHTML) {
+      io.emit("new room", stringOHTML);
+    }
+  });
 });
 
 server.listen(process.env.PORT || 3000);
