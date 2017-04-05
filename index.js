@@ -1,87 +1,91 @@
-const express = require("express");
+const express = require('express');
 const app = express();
-const server = require("http").createServer(app);
-const io = require("socket.io")(server);
-const redisClient = require("redis").createClient();
-const expressHandlebars = require("express-handlebars");
-const bodyParser = require("body-parser");
-const shortid = require("shortid");
+const server = require('http').createServer(app);
+const io = require('socket.io')(server);
+const redisClient = require('redis').createClient();
+const expressHandlebars = require('express-handlebars');
+const bodyParser = require('body-parser');
+const shortid = require('shortid');
 
 app.use(bodyParser.urlencoded({ extended: true }));
-
 app.use(
-  "/socket.io",
-  express.static(__dirname + "node_modules/socket.io-client/dist/")
+  '/socket.io',
+  express.static(__dirname + 'node_modules/socket.io-client/dist/')
 );
 
 const hbs = expressHandlebars.create({
-  defaultLayout: "main"
+  defaultLayout: 'main'
 });
 
-app.use(express.static(__dirname + "/public"));
+app.use(express.static(__dirname + '/public'));
 
-app.engine("handlebars", hbs.engine);
-app.set("view engine", "handlebars");
+app.engine('handlebars', hbs.engine);
+app.set('view engine', 'handlebars');
 
-io.on("connection", client => {
-  client.on("postMessage", newMessage => {
-    console.log("inside client.on newMessage", newMessage);
+io.on('connection', client => {
+  client.on('postMessage', newMessage => {
+    //console.log(client.username);
+    //console.log('inside client.on newMessage', newMessage);
 
-    let messageID = "message_" + shortid.generate();
+    let messageID = 'message_' + shortid.generate();
 
     // DON'T FORGET TO CHANGE THESE GEEEEEZE
-    let user = "anon";
-    let room = "cats";
+    let user = client.username;
+    let room = 'room1';
 
     redisClient.hmset(
       messageID,
-      "messageBody",
+      'messageBody',
       newMessage,
-      "username",
+      'username',
       user,
-      "roomName",
+      'roomName',
       room
     );
+
+    io.emit('newMessage', newMessage, user);
   });
 
-  client.on("signUp", newUser => {
-    console.log("inside client.on newUser", newUser);
+  client.on('signUp', newUser => {
+    //  console.log('inside client.on newUser', newUser);
 
     var p = new Promise(function(resolve, reject) {
-      redisClient.keys("user_*", (err, userList) => {
+      redisClient.keys('user_*', (err, userList) => {
         resolve(userList);
       });
     });
 
     p.then(userList => {
       if (!userList.includes(newUser)) {
-        let userKey = "user_" + newUser;
+        let userKey = 'user_' + newUser;
         redisClient.setnx(userKey, newUser);
         //make sign in box go away, make chat rooms appear
         //emit userAccepted
-        console.log("before client emit userAccepted if part");
-        client.emit("userAccepted");
+        //console.log('before client emit userAccepted if part');
+        client.username = newUser;
+        client.emit('userAccepted', newUser);
       } else {
-        console.log("before client emit userAccepted else part");
-        client.emit("userAccepted");
+        //console.log('before client emit userAccepted else part');
+        client.emit('userAccepted');
       }
     });
   });
 });
 
-app.get("/", (req, res) => {
+app.get('/', (req, res) => {
   let messagesObj = {};
-  redisClient.keys("user_*", (err, users) => {
+
+  redisClient.keys('user_*', (err, users) => {
     users.forEach(user => {
       redisClient.get(user, (err, result) => {
-        console.log("UserKey: " + user);
-        console.log("Username:" + result);
+        //  console.log('UserKey: ' + user);
+        //  console.log('Username:' + result);
       });
     });
   });
 
   var p = new Promise(function(resolve, reject) {
-    redisClient.keys("message_*", (err, keys) => {
+    redisClient.keys('message_*', (err, keys) => {
       //console.log(keys);
       if (keys.length === 0) {
         resolve(messagesObj);
@@ -101,7 +105,8 @@ app.get("/", (req, res) => {
   });
 
   p.then(messageList => {
-    res.render("index", { messageList });
+    console.log(messageList);
+    res.render('index', { messageList });
   });
   //need to set this up in a promise or something
 

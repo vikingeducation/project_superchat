@@ -1,4 +1,7 @@
+
 <body>
+
+<h3 id="userNav" style="color: black">Not signed in</h3>
 
 <div class="container" id="signUpContainer">
   <div class="row">
@@ -27,12 +30,13 @@
             <div class="panel-heading">
               <h3 class="panel-title">Cats</h3>
             </div>
-              <div class="panel-body">
+              <div class="panel-body" id="firstChatroom">
                 {{#each messageList as |message|}}
                   <h4>{{message.username}}</h4>
                   <p>{{message.messageBody}}</p>
                   <hr>
                 {{/each}}
+
                 <hr>
               </div>
           </div>
@@ -80,9 +84,12 @@ var socket = io.connect('http://localhost:3000');
   //   $("#count").html(count);
   // })
 
-  socket.on('userAccepted', function() {
-    // $("#testArea").html("it worked");
-    // console.log("inside userAccepted ");
+  socket.on('newMessage', function(message, user) {
+    $("#firstChatroom").append(`<h4>${user}</h4><p>${message}</p><hr>`);
+  })
+
+  socket.on('userAccepted', function(username) {
+    $("#userNav").html(username);
     $("#signUpContainer").hide();
     $(".verifiedUser").toggleClass('hidden');
   })
@@ -90,6 +97,12 @@ var socket = io.connect('http://localhost:3000');
   $("#submitBtn").click(function() {
     let newMessage = $("#chatMessage").val();
     $("#chatMessage").val("");
+    // let user = $("#userNav").html();
+    //
+    // $("#firstChatroom").append(`<h4>${user}</h4><p>${newMessage}</p><hr>`)
+    //append html for username, message body, and a break
+
+
     socket.emit('postMessage', newMessage);
   })
 
@@ -99,8 +112,6 @@ var socket = io.connect('http://localhost:3000');
     // console.log("before socket.emit sigup ", newUser);
     socket.emit('signUp', newUser);
   })
-
-
 
 </script>
 </html>
