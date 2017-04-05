@@ -1,26 +1,56 @@
-const express = require('express');
+const express = require("express");
 const app = express();
-const server = require('http').createServer(app);
-const io = require('socket.io')(server);
-const redisClient = require('redis').createClient();
-const expressHandlebars = require('express-handlebars');
-const bodyParser = require('body-parser');
-const shortid = require('shortid');
+const server = require("http").createServer(app);
+const io = require("socket.io")(server);
+const redisClient = require("redis").createClient();
+const expressHandlebars = require("express-handlebars");
+const bodyParser = require("body-parser");
+const shortid = require("shortid");
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
+app.use(
+  "/socket.io",
+  express.static(__dirname + "node_modules/socket.io-client/dist/")
+);
+
 const hbs = expressHandlebars.create({
-  defaultLayout: 'main'
+  defaultLayout: "main"
 });
 
-app.use(express.static(__dirname + '/public'));
+app.use(express.static(__dirname + "/public"));
 
-app.engine('handlebars', hbs.engine);
-app.set('view engine', 'handlebars');
+app.engine("handlebars", hbs.engine);
+app.set("view engine", "handlebars");
 
 //redisClient.flushall();
 
-io.on('connection', client => {});
+io.on("connection", client => {
+  console.log("inside io.on ");
+  client.on("postMessage", () => {
+    //let newMessage = req.body.message;
+    console.log("inside client.on ");
+    let messageID = "message_" + shortid.generate();
+
+    // DON'T FORGET TO CHANGE THESE GEEEEEZE
+    let user = "anon";
+    let room = "cats";
+
+    //Currently just rewriting the messages hash every time
+
+    // redisClient.hmset(messageID);
+
+    redisClient.hmset(
+      messageID,
+      "messageBody",
+      newMessage,
+      "username",
+      user,
+      "roomName",
+      room
+    );
+  });
+});
 
 // Seperate databases for messages, users, rooms?
 // Or single database with seperate hashes?
@@ -78,12 +108,12 @@ io.on('connection', client => {});
 //hashkey contains all information:
 //
 
-app.get('/', (req, res) => {
+app.get("/", (req, res) => {
   let messagesObj = {};
 
   var p = new Promise(function(resolve, reject) {
-    redisClient.keys('message_*', (err, keys) => {
-      console.log(keys);
+    redisClient.keys("message_*", (err, keys) => {
+      //console.log(keys);
       if (keys.length === 0) {
         resolve(messagesObj);
       }
@@ -91,8 +121,8 @@ app.get('/', (req, res) => {
       keys.forEach(key => {
         redisClient.hgetall(key, (err, message) => {
           messagesObj[key] = message;
-          console.log(Object.keys(messagesObj).length);
-          console.log(keys.length);
+          //console.log(Object.keys(messagesObj).length);
+          //console.log(keys.length);
           if (Object.keys(messagesObj).length === keys.length) {
             resolve(messagesObj);
           }
@@ -102,7 +132,7 @@ app.get('/', (req, res) => {
   });
 
   p.then(messageList => {
-    res.render('index', { messageList });
+    res.render("index", { messageList });
   });
   //need to set this up in a promise or something
 
@@ -113,55 +143,53 @@ app.get('/', (req, res) => {
   // });
 });
 
-app.post('/', (req, res) => {
-  let newMessage = req.body.message;
-  let messageID = 'message_' + shortid.generate();
-
-  // DON'T FORGET TO CHANGE THESE GEEEEEZE
-  let user = 'anon';
-  let room = 'cats';
-
-  //Currently just rewriting the messages hash every time
-
-  // redisClient.hmset(messageID);
-
-  redisClient.hmset(
-    messageID,
-    'messageBody',
-    newMessage,
-    'username',
-    user,
-    'roomName',
-    room
-  );
-
-  // messages: {
-  //   uniqueid: blah,
-  //   message:blah,
-  //   username:blah,
-  //   roomname:blah,
-  //   uniqueid:
-  // }
-
-  // redisClient.hmset("rooms", "roomName");
-  //hmset hash key value key value key value
-  //   redisClient.hmset(
-  //     uniqueID,
-  //     'uniqueID',
-  //     uniqueID,
-  //     'creationTime',
-  //     creationTime,
-  //     'url',
-  //     req.body.userURL,
-  //     'count',
-  //     0,
-  //     (err, results) => {
-  //       redisClient.hgetall(uniqueID, (err, results) => {
-  //         console.log(results);
-  //       });
-  //     }
-  //   );
-});
+//app.post("/", (req, res) => {
+// let newMessage = req.body.message;
+// let messageID = "message_" + shortid.generate();
+//
+// // DON'T FORGET TO CHANGE THESE GEEEEEZE
+// let user = "anon";
+// let room = "cats";
+//
+// //Currently just rewriting the messages hash every time
+//
+// // redisClient.hmset(messageID);
+//
+// redisClient.hmset(
+//   messageID,
+//   "messageBody",
+//   newMessage,
+//   "username",
+//   user,
+//   "roomName",
+//   room
+// );
+// messages: {
+//   uniqueid: blah,
+//   message:blah,
+//   username:blah,
+//   roomname:blah,
+//   uniqueid:
+// }
+// redisClient.hmset("rooms", "roomName");
+//hmset hash key value key value key value
+//   redisClient.hmset(
+//     uniqueID,
+//     'uniqueID',
+//     uniqueID,
+//     'creationTime',
+//     creationTime,
+//     'url',
+//     req.body.userURL,
+//     'count',
+//     0,
+//     (err, results) => {
+//       redisClient.hgetall(uniqueID, (err, results) => {
+//         console.log(results);
+//       });
+//     }
+//   );
+//});
 
 // app.get('/', (req, res) => {
 //   var allKeys = [];
