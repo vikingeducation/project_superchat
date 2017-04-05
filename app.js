@@ -44,9 +44,10 @@ app.use(function(err, req, res, next) {
 io.on("connection", client => {
   console.log("New connection!");
   //send the client the data
-  chatOps.buildChatTable()
-  .then(function onFulfilled(htmlString) {
-      client.emit("connection", htmlString);
+  //display all message of the default chatroom
+  let pro = Promise.all([chatOps.buildMessageTable("default"), chatOps.buildChatTable()]);
+  pro.then(function onFulfilled(infoObj) {
+      client.emit("connection", { "messages" : infoObj[0], "rooms" : infoObj[1]});
   });
   
   
