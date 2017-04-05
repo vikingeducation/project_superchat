@@ -10,9 +10,6 @@ $(document).ready(function() {
     return cookies;
   };
   var theCookies = getCookies();
-  console.log(`value of cookies.user ${ theCookies.user }`);
-  console.log(`value of cookies.user ${ Object.keys(theCookies) }`);
-  console.log(`document.cookies is ${ document.cookie }`);
   
   
   var currentUrl = $(location).attr("href");
@@ -20,7 +17,7 @@ $(document).ready(function() {
   var socket = io.connect(currentUrl);
   socket.on("connection", data => {
     console.log("We got connected!");
-    
+    console.log(`data is ${ data }`);
 
     
     $('#messages tbody').append(data.messages);

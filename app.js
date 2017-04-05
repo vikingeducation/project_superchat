@@ -50,10 +50,10 @@ io.on("connection", client => {
     chatOps.buildChatTable()
   ]);
   pro.then(function onFulfilled(infoObj) {
+      console.log(`infoObj value is ${ infoObj }`);
     client.emit("connection", { messages: infoObj[0], rooms: infoObj[1] });
   });
-
-  client.emit("connection");
+  
   client.on("new room", data => {
     //io.emit(new room) tells all the clients to update their rooms
     let pro = chatOps.makeNewRoom(data);
