@@ -6,8 +6,12 @@ $(document).ready(function(){
   })
   socket.on('show messages', function(messages){
     $('#roommessages').removeClass('hidden');
+    $('#roommessages ul').html('')
     messages.forEach(function(message){
-      $('#roommessages ul').append($('<li>').text(messages.body));
+      var $messageLi = $('<li></li>')
+      .text(message.body);
+
+      $('#roommessages ul').append($messageLi);
     })
     console.log(messages)
   })
