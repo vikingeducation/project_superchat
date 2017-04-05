@@ -44,7 +44,7 @@ app.use(function(err, req, res, next) {
 });
 
 // sockets requirements
-const {getMessages, createMessage, getRooms, createRoom} = require('./lib/redis_client');
+const {getMessages, createMessage, getRooms, createRoom, enterRoom, leaveRoom} = require('./lib/redis_client');
 
 io.on("connection", client => {
 	console.log("websockets connection open");
@@ -55,11 +55,24 @@ io.on("connection", client => {
     })
   });
 
+  client.on('join room', (roomName) => {
+    enterRoom(roomName).then((number) => {
+      io.emit("join room", {roomName, number});
+    }) 
+  });
+
+  client.on('leave room', (roomName) => {
+    leaveRoom(roomName).then((number) => {
+      io.emit("leave room", {roomName, number});
+    }) 
+  });  
+
   client.on('new message', (infoObj) => {
     var roomName = infoObj.roomName;
     var body = infoObj.body;
-    createMessage(roomName, 'author', body).then(() => {
-      io.emit("new message", {roomName, author: 'author', body});
+    var author = infoObj.author;
+    createMessage(roomName, author, body).then(() => {
+      io.emit("new message", {roomName, author, body});
     })
   }); 
 

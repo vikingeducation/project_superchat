@@ -1,3 +1,5 @@
+{{>navbar user=user}}
+
 <div class="jumbotron">
   <div class="container">
     <h1>SUPER CHAT</h1>
@@ -9,11 +11,16 @@
   <div class="row">
     <div class="col-md-4">
       <h2>Chat rooms</h2>
-
+      <ul class="list-group">
     {{#each roomsList as |room|}}
-      <h3 class='room'>{{room.name}}</h3>
-      <p>{{room.numUsers}} members</p>
+      <li class="list-group-item">
+        <div class="{{room.name}}">
+          <h3 class='room'>{{room.name}}</h3>
+          <p>{{room.numUsers}} members</p>
+        </div>
+      </li>
     {{/each}}
+      </ul>
     </div>
     <div class="col-md-4">
       <div id='roommessages' class='hidden'></div>

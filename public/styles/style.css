@@ -3,3 +3,9 @@ body {
   padding-top: 50px;
   padding-bottom: 20px;
 }
+
+#logged-in-user {
+	color: #9d9d9d;
+	font-size: 1.5em;
+	margin-top: 10px;
+}

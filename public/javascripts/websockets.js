@@ -2,32 +2,41 @@ $(document).ready(function(){
   var socket = io.connect('http://localhost:3000');
 
   $('.room').click(function(){
-    socket.emit('show messages', $(this).text())
+    socket.emit('show messages', $(this).text());
+    socket.emit('join room', $(this).text());
+    var activeRoom = $('#roommessages h2').text();
+    if (activeRoom) {
+      socket.emit('leave room', activeRoom);
+    }
   })
 
   socket.on('show messages', function(roomObj){
-    $('#roommessages').removeClass('hidden');
-    $('#message-form').removeClass('hidden');
-    var $roomName = $('<h2></h2>')
-    .text(roomObj.roomName);
-    $room = $('#roommessages');
-    $room.html('');
-    $room.append($roomName);
-    $room.append('<ul></ul>');
+    showRooms();
+    initializeRoom(roomObj.roomName);
 
     $list = $('#roommessages ul');
 
     for (let i=0; i<roomObj.messages.length; i++) {
       addMessage($list, roomObj.messages[i]);
     }
+  })
 
+  socket.on('join room', function(roomObj){
+    var roomName = roomObj.roomName;
+    $(`.${roomName} p`).text(`${roomObj.number} members`);
+  })
+
+  socket.on('leave room', function(roomObj){
+    var roomName = roomObj.roomName;
+    $(`.${roomName} p`).text(`${roomObj.number} members`);
   })
 
   $('#submit-message').click(function(e){
     e.preventDefault();
     var body = $('#new-message').val();
     var roomName = $('#roommessages h2').text();
-    socket.emit('new message', {body, roomName});
+    var author = $("#logged-in-user").text();
+    socket.emit('new message', {body, author, roomName});
   })
 
   socket.on('new message', function(messageObj){
@@ -46,16 +55,27 @@ function addMessage(parent, message) {
   .text(message.author);
   var $body = $('<p></p>')
   .text(message.body);
-  var $messageLi = $('<li></li>')
+  var $messageDiv = $('<div></div>')
   .append($author)
-  .append($body);
+  .append($body);  
+  var $messageLi = $('<li class="list-group-item"></li>')
+  .append($messageDiv);
 
   parent.prepend($messageLi);
 }
 
+function showRooms(){
+  $('#roommessages').removeClass('hidden');
+  $('#message-form').removeClass('hidden');
+}
+
+function initializeRoom(roomName){
+  var $roomName = $('<h2></h2>')
+  .text(roomName);
+  $room = $('#roommessages');
+  $room.html('');
+  $room.append($roomName);
+  $room.append('<ul class="list-group"></ul>');
+}
 
 
-// socket.on('new count', function(obj) {
-//     var id = '#' + obj.id;
-//     $(id).text(obj.clicks);
-//   });
