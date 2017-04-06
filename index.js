@@ -30,11 +30,11 @@ io.on('connection', client => {
     io.emit('createdNewRoom', newRoomName);
   });
 
-  client.on('postMessage', newMessage => {
+  client.on('postMessage', (newMessage, room) => {
     let user = client.username;
-    ra.postMessage(client, newMessage);
+    ra.postMessage(client, newMessage, room);
 
-    io.emit('newMessage', newMessage, user);
+    io.emit('newMessage', newMessage, user, room);
   });
 
   client.on('signUp', newUser => {

@@ -4,6 +4,7 @@
 <h3 id="userNav" style="color: black">Not signed in</h3>
 <button type="submit" id="userLogOut" class="btn btn-default hidden">Sign Out</button>
 
+<!-- Sign in -->
 <div class="container" id="signUpContainer">
   <div class="row">
     <div class="col-xs-6 col-md-3" id="bordered">
@@ -24,38 +25,34 @@
 
 <!-- List of Rooms -->
 <div class="container verifiedUser hidden">
-      <div class="row">
-        <div class="col-xs-6 col-md-3" id="bordered">
-          <div class="panel panel-default" id="overflowEnabled">
-            <div class="panel-heading">
-              <h3 class="panel-title">List of Chat Rooms</h3>
-            </div>
-              <div class="panel-body" id="listOfRooms">
-                <h4>Create a new chat room</h4>
-                <div class="form-group">
-                  <input type="text" class="form-control" id="createNewChat" name="newRoomName" placeholder="Enter name for new room">
-                </div>
-                <button type="submit" id="newChatRoomSubmit" class="btn btn-default">Create</button>
-                <hr>
-
-                {{#each roomNames as |room|}}
-                  <h4 id="{{room}}" class="rooms">{{room}}<h4>
-                  <hr>
-                {{/each}}
-
-
-
-              </div>
+  <div class="row">
+    <div class="col-xs-6 col-md-3" id="bordered">
+      <div class="panel panel-default" id="overflowEnabled">
+        <div class="panel-heading">
+          <h3 class="panel-title">List of Chat Rooms</h3>
+        </div>
+        <div class="panel-body" id="listOfRooms">
+          <h4>Create a new chat room</h4>
+          <div class="form-group">
+            <input type="text" class="form-control" id="createNewChat" name="newRoomName" placeholder="Enter name for new room">
           </div>
+          <button type="submit" id="newChatRoomSubmit" class="btn btn-default">Create</button>
+          <hr>
+          {{#each roomNames as |room|}}
+            <h4 id="room_{{room}}" class="rooms">{{room}}<h4>
+            <hr>
+          {{/each}}
         </div>
       </div>
     </div>
+  </div>
+</div>
 
 
 
 <!-- Chat Rooms -->
 {{#each roomNames as |room|}}
-<div class="container verifiedUser hidden">
+<div id="{{room}}panel" class="container roomContainer hidden">
       <div class="row">
         <div class="col-xs-6 col-md-3" id="bordered">
           <div class="panel panel-default" id="overflowEnabled">
@@ -81,7 +78,7 @@
             <div class="col-xs-6 col-md-3" id="bordered">
               <div class="panel panel-default">
                 <div class="panel-heading">
-                  <h3 class="panel-title">Cats</h3>
+                  <h3 class="panel-title">Post a message from here</h3>
                 </div>
                   <div class="panel-body">
                         <div class="form-group">
@@ -98,17 +95,21 @@
 
 <script>
 
-var socket = io.connect('http://localhost:3000');
+$(document).ready(function() {
+  var socket = io.connect('http://localhost:3000');
 
-  socket.on('newMessage', function(message, user) {
-    $("#firstChatroom").append(`<h4>${user}</h4><p>${message}</p><hr>`);
+  /////////////////////////
+  // Listen Events
+
+  socket.on('newMessage', function(message, user, room) {
+    $(`#${room}`).append(`<h4>${user}</h4><p>${message}</p><hr>`);
   })
 
   socket.on('userAccepted', function(username) {
     $("#userNav").html(username);
-    $("#userLogOut").toggleClass('hidden');
-    $("#signUpContainer").toggleClass('hidden');
-    $(".verifiedUser").toggleClass('hidden');
+    $("#userLogOut").hide();
+    $("#signUpContainer").hide();
+    $(".verifiedUser").show();
   })
 
   socket.on('userDenied', function(username) {
@@ -119,34 +120,33 @@ var socket = io.connect('http://localhost:3000');
     $("#listOfRooms").append(`<h4 id="${roomname} class="rooms">${roomname}</h4><hr>`);
   })
 
+  //////////////////////
+  // Click Events
   $(".rooms").click(function(event) {
     let selectedRoom = event.target;
+    let nameOfRoom = $(selectedRoom).html();
 
-    $("").toggleClass("hidden");
-
-    // let user = $("#userNav").html();
-    //
-    // $("#firstChatroom").append(`<h4>${user}</h4><p>${newMessage}</p><hr>`)
-    //append html for username, message body, and a break
-    socket.emit('postMessage', newMessage);
+    $(`${nameOfRoom}panel`).hide();
+    console.log(`${nameOfRoom}panel`)
   })
 
   $("#submitBtn").click(function() {
     let newMessage = $("#chatMessage").val();
+    let room = $(".roomContainer").not(".hidden").find(".panel-title").html();
     $("#chatMessage").val("");
     // let user = $("#userNav").html();
     //
     // $("#firstChatroom").append(`<h4>${user}</h4><p>${newMessage}</p><hr>`)
     //append html for username, message body, and a break
-    socket.emit('postMessage', newMessage);
+    socket.emit('postMessage', newMessage, room);
   })
 
   $("#userLogOut").click(function() {
     var currentUser = $("#userNav").html();
     $("#userNav").html("Not signed in.");
-    $("#userLogOut").toggleClass('hidden');
-    $("#signUpContainer").toggleClass('hidden');
-    $(".verifiedUser").toggleClass('hidden');
+    $("#userLogOut").show();
+    $("#signUpContainer").hide();
+    $(".verifiedUser").show();
     socket.emit('userLoggedOut', currentUser);
   })
 
@@ -161,7 +161,7 @@ var socket = io.connect('http://localhost:3000');
     $("#createNewChat").val("");
     socket.emit('createNewRoom', newRoomName);
   })
-
+});
 
 
 </script>
