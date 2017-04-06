@@ -14,9 +14,13 @@
     "author": "tom",
   },
 
-  "user-1": {
-    "name": "nicolas"
-  },
+  "user-name1": [],
+  "user-name2": [],
+
+  "users": [
+    "user-name1",
+    "user-name2",
+  ],
 
   "room-1-messages": [
     "message-1",

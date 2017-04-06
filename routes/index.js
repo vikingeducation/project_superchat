@@ -7,6 +7,7 @@ router.get('/', (req, res) => {
 
 router.post('/login', (req, res) => {
 	let username = req.body.username;
+  // create the user in redis
 	res.cookie('username', username);
 	res.redirect('/chatroom');
 })
