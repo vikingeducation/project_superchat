@@ -1,7 +1,7 @@
 $(document).ready(function(){
   var socket = io.connect('http://localhost:3000');
 
-  $('.room').click(function(){
+  $('.sidebar-nav').on('click', 'a', function(e){
     socket.emit('show messages', $(this).text());
     socket.emit('join room', $(this).text());
     var activeRoom = $('#roommessages h2').text();
@@ -52,23 +52,26 @@ $(document).ready(function(){
     }
   })
 
-  $('#create-room-submit').click(function(e){
-    e.preventDefault();
-    var roomName = $('#create-room input').val();
-    socket.emit('create room', roomName);
+  $('#create-room-submit').keypress(function(e){
+    if(e.which == 13){
+      e.preventDefault();
+      var roomName = $('#create-room input').val();
+      socket.emit('create room', roomName);
+    }
   })
 
   socket.on('create room', function(roomName){
-    var $newRoom = $('<li class="list-group-item"></li>');
-    var $roomDiv = $(`<div class="${roomName}"></div>`);
-    var $roomName = $(`<h3 class="room">${roomName}</h3>`);
-    var $roomMembers = $('<p>0 members</p>');
-    var $list = $('.rooms-list');
-    $roomDiv.append($roomName);
-    $roomDiv.append($roomMembers);
-    $newRoom.append($roomDiv);
-    $list.append($newRoom);
-
+    //
+    $newA = $('<a>')
+      .addClass('room')
+      .attr('href', '#')
+      .text(roomName);
+    $newDiv = $('<div>')
+      .addClass(roomName);
+    $newLi = $('<li>');
+    $newDiv.append($newA);
+    $newLi.append($newDiv);
+    $('.sidebar-nav').append($newLi);
   })
 })
 
@@ -83,21 +86,21 @@ function addMessage(parent, message) {
   var $messageLi = $('<li class="list-group-item"></li>')
   .append($messageDiv);
 
-  parent.prepend($messageLi);
+  parent.append($messageLi);
 }
 
 function showRooms(){
   $('#roommessages').removeClass('hidden');
+  $('.messages-header').removeClass('hidden');
   $('#message-form').removeClass('hidden');
 }
 
 function initializeRoom(roomName){
-  var $roomName = $('<h2></h2>')
-  .text(roomName);
-  $room = $('#roommessages');
+  var $navbarTitle = $('.messages-header h2');
+  $navbarTitle.text(roomName)
+  var $room = $('#roommessages');
   $room.html('');
-  $room.append($roomName);
-  $room.append('<ul class="list-group"></ul>');
+  $room.append('<ul></ul>');
 }
 
 
