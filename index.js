@@ -1,5 +1,3 @@
-
-
 const express = require("express")
 const app = express()
 const server = require('http').createServer(app)
@@ -7,19 +5,18 @@ const io = require('socket.io')(server)
 const bodyParser = require('body-parser')
 const expressHandlebars = require("express-handlebars");
 const cp = require('cookie-parser');
-var path = require('path');
-// const redisClient = require('./services/redis/createClient');
-const {addMessage, getMessagesForRoom, compareTimes} = require('./services/redis/storeMessages')
-const {addRoom, getRooms} = require('./services/redis/addRoom');
-
+const path = require('path');
+//Helper Modules
+const {addMessage, getMessagesForRoom, compareMessageTimes} = require('./services/redis/messageHandler')
+const {addRoom, getRoomIDs} = require('./services/redis/roomHandler');
 const port = process.env.PORT || '3000'
 
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cp())
 
 const hbs = expressHandlebars.create({
   defaultLayout: "main",
 });
-app.use(cp())
 app.engine("handlebars", hbs.engine);
 app.set("view engine", "handlebars");
 
@@ -50,25 +47,20 @@ io.on("connection", client => {
 
 });
 
-  // redisClient.flushall();
-
 app.get('/', (req, res) => {
   if (!req.cookies.username) {
     res.redirect("/login")
   } else {
     let roomNames = [];
     let username = req.cookies.username;
-    getRooms().then(roomNamesArr => {
-      roomNamesArr.forEach(roomNamesId => {
-        roomNames.push(roomNamesId.substr(5))
+    getRoomIDs()
+    .then(roomIDsArray => {
+      roomIDsArray.forEach(roomID => {
+        roomNames.push(roomID.substr(5))
       })
-      // if (!roomNames.length) {
-      //   addRoom("Cats");
-      //   roomNames.push("Cats");
-      // }
-      getMessagesForRoom('Cats').then(messages => {
-        console.log(messages);
-        messages = messages.sort(compareTimes)
+      getMessagesForRoom('Cats') //Cats is default room
+      .then(messages => {
+        messages = messages.sort(compareMessageTimes)
         res.render('index', {roomNames, messages, username})
       })
     })
@@ -97,3 +89,9 @@ app.get('/signout', (req, res) => {
 server.listen(port, function(err) {
   console.log(`listening on ${port}`);
 });
+
+      //IF FLUSH DATABASE, ADD TO GET '/' TO RENDER HOMEPAGE
+      // if (!roomNames.length) {
+      //   addRoom("Cats");
+      //   roomNames.push("Cats");
+      // }

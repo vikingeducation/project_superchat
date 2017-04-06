@@ -1,11 +1,7 @@
-module.exports = {
-  addMessage,
-  getMessagesForRoom,
-  compareTimes
-}
-
 const shortid = require('shortid');
 const redisClient = require('./createClient');
+
+
 function addMessage(body, username, room, time) {
   const id = shortid.generate();
   redisClient.hmset(`messages:${id}`, { body, username, room, time });
@@ -36,7 +32,7 @@ function getMessages(keys) {
   return Promise.all(keys.map(getMessage));
 }
 
-function compareTimes(a,b) {
+function compareMessageTimes(a,b) {
   if (a.time < b.time)
     return -1;
   if (a.time > b.time)
@@ -44,3 +40,8 @@ function compareTimes(a,b) {
   return 0;
 }
 
+module.exports = {
+  addMessage,
+  getMessagesForRoom,
+  compareMessageTimes
+}
