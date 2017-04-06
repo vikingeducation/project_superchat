@@ -95,7 +95,7 @@ io.on("connection", client => {
   client.on("room-change", room => {
     chatOps.buildMessageTable(room)
     .then(function onFulfilled(messages) {
-      client.emit("room-change", messages);
+      client.emit("room-change", { messages });
   });
     
     

@@ -65,7 +65,7 @@ $(document).ready(function() {
   );
   
   socket.on('room-change', data => {
-    $("#messages tbody").html(data);
+    $("#messages tbody").html(data.messages);
   });
   
   
