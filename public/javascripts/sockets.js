@@ -14,6 +14,11 @@ $(document).ready(function() {
 
   //setting the username at top of screen
   $("#user-heading").text(theCookies.user);
+  
+  
+  //Remove hidden class from logout button
+  $('#logout').removeClass('hidden');
+  
 
   var currentUrl = $(location).attr("href");
   console.log(location);
