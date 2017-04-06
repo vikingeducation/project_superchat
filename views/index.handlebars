@@ -51,7 +51,7 @@
 
 
 <!-- Chat Rooms -->
-{{#each roomNames as |room|}}
+{{#each roomList as |room|}}
 <div id="{{room}}panel" class="container roomContainer hidden">
       <div class="row">
         <div class="col-xs-6 col-md-3" id="bordered">
@@ -117,7 +117,7 @@ $(document).ready(function() {
   })
 
   socket.on('createdNewRoom', function(roomname) {
-    $("#listOfRooms").append(`<h4 id="${roomname} class="rooms">${roomname}</h4><hr>`);
+    $("#listOfRooms").append(`<h4 id="room_${roomname}" class="rooms">${roomname}</h4><hr>`);
   })
 
   //////////////////////
@@ -125,10 +125,9 @@ $(document).ready(function() {
   $(".rooms").click(function(event) {
     let selectedRoom = event.target;
     let nameOfRoom = $(selectedRoom).html();
-    $(`.roomContainer`).addClass('hidden');
-    $(`#${nameOfRoom}panel`).toggleClass('hidden');
+    let namePanel = "#" + nameOfRoom + "panel";
+    $(`${namePanel}`).toggleClass('hidden');
     socket.emit('launchChatRoom', nameOfRoom);
-    // console.log(`${nameOfRoom}panel`)
   })
 
   $("#submitBtn").click(function() {
@@ -149,6 +148,7 @@ $(document).ready(function() {
 
   $("#userSubmit").click(function() {
     let newUser = $("#newUser").val();
+    console.log(newUser);
     $("#newUser").val("");
     socket.emit('signUp', newUser);
   })
