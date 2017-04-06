@@ -1,0 +1,20 @@
+/* Move down content because we have a fixed navbar that is 50px tall */
+body {
+  padding-top: 75px;
+  padding-left:45px;
+
+}
+
+#bordered {
+  border: 2px 2px 2px 2px;
+}
+
+#overflowEnabled {
+  overflow-y: auto;
+  height: 50%;
+  width: 100%;
+}
+
+.rooms:hover{
+  color:blue;
+}
