@@ -7,9 +7,10 @@ const expressHandlebars = require("express-handlebars");
 const cp = require('cookie-parser');
 var path = require('path');
 redisClient = require("redis").createClient();
-
 const {addMessage, getMessagesForRoom, compareTimes} = require('./services/redis/storeMessages')
 const {addRoom, getRooms} = require('./services/redis/addRoom');
+
+const port = process.env.PORT || '3000'
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -86,4 +87,9 @@ app.post('/login', (req, res) => {
   res.redirect('/')
 })
 
-server.listen(8000)
+app.get('/signout', (req, res) => {
+  res.clearCookie("username")
+  res.redirect('/login')
+})
+
+server.listen(port)

@@ -75,8 +75,7 @@
   padding: 3px 20px;
 }
    .member_list .chat-body {
-   margin-left: 47px;
-   margin-top: 0;
+   text-align: center;
    }
    .top_nav {
    overflow: visible;
@@ -201,4 +200,75 @@
 
 .hidden {
   display: none;
+}
+
+#header-bar {
+  background: #428BCA;
+}
+
+#header-bar h1 {
+  display: inline-block;
+  font-weight: 900;
+  letter-spacing: .1em;
+  margin: 0;
+  padding: 20px;
+  color: #fff;
+}
+
+#room_name_prompt {
+  color: #666;
+}
+
+#currentRoom,
+#username  {
+  color: black;
+  font-size: 1.2em;
+}
+
+#user_prompt {
+  color: #666;
+}
+
+.btn-danger#addRoom {
+  padding: 4px 8px 4px 8px;
+  margin: 5px;
+  font-size: 12px;
+  background: #449D44;
+  color: #fff;
+  font-weight: ;
+}
+
+#user_options_header {
+  margin: 20px;
+  margin-top: 10px;
+  float: right;
+}
+
+#user_options_header a {
+  text-decoration: none;
+  font-weight: 900;
+  color: #fff;
+}
+
+#username_header {
+  font-weight: 600;
+  color: #E8E6E7;
+  font-size: 20px;
+}
+
+#login_box {
+  margin: auto;
+  margin-top: 80px;
+  width: 200px;
+  border: 1px solid #e8e6e7;
+  border-radius: 6px
+}
+
+#login_box_elements {
+  margin: 10px;
+  background
+}
+
+#login_box_elements button {
+  margin-top: 8px;
 }

@@ -1,10 +1,17 @@
 <script src="https://use.fontawesome.com/45e03a14ce.js"></script>
 
 <div class="main_section">
-   <div class="container">
+  <div class="container">
+  <div id="header-bar">
+    <h1 id="header-text">SuperChat</h1>
+    <div id="user_options_header">
+      <span id="username_header">{{username}}</span>
+      <a href="/signout" id="sign_out">Sign Out</a>
+    </div>
+  </div>
       <div class="chat_container">
          <div class="col-sm-3 chat_sidebar">
-       <div class="row">
+      <div class="row">
             <div id="custom-search-input">
                <div class="input-group col-md-12">
                   <input type="text" id="newRoom" class="search-query form-control"/>
@@ -17,10 +24,10 @@
                <ul class="list-unstyled" id="rooms">
                 {{#each roomNames as |roomName|}}
                   <li class="left clearfix">
-                     <div class="chat-body clearfix">
-                        <div class="header_sec roomName">
+                     <div class="chat-body clearfix roomName">
+                        <div class="header_sec">
                           <!-- Rooms will go in here -->
-                           <strong class="primary-font">{{roomName}}</strong>
+                           <strong class="primary-font roomText">{{roomName}}</strong>
                         </div>
                      </div>
                   </li>
@@ -33,8 +40,8 @@
          <div class="col-sm-9 message_section">
      <div class="row">
       <div class="new_message_head">
-        <div>You are in the room: <span id="currentRoom">Cats</span></div>
-     <div class="pull-left"> Logged in as: <span id="username">{{username}}</span></div>
+        <div id="room_name_prompt">You are in the room: <span id="currentRoom">Cats</span></div>
+     <div class="pull-left" id="user_prompt"> Logged in as: <span id="username" >{{username}}</span></div>
      </div><!--new_message_head-->
      <div class="chat_area">
      <ul class="list-unstyled messages">
@@ -92,7 +99,7 @@
     $("#rooms").prepend(`<li class="left clearfix">
                      <div class="chat-body clearfix">
                         <div class="header_sec roomName">
-                           <strong class="primary-font">${newRoom}</strong>
+                           <strong class="primary-font roomText">${newRoom}</strong>
                         </div>
                      </div>
                   </li>`)
@@ -124,12 +131,18 @@
     console.log("CONNECTED");
     let newRoom = $("#newRoom").val();
     $("#newRoom").val("");
-    socket.emit('add room', newRoom);
+    if (newRoom.length) {
+      socket.emit('add room', newRoom);
+    }
   })
 
   $("ul#rooms").on("click", ".roomName", (event) => {
-    console.log($(event.target).text())
-    let roomName = $(event.target).text();
+    console.log($(event.target))
+    let roomName = $(event.target).find('.roomText').text();
+    // if text is clicked, set roomName to text element
+    if (!roomName) {
+      roomName = $(event.target).text();
+    }
     $("#currentRoom").text(roomName);
     socket.emit('change room', roomName);
   })

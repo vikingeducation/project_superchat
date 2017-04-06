@@ -4,7 +4,9 @@
   "description": "Build a realtime multi-room chat application. Make it super.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+    
   },
   "repository": {
     "type": "git",
@@ -16,6 +18,7 @@
   "bugs": {
     "url": "https://github.com/markmarkyesyes/project_superchat/issues"
   },
+
   "homepage": "https://github.com/markmarkyesyes/project_superchat#readme",
   "dependencies": {
     "body-parser": "^1.17.1",
