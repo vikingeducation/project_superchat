@@ -12,18 +12,42 @@
           <h3 class="panel-title">Sign Up</h3>
         </div>
         <div class="panel-body">
-          <!-- <form> -->
             <div class="form-group">
               <input type="text" class="form-control" id="newUser" name="username" placeholder="Enter username">
             </div>
             <button type="submit" id="userSubmit" class="btn btn-default">Sign Up</button>
-          <!-- </form> -->
         </div>
       </div>
     </div>
   </div>
 </div>
-<!-- Chat Room -->
+
+<!-- List of Rooms -->
+<div class="container verifiedUser hidden">
+      <div class="row">
+        <div class="col-xs-6 col-md-3" id="bordered">
+          <div class="panel panel-default" id="overflowEnabled">
+            <div class="panel-heading">
+              <h3 class="panel-title">List of Chat Rooms</h3>
+            </div>
+              <div class="panel-body" id="firstChatroom">
+                <h4>Cat Room</h4>
+                <p># of members</p>
+                <hr>
+                {{#each roomNames as |room|}}
+                  <h4>{{room}}</h4>
+                  <!-- <p>{{room.members}}</p> -->
+                  <hr>
+                {{/each}}
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+<!-- Chat Rooms -->
 <div class="container verifiedUser hidden">
       <div class="row">
         <div class="col-xs-6 col-md-3" id="bordered">
@@ -52,36 +76,21 @@
                   <h3 class="panel-title">Cats</h3>
                 </div>
                   <div class="panel-body">
-                    <!-- <form> -->
                         <div class="form-group">
                           <input type="text" class="form-control" id="chatMessage" name="message" placeholder="Chat here">
                         </div>
                         <button type="submit" id="submitBtn" class="btn btn-default">Submit</button>
-                      <!-- </form> -->
                   </div>
               </div>
             </div>
           </div>
         </div>
-        <!-- <div class="container" id="testArea">
-          <h4> testing</h4>
-        </div> -->
+
 </body>
 
 <script>
 
-// $( document ).ready() {
-//   $(".verifiedUser").hide();
-// }
 var socket = io.connect('http://localhost:3000');
-
-// socket.on('new message', function(count, uniqueID) {
-//   $('#' + uniqueID).html(count);
-// });
-
-  // socket.on('new count', function(count) {
-  //   $("#count").html(count);
-  // })
 
   socket.on('newMessage', function(message, user) {
     $("#firstChatroom").append(`<h4>${user}</h4><p>${message}</p><hr>`);
@@ -121,7 +130,6 @@ var socket = io.connect('http://localhost:3000');
   $("#userSubmit").click(function() {
     let newUser = $("#newUser").val();
     $("#newUser").val("");
-    // console.log("before socket.emit sigup ", newUser);
     socket.emit('signUp', newUser);
   })
 
