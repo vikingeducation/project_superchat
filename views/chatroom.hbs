@@ -11,6 +11,16 @@
             {{user}}
           </p>
       </li>
+      <li class="channels-header">
+        <p>Channels<span id="create-new-channel" class="pull-right">+</span></p>
+      </li>
+      <li class="new-channel-form hidden">
+        <form id="create-room">
+          <div class="form-group">
+            <input type="text" name="roomName" placeholder="Room name" class="form-control" id="create-room-submit" >
+          </div>
+        </form>
+      </li>
       {{#each roomsList as |room|}}
         <li>
           <div class="{{room.name}}">
@@ -57,12 +67,7 @@
 
       <ul class="list-group rooms-list">
       <li class="list-group-item">
-        <form id="create-room">
-          <div class="form-group">
-            <input type="text" name="roomName" placeholder="Room name" class="form-control">
-          </div>
-          <div class="text-center"><button type="submit" id="create-room-submit" class="btn btn-success">Sign in</button></div>
-        </form>
+
       </li>
 
       </ul>

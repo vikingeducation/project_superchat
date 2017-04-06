@@ -112,7 +112,22 @@ body {
     background: none;
 }
 
+.channels-header p{
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #999999;
+}
 
+.channels-header span {
+    font-size: 1.5em;
+    right: 20px;
+    position: absolute;
+    margin: -3px 0 0 0;
+}
+
+.channels-header span:hover{
+    cursor: pointer;
+}
 
 @media(min-width:768px) {
     #wrapper {
