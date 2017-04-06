@@ -9,6 +9,7 @@ const path = require('path');
 //Helper Modules
 const {addMessage, getMessagesForRoom, compareMessageTimes} = require('./services/redis/messageHandler')
 const {addRoom, getRoomIDs} = require('./services/redis/roomHandler');
+const checkSuperbot = require('./services/chatbot/superbot.js')
 const port = process.env.PORT || '3000'
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -31,7 +32,13 @@ io.on("connection", client => {
 
   client.on("send post", (newPost, username, room) => {
     addMessage(newPost, username, room, Date.now());
-    io.emit('new post', [newPost, username, room]);
+    let superBotResponse = checkSuperbot(newPost)
+    if (superBotResponse) {
+      addMessage(superBotResponse, 'superBot', room, Date.now());
+      io.emit('new post', [newPost, username, room], [superBotResponse, 'superBot', room]);
+    } else {
+      io.emit('new post', [newPost, username, room]);
+    }
   });
 
   client.on("add room", (newRoom) => {
