@@ -1,3 +1,5 @@
+//redis://h:pb5c2e26ab92764898753f7d9b135ea957fb475eae0f263579bca67bbd3a49468@ec2-34-206-56-30.compute-1.amazonaws.com:41149
+
 const express = require("express")
 const app = express()
 const server = require('http').createServer(app)
@@ -6,7 +8,7 @@ const bodyParser = require('body-parser')
 const expressHandlebars = require("express-handlebars");
 const cp = require('cookie-parser');
 var path = require('path');
-redisClient = require("redis").createClient();
+redisClient = require("redis").createClient(process.env.REDIS_URL);
 const {addMessage, getMessagesForRoom, compareTimes} = require('./services/redis/storeMessages')
 const {addRoom, getRooms} = require('./services/redis/addRoom');
 
