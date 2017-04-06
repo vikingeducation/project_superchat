@@ -1,0 +1,89 @@
+{{!-- {{>navbar user=user}} --}}
+<div class="toggled" id="wrapper">
+  <!-- Sidebar -->
+  <div id="sidebar-wrapper">
+    <ul class="sidebar-nav">
+      <li class="sidebar-brand">
+          <a href="#">
+            {{title}}
+          </a>
+          <p id="current-user">
+            {{user}}
+          </p>
+      </li>
+      <li class="channels-header">
+        <p>Channels<span id="create-new-channel" class="pull-right">+</span></p>
+      </li>
+      <li class="new-channel-form hidden">
+        <form id="create-room">
+          <div class="form-group">
+            <input type="text" name="roomName" placeholder="Room name" class="form-control" id="create-room-submit" >
+          </div>
+        </form>
+      </li>
+      {{#each roomsList as |room|}}
+        <li>
+          <div class="{{room.name}}">
+            <a class="room" href="#">{{room.name}}</a>
+          </div>
+        </li>
+      {{/each}}
+
+    </ul>
+  </div>
+  <!-- /#sidebar-wrapper -->
+
+
+  <!-- Page Content -->
+  <div id="page-content-wrapper">
+    <div class="messages-header hidden">
+      {{>navbar}}
+    </div>
+    <div id='roommessages' class='hidden'></div>
+
+  </div>
+  <footer>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-xs-10">
+          <div class="hidden" id="message-form">
+            <form>
+              <div class="form-group">
+                <input type="text" class="form-control" id="new-message" placeholder="Type your message"></input>
+              </div>
+    {{!--           <button type="submit" id="submit-message" class="btn btn-default">Send</button> --}}
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    </footer>
+  <!-- /#page-content-wrapper -->
+</div>
+
+    <!-- /#wrapper
+
+
+
+
+{{!-- styles above  --}}
+
+<div class="jumbotron">
+  <div class="container">
+    <h1>SUPER CHAT</h1>
+  </div>
+</div>
+
+<div class="container">
+  <!-- Example row of columns -->
+  <div class="row">
+
+    <div class="col-md-4">
+      <div id='roommessages' class='hidden'></div>
+    </div>
+    <div class="col-md-4">
+
+    </div>
+  </div>
+</div>
+
