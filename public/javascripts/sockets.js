@@ -56,11 +56,12 @@ $(document).ready(function() {
   });
   
   
-  $("#rooms").on("click", "div", ((event) => {
+  $("#rooms").on("click", "div.room-name", ((event) => {
     //event.target.id;
     //emit roomchange event to server
-    socket.emit('room-change', event.target.id);
-    $("#currentChatroom").val(event.target.id);
+    console.log("value of this.id is " + event.currentTarget.id);
+    socket.emit('room-change', event.currentTarget.id);
+    $("#currentChatroom").val(event.currentTarget.id);
     })
   );
   
