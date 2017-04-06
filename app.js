@@ -6,6 +6,28 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const chatOps = require("./lib/chatOps");
 
+
+//** For testing purposes only**/
+
+/**Initialize the database with a default classroom **/
+const redis = require('redis');
+const redisClient = redis.createClient();
+redisClient.flushall();
+redisClient.lpush("rooms", "default");
+//Grab the default room and pull from it?
+
+let messageID = "message" + Date.now();
+redisClient.setnx(messageID, JSON.stringify({
+  user: "welcome",
+  message: "welcome to default",
+  room: "default"
+}));
+//Add this newly created message to the default's field in the rooms key
+redisClient.lpush("default", messageID);
+//* End Test Code **/////////
+
+
+
 //Require routes
 const index = require("./routes/index.js")(io);
 
@@ -47,10 +69,9 @@ io.on("connection", client => {
   //display all message of the default chatroom
   let pro = Promise.all([
     chatOps.buildMessageTable("default"),
-    chatOps.buildChatTable()
+    chatOps.buildRoomsTable()
   ]);
   pro.then(function onFulfilled(infoObj) {
-      console.log(`infoObj value is ${ infoObj }`);
     client.emit("connection", { messages: infoObj[0], rooms: infoObj[1] });
   });
   
