@@ -1,0 +1,63 @@
+{{!-- {{>navbar user=user}} --}}
+<div class="toggled" id="wrapper">
+  <!-- Sidebar -->
+  <div id="sidebar-wrapper">
+    <ul class="sidebar-nav">
+      <li class="sidebar-brand">
+          <a id="title" href="#">
+            {{title}}
+          </a>
+          <p>
+            <span id="current-user">{{user}}</span><a href="/logout" class="smallest pull-right">log out</a>
+          </p>
+      </li>
+      <li class="channels-header">
+        <p>Channels<span id="create-new-channel" class="pull-right">+</span></p>
+      </li>
+      <li class="new-channel-form hidden">
+        <form id="create-room">
+          <div class="form-group">
+            <input type="text" name="roomName" placeholder="Room name" class="form-control" id="create-room-submit" >
+          </div>
+        </form>
+      </li>
+      {{#each roomsList as |room|}}
+        <li class="room-list">
+          <div class="{{room.name}}">
+            <a class="room" href="#">{{room.name}}</a>
+          </div>
+        </li>
+      {{/each}}
+    </ul>
+  </div>
+  <!-- /#sidebar-wrapper -->
+
+
+  <!-- Page Content -->
+  <div id="page-content-wrapper">
+  <div class="page-inner">
+    <div class="messages-header hidden">
+      {{>navbar}}
+    </div>
+    <div id='roommessages' class='hidden'></div>
+  </div>
+  </div>
+  <footer>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-xs-10">
+          <div class="hidden" id="message-form">
+            <form>
+              <div class="form-group">
+                <input type="text" class="form-control" id="new-message" placeholder="Type your message"></input>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <!-- /#page-content-wrapper -->
+</div>
+
+

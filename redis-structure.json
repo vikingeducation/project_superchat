@@ -1,0 +1,54 @@
+{
+  "message-1":{
+    "body": "sample body text",
+    "author": "nicolas",
+  },
+
+  "message-2":{
+    "body": "sample body text2",
+    "author": "nicolas",
+  },
+
+  "message-3":{
+    "body": "sample body text3",
+    "author": "tom",
+  },
+
+  "user-name1": [],
+  "user-name2": [],
+
+  "users": [
+    "user-name1",
+    "user-name2",
+  ],
+
+  "room-1-messages": [
+    "message-1",
+    "message-2",
+    "message-3",
+  ],
+
+  "room-1-users": [
+    "user-1",
+    "user-2",
+    "user-3",
+  ],
+
+  "rooms": {
+    "roomname": 0,
+    "roomname2": 1,
+    "roomname3": 2,
+  },
+
+  "room-1":{
+    "name": "roomname",
+  } ,
+
+  "room-2":{
+    "name": "roomname",
+  } ,
+
+  "room-3":{
+    "name": "roomname",
+  } ,
+}
