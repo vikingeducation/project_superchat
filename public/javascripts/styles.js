@@ -1,6 +1,7 @@
 $(document).ready(function(){
-  $('.room').click(function(e){
+  $('.sidebar-nav').on('click', 'a', function(e){
     $('.room').removeClass('selected');
+    console.log(e.target);
     $(e.target).addClass('selected');
   })
 

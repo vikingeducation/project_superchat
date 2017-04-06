@@ -1,7 +1,7 @@
 $(document).ready(function(){
   var socket = io.connect('http://localhost:3000');
 
-  $('.room').click(function(){
+  $('.sidebar-nav').on('click', 'a', function(e){
     socket.emit('show messages', $(this).text());
     socket.emit('join room', $(this).text());
     var activeRoom = $('#roommessages h2').text();
@@ -62,7 +62,16 @@ $(document).ready(function(){
 
   socket.on('create room', function(roomName){
     //
-    $('.sidebar-nav').append('<li>...')
+    $newA = $('<a>')
+      .addClass('room')
+      .attr('href', '#')
+      .text(roomName);
+    $newDiv = $('<div>')
+      .addClass(roomName);
+    $newLi = $('<li>');
+    $newDiv.append($newA);
+    $newLi.append($newDiv);
+    $('.sidebar-nav').append($newLi);
   })
 })
 
@@ -77,7 +86,7 @@ function addMessage(parent, message) {
   var $messageLi = $('<li class="list-group-item"></li>')
   .append($messageDiv);
 
-  parent.prepend($messageLi);
+  parent.append($messageLi);
 }
 
 function showRooms(){
@@ -91,7 +100,7 @@ function initializeRoom(roomName){
   $room = $('#roommessages');
   $room.html('');
   $room.append($roomName);
-  $room.append('<ul class="list-group"></ul>');
+  $room.append('<ul></ul>');
 }
 
 
