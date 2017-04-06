@@ -29,6 +29,14 @@ $(document).ready(function(){
     }
   })
 
+  socket.on('leave room', function(roomObj){
+    var roomName = roomObj.roomName;
+    var activeRoom = $('.messages-header h2').text();
+    if (roomObj.roomName === activeRoom) {
+      $('#room-members').text(`${roomObj.number} members`);
+    }
+  })
+
 
 
   $('#new-message').keypress(function(e){
