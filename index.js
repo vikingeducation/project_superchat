@@ -6,6 +6,7 @@ const bodyParser = require('body-parser')
 const expressHandlebars = require("express-handlebars");
 const cp = require('cookie-parser');
 const path = require('path');
+const redisClient = require('./services/redis/createClient');
 //Helper Modules
 const {addMessage, getMessagesForRoom, compareMessageTimes} = require('./services/redis/messageHandler')
 const {addRoom, getRoomIDs} = require('./services/redis/roomHandler');
@@ -54,6 +55,8 @@ io.on("connection", client => {
 
 });
 
+// redisClient.flushall();
+
 app.get('/', (req, res) => {
   if (!req.cookies.username) {
     res.redirect("/login")
@@ -65,6 +68,10 @@ app.get('/', (req, res) => {
       roomIDsArray.forEach(roomID => {
         roomNames.push(roomID.substr(5))
       })
+      // if (!roomNames.length) {
+      //    addRoom("Cats");
+      //   roomNames.push("Cats");
+      //  }
       getMessagesForRoom('Cats') //Cats is default room
       .then(messages => {
         messages = messages.sort(compareMessageTimes)

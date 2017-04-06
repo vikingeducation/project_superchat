@@ -34,6 +34,9 @@ $( document ).ready(function() {
             </li>`
             )
           }
+      } else {
+        console.log('room ', room);
+        $(`#${room}`).find(".indicator").append('TEXT');
       }
     });
 
@@ -42,7 +45,7 @@ $( document ).ready(function() {
         `<li class="left clearfix">
           <div class="chat-body clearfix">
             <div class="header_sec roomName">
-              <strong class="primary-font roomText">${newRoom}</strong>
+              <strong class="primary-font roomText" id="{newRoom}">${newRoom}</strong><div id="indicator" class="hidden"></div>
             </div>
           </div>
         </li>`

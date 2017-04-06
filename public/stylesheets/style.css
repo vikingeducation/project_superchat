@@ -272,3 +272,12 @@
 #login_box_elements button {
   margin-top: 8px;
 }
+
+.indicator {
+  width: 6px;
+  height: 6px;
+  margin-left: 15px;
+  border-radius: 3px;
+  background-color: red;
+  display: inline-block;
+}
