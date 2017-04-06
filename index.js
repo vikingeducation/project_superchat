@@ -23,6 +23,13 @@ app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
 
 io.on('connection', client => {
+  client.on('createNewRoom', newRoomName => {
+    //let user = client.username;
+    ra.addRoom(newRoomName);
+
+    io.emit('createdNewRoom', newRoomName);
+  });
+
   client.on('postMessage', newMessage => {
     let user = client.username;
     ra.postMessage(client, newMessage);
