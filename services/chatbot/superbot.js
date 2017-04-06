@@ -1,18 +1,11 @@
-const superbotResponses = [
-  "I think you're super!",
-  "Thats 'SUPER' hehehehe",
-  "I could do better!"
-];
-
-function responseRandomizer() {
-  var response = superbotResponses[Math.floor(Math.random()*superbotResponses.length)];
-  return response;
-}
+const {responses, responseRandomizer} = require("./responses")
 
 function checkSuperbot(message) {
   if (message.match(/super/)) {
-    return responseRandomizer();
-  } else {
+    return responseRandomizer(responses.super);
+  } else if (message.match(/pizza/)) {
+    return responseRandomizer(responses.pizza);
+  }else {
     return undefined
   }
 } 

@@ -1,7 +1,7 @@
 $( document ).ready(function() {
 
-  var socket = io.connect('https://salty-sea-90816.herokuapp.com/');
-  // var socket = io.connect('http://localhost:3000');
+  // var socket = io.connect('https://salty-sea-90816.herokuapp.com/');
+  var socket = io.connect('http://localhost:3000');
 
     //Event Listeners
     socket.on('new post', (userResponse, botResponse) => {
