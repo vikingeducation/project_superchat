@@ -6,10 +6,6 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const chatOps = require("./lib/chatOps");
 
-
-
-
-
 //** For testing purposes only**/
 
 /**Initialize the database with a default classroom **/
@@ -79,9 +75,9 @@ io.on("connection", client => {
     client.emit("connection", { messages: infoObj[0], rooms: infoObj[1] });
   });
 
-  client.on("new room", data => {
+  client.on("new room", room => {
     //io.emit(new room) tells all the clients to update their rooms
-    let pro = chatOps.makeNewRoom(data);
+    let pro = chatOps.makeNewRoom(room);
     pro.then(htmlString => {
       if (htmlString) {
         io.emit("new room", htmlString);
@@ -92,22 +88,16 @@ io.on("connection", client => {
     //io.emit(new room) tells all the clients to update their rooms
     let htmlString = chatOps.makeNewMessage(data);
     if (htmlString) {
-      io.emit("new message", htmlString);
+      let room = data.room;
+      io.emit("new message", { htmlString, room });
     }
   });
-  
+
   client.on("room-change", room => {
-    chatOps.buildMessageTable(room)
-    .then(function onFulfilled(messages) {
+    chatOps.buildMessageTable(room).then(function onFulfilled(messages) {
       client.emit("room-change", { messages });
+    });
   });
-    
-    
-    
-  })
-  
-  
-  
 });
 
 server.listen(process.env.PORT || 3000);
