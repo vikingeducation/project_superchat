@@ -36,16 +36,31 @@
 
   <!-- Page Content -->
   <div id="page-content-wrapper">
-      <div class="container-fluid">
-          <div class="row">
-              <div class="col-lg-12">
-                <div id='roommessages' class='hidden'></div>
-              </div>
-          </div>
-      </div>
+    <div class="messages-header hidden">
+      {{>navbar}}
+    </div>
+    <div id='roommessages' class='hidden'></div>
+
   </div>
+  <footer>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-xs-10">
+          <div class="hidden" id="message-form">
+            <form>
+              <div class="form-group">
+                <input type="text" class="form-control" id="new-message" placeholder="Type your message"></input>
+              </div>
+    {{!--           <button type="submit" id="submit-message" class="btn btn-default">Send</button> --}}
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    </footer>
   <!-- /#page-content-wrapper -->
 </div>
+
     <!-- /#wrapper
 
 
@@ -67,15 +82,7 @@
       <div id='roommessages' class='hidden'></div>
     </div>
     <div class="col-md-4">
-      <div class="hidden" id="message-form">
-        <form>
-          <div class="form-group">
-            <label for="new-message">NEW POST</label>
-            <textarea type="text" class="form-control" id="new-message" placeholder="Type your message"></textarea>
-          </div>
-          <button type="submit" id="submit-message" class="btn btn-default">Send</button>
-        </form>
-      </div>
+
     </div>
   </div>
 </div>

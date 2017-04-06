@@ -91,15 +91,15 @@ function addMessage(parent, message) {
 
 function showRooms(){
   $('#roommessages').removeClass('hidden');
+  $('.messages-header').removeClass('hidden');
   $('#message-form').removeClass('hidden');
 }
 
 function initializeRoom(roomName){
-  var $roomName = $('<h2></h2>')
-  .text(roomName);
-  $room = $('#roommessages');
+  var $navbarTitle = $('.messages-header h2');
+  $navbarTitle.text(roomName)
+  var $room = $('#roommessages');
   $room.html('');
-  $room.append($roomName);
   $room.append('<ul></ul>');
 }
 
