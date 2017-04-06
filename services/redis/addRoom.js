@@ -1,7 +1,7 @@
-const shortid = require('shortid'); 
 
+const redisClient = require('./createClient');
 function addRoom(roomName) {
-  let id = shortid.generate();
+
   redisClient.lpush('rooms', `room:${roomName}`);
 }
 

@@ -5,7 +5,7 @@ module.exports = {
 }
 
 const shortid = require('shortid');
-
+const redisClient = require('./createClient');
 function addMessage(body, username, room, time) {
   const id = shortid.generate();
   redisClient.hmset(`messages:${id}`, { body, username, room, time });
