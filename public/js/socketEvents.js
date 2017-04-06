@@ -4,12 +4,13 @@ $( document ).ready(function() {
   // var socket = io.connect('http://localhost:3000');
 
     //Event Listeners
-    socket.on('new post', (data, botResponse) => {
-      let newPost = data[0];
-      let username = data[1];
-      let room = data[2];
-      console.log(botResponse)
+    socket.on('new post', (userResponse, botResponse) => {
+      //User response elements
+      let newPost = userResponse[0];
+      let username = userResponse[1];
+      let room = userResponse[2];
       if ($("#currentRoom").text() === room) {
+        //User response
         $(".messages").append(
           `<li class="left clearfix">
             <span class="chat-img1 pull-left">
@@ -19,7 +20,20 @@ $( document ).ready(function() {
               <p>${newPost}</p>
             </div>
           </li>`
-        );
+        )
+          if (botResponse) {
+            response = botResponse[0]
+            $(".messages").append(
+            `<li class="left clearfix">
+              <span class="chat-img1 pull-left">
+                <h6>SuperBot</h6>
+              </span>
+              <div class="chat-body1 clearfix">
+                <p>${response}</p>
+              </div>
+            </li>`
+            )
+          }
       }
     });
 
