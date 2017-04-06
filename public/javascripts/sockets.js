@@ -12,6 +12,9 @@ $(document).ready(function() {
   };
   var theCookies = getCookies();
 
+  //setting the username at top of screen
+  $("#user-heading").text(theCookies.user);
+
   var currentUrl = $(location).attr("href");
   console.log(location);
   var socket = io.connect(currentUrl);
@@ -33,7 +36,7 @@ $(document).ready(function() {
 
     //find the rooms table
     //and append it to the end of the table
-    $("#rooms tbody").append(stringOHTML);
+    $("#rooms tbody").prepend(stringOHTML);
   });
 
   $("#newRoom").submit(event => {
@@ -46,7 +49,7 @@ $(document).ready(function() {
   socket.on("new message", data => {
     console.log(`data is ${data}`);
     if (data.room === ___currentRoom) {
-      $("#messages tbody").append(data.htmlString);
+      $("#messages tbody").prepend(data.htmlString);
     } else {
       $(`#${data.room}`).parents("td").addClass("warning");
     }
@@ -74,11 +77,10 @@ $(document).ready(function() {
   socket.on("room-change", data => {
     $("#messages tbody").html(data.messages);
   });
-  
-  
-  
-  
-  
-  
-  
+
+  $("#logout").click(event => {
+    event.preventDefault();
+    document.cookie += "=;expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+    window.location = "/";
+  });
 });
