@@ -77,7 +77,7 @@
 <!--  -->
 
 <script type="text/javascript">
-  var socket = io.connect('http://localhost:3000');
+  var socket = io.connect('https://salty-sea-90816.herokuapp.com/');
 
   socket.on('new post', (data) => {
     let newPost = data[0];
