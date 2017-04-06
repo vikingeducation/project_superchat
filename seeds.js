@@ -10,11 +10,10 @@ function seedRedisStore() {
   createRoom("random-awesomeness");
 
 
-  createMessage("2017-mar", "Mimir", "How's it going?");
-  createMessage("2017-mar", "Odin", "Really Well!");
-  createMessage("2017-mar", "Mimir", "Cool!");
-
-  createMessage("JavaScript", "Mimir", "Promises are hard!");
+  createMessage("2017-mar", "Mimir", "How's it going?")
+	createMessage("2017-mar", "Odin", "Really Well!")
+  createMessage("2017-mar", "Mimir", "Cool!")
+  createMessage("JavaScript", "Mimir", "Promises are hard!")
   createMessage("JavaScript", "Odin", "Try using async/await");
 }
 
