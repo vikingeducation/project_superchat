@@ -84,6 +84,12 @@ body {
     text-decoration: none;
 }
 
+.sidebar-nav li a.selected {
+    text-decoration: none;
+    color: #fff;
+    background: rgba(255,255,255,0.2);
+}
+
 .sidebar-brand {
     text-transform: uppercase;
 }
