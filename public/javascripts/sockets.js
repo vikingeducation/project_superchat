@@ -1,4 +1,8 @@
 $(document).ready(function() {
+  
+  var ___currentRoom = "default";
+  
+  
   var getCookies = function() {
     var pairs = document.cookie.split(";");
     var cookies = {};
@@ -49,7 +53,7 @@ $(document).ready(function() {
     event.preventDefault();
     let message = $("#message").val().trim();
     let user = theCookies.user || "Anon"; //Some function to get usersName
-    let room = $("#currentChatroom").val() || "default"; //Some function
+    let room = ___currentRoom || "default"; //Some function
     //name of user and name of current chatroom
     socket.emit("new message", { message, user, room });
     return false;
@@ -57,11 +61,9 @@ $(document).ready(function() {
   
   
   $("#rooms").on("click", "div.room-name", ((event) => {
-    //event.target.id;
     //emit roomchange event to server
-    console.log("value of this.id is " + event.currentTarget.id);
     socket.emit('room-change', event.currentTarget.id);
-    $("#currentChatroom").val(event.currentTarget.id);
+    ___currentRoom = event.currentTarget.id;
     })
   );
   
