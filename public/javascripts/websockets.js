@@ -1,7 +1,7 @@
 $(document).ready(function(){
-  var socket = io.connect('https://superslack.herokuapp.com');
+  var socket = io.connect('http://localhost:3000');
 
-  $('.sidebar-nav').on('click', 'a', function(e){
+  $('.sidebar-nav .room-list').on('click', 'a', function(e){
     socket.emit('show messages', $(this).text());
     socket.emit('join room', $(this).text());
     var activeRoom = $('.messages-header h2').text();
@@ -36,8 +36,6 @@ $(document).ready(function(){
       $('#room-members').text(`${roomObj.number} members`);
     }
   })
-
-
 
   $('#new-message').keypress(function(e){
     if(e.which == 13){
