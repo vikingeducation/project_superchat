@@ -96,7 +96,7 @@ body {
 }
 
 .sidebar-brand {
-    text-transform: uppercase;
+    text-transform: none;
 }
 
 .sidebar-nav > .sidebar-brand {
@@ -198,4 +198,13 @@ footer {
 }
 footer input {
     margin-top:14px;
+}
+
+a.smallest {
+    font-size:0.5em;
+    margin-right:20px;
+}
+
+.new-channel-form {
+    padding: 0 20px;
 }

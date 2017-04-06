@@ -11,5 +11,10 @@ router.post('/login', (req, res) => {
 	res.redirect('/chatroom');
 })
 
+router.get('/logout', (req, res) => {
+  res.clearCookie('username');
+  res.redirect('/');
+})
+
 
 module.exports = router;

@@ -61,12 +61,12 @@ $(document).ready(function(){
     if(e.which == 13){
       e.preventDefault();
       var roomName = $('#create-room input').val();
+      $('#create-room input').val('');
       socket.emit('create room', roomName);
     }
   })
 
   socket.on('create room', function(roomName){
-    //
     $newA = $('<a>')
       .addClass('room')
       .attr('href', '#')
@@ -77,6 +77,7 @@ $(document).ready(function(){
     $newDiv.append($newA);
     $newLi.append($newDiv);
     $('.sidebar-nav').append($newLi);
+    $('.new-channel-form').toggleClass('hidden');
   })
 })
 
