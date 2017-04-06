@@ -1,41 +1,139 @@
+<script src="https://use.fontawesome.com/45e03a14ce.js"></script>
 
+<div class="main_section">
+   <div class="container">
+      <div class="chat_container">
+         <div class="col-sm-3 chat_sidebar">
+       <div class="row">
+            <div id="custom-search-input">
+               <div class="input-group col-md-12">
+                  <input type="text" id="newRoom" class="search-query form-control"/>
+                  <button class="btn btn-danger" type="button" id="addRoom">
+                  New Room
+                  </button>
+               </div>
+            </div>
+            <div class="member_list">
+               <ul class="list-unstyled" id="rooms">
+                {{#each roomNames as |roomName|}}
+                  <li class="left clearfix">
+                     <div class="chat-body clearfix">
+                        <div class="header_sec roomName">
+                          <!-- Rooms will go in here -->
+                           <strong class="primary-font">{{roomName}}</strong>
+                        </div>
+                     </div>
+                  </li>
+                  {{/each}}
+               </ul>
+            </div></div>
+         </div>
+         <!--chat_sidebar-->
 
-<div class="row">
+         <div class="col-sm-9 message_section">
+     <div class="row">
+      <div class="new_message_head">
+        <div>You are in the room: <span id="currentRoom">Cats</span></div>
+     <div class="pull-left"> Logged in as: <span id="username">{{username}}</span></div>
+     </div><!--new_message_head-->
+     <div class="chat_area">
+     <ul class="list-unstyled messages">
 
-  <div class="col-xs-3">
-    <a href="/newroom">Create a New Room</a>
-    <!-- <a href="{{rooms.roomname}}"></a> -->
-
-    {{#each roomsArr as |room|}}
-
-      Rooms:
-      <a href="/room/{{room.name}}">{{room.name}}</a>
-
-    {{/each}}
-
-  </div>
-  <div class="col-xs-3 messages">
-    <div>
-      {{#each messagesArr as |message|}}
-      Text:
-      {{message.body}}
-      Username:
-      {{message.username}}
-      <br>
-      <br>
+        {{#each messages as |message|}}
+        <li class="left clearfix">
+           <span class="chat-img1 pull-left">
+           <h6>{{message.username}}</h6>
+           </span>
+           <div class="chat-body1 clearfix">
+              <p>{{message.body}}</p>
+           </div>
+      </li>
       {{/each}}
-    </div>
-  </div>
+     </ul>
+     </div><!--chat_area-->
 
-<div class="col-xs-3 new-post">
-  <form action="/update" method="post">
-    <label for="newPost">NEW POST</label><br>
-    <textarea name="newPost" ></textarea><br>
-    <button class="btn btn-primary">Send</button>
-  </form>
+    <div class="message_write">
+       <textarea class="form-control" placeholder="type a message" id="newPost"></textarea>
+     <div class="clearfix"></div>
+     <div class="chat_bottom">
+ <a href="#" class="pull-right btn btn-success" id="sendPost">
+ Send</a></div>
+     </div>
+     </div>
+         </div> <!--message_section-->
+      </div>
+   </div>
 </div>
 
 
 
+<!--  -->
 
-</div>
+<script type="text/javascript">
+  var socket = io.connect('http://localhost:8000');
+
+  socket.on('new post', (data) => {
+    let newPost = data[0];
+    let username = data[1];
+    let room = data[2];
+    if ($("#currentRoom").text() === room) {
+      $(".messages").append(`<li class="left clearfix">
+           <span class="chat-img1 pull-left">
+           <h6>${username}</h6>
+           </span>
+           <div class="chat-body1 clearfix">
+              <p>${newPost}</p>
+           </div>
+      </li>`);
+    }
+  });
+
+  socket.on('new room', (newRoom) => {
+    $("#rooms").prepend(`<li class="left clearfix">
+                     <div class="chat-body clearfix">
+                        <div class="header_sec roomName">
+                           <strong class="primary-font">${newRoom}</strong>
+                        </div>
+                     </div>
+                  </li>`)
+  });
+
+  socket.on('change room messages', (messages) => {
+    $(".messages").empty();
+    messages.forEach(message => {
+      $(".messages").prepend(`<li class="left clearfix">
+           <span class="chat-img1 pull-left">
+           <h6>${message.username}</h6>
+           </span>
+           <div class="chat-body1 clearfix">
+              <p>${message.body}</p>
+           </div>
+      </li>`)
+    })
+  })
+
+  $("#sendPost").click(() => {
+    let newPost = $("#newPost").val();
+    let username = $("#username").text();
+    let room = $("#currentRoom").text();
+    $("#newPost").val("");
+    socket.emit('send post', newPost, username, room);
+  });
+
+  $("#addRoom").click(() => {
+    console.log("CONNECTED");
+    let newRoom = $("#newRoom").val();
+    $("#newRoom").val("");
+    socket.emit('add room', newRoom);
+  })
+
+  $("ul#rooms").on("click", ".roomName", (event) => {
+    console.log($(event.target).text())
+    let roomName = $(event.target).text();
+    $("#currentRoom").text(roomName);
+    socket.emit('change room', roomName);
+  })
+
+
+
+</script>

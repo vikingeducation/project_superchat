@@ -3,40 +3,11 @@ Build a realtime multi-room chat application. Make it super.
 
 Mark + Egle
 
-messageid: {body:body, author:author}
+message:id1: {content, author, room}
+message:id2: {content, author, room}
 
-roomName: [ messages:1, messages2]
+rooms: [room:name, room:name1, room:name2]
 
-key: messages -
-value: (in array){
-  body: content,
-  author: name, <- from logged in user
-  room: room posted <-(thinking ahead) module to iterate through rooms by room
-}
+room:name: [message:id1, message:id2]
+room:name1: [message:id3, message:id4]
 
-users: [ ]
-
-key: users - 
-value: in array {
-  user: name <-store as cookie
-}
-rooms : [ ]
-key: rooms -
-value: in array {
-  room:1 Messages messages <-populate at storePost based on room posted in (by paramaterized url?)
-  room:2 
-}
-sss
-sss
-
-"messages:1" = {body: skdjfksjdf, author: me}
-"messages:2" = {body: sgfshgksjdf, author: me}
-"messages:3" = {body: skdsffksjdf, author: me}
-
-let keys = redisClient.keys('messages:*')
-
-keys.forEach(key (key) => {
-  redisClient.hget(key (err, value) => {
-
-  })
-})

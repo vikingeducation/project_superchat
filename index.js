@@ -5,11 +5,11 @@ const io = require('socket.io')(server)
 const bodyParser = require('body-parser')
 const expressHandlebars = require("express-handlebars");
 const cp = require('cookie-parser');
+var path = require('path');
 redisClient = require("redis").createClient();
 
-const storePost = require('./services/redis/storePost');
-const getValues = require('./services/redis/getMessages');
-const addRoom = require('./services/redis/addRoom');
+const {addMessage, getMessagesForRoom, compareTimes} = require('./services/redis/storeMessages')
+const {addRoom, getRooms} = require('./services/redis/addRoom');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -20,21 +20,53 @@ app.use(cp())
 app.engine("handlebars", hbs.engine);
 app.set("view engine", "handlebars");
 
+app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(
+  "/socket.io",
+  express.static(__dirname + "node_modules/socket.io-client/dist/")
+);
 
-  //redisClient.flushall();
+io.on("connection", client => {
+
+  client.on("send post", (newPost, username, room) => {
+    addMessage(newPost, username, room, Date.now());
+    io.emit('new post', [newPost, username, room]);
+  });
+
+  client.on("add room", (newRoom) => {
+    addRoom(newRoom);
+    io.emit('new room', newRoom);
+  });
+
+  client.on("change room", (roomName) => {
+    getMessagesForRoom(roomName).then(messages => {
+        client.emit('change room messages', messages)
+      })
+  })
+
+});
+
+  // redisClient.flushall();
 
 app.get('/', (req, res) => {
   if (!req.cookies.username) {
     res.redirect("/login")
   } else {
-    let messagesArr = [];
-    let roomsArr = [];
-    getValues('room:asdf:message:*').then(messages => {
-      messagesArr = messages;
-      getValues('rooms:*').then(rooms => {
-        roomsArr = rooms;
-        res.render('index', {messagesArr, roomsArr})
+    let roomNames = [];
+    let username = req.cookies.username;
+    getRooms().then(roomNamesArr => {
+      roomNamesArr.forEach(roomNamesId => {
+        roomNames.push(roomNamesId.substr(5))
+      })
+      if (!roomNames.length) {
+        addRoom("Cats");
+        roomNames.push("Cats");
+      }
+      getMessagesForRoom('Cats').then(messages => {
+        console.log(messages);
+        messages = messages.sort(compareTimes)
+        res.render('index', {roomNames, messages, username})
       })
     })
   }
@@ -53,28 +85,5 @@ app.post('/login', (req, res) => {
   res.cookie("username", username)
   res.redirect('/')
 })
-
-app.post('/update', (req, res) => {
-  let post = req.body.newPost;
-  let username = req.cookies.username;
-  storePost(post, username);
-  res.redirect('/')
-})
-
-app.get('/newroom', (req, res) => {
-  res.render('newroom')
-})
-
-app.post('/updaterooms', (req, res) => {
-  let room = req.body.newRoom;
-  addRoom(room);
-  res.redirect('/')
-})
-
-app.get('/room/:roomName', (req, res) => {
-  let roomName = req.params.roomName;
-  
-})
-
 
 server.listen(8000)
