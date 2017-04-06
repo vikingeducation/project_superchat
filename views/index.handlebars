@@ -122,6 +122,7 @@ $(document).ready(function() {
 
   //////////////////////
   // Click Events
+  // instead of .rooms, we want to look for its parent object
   $(".rooms").click(function(event) {
     let selectedRoom = event.target;
     let nameOfRoom = $(selectedRoom).html();
