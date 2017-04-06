@@ -91,6 +91,19 @@ io.on("connection", client => {
       io.emit("new message", htmlString);
     }
   });
+  
+  client.on("room-change", room => {
+    chatOps.buildMessageTable(room)
+    .then(function onFulfilled(messages) {
+      io.emit("room-change", { messages });
+  });
+    
+    
+    
+  })
+  
+  
+  
 });
 
 server.listen(process.env.PORT || 3000);

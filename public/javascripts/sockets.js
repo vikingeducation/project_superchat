@@ -54,4 +54,20 @@ $(document).ready(function() {
     socket.emit("new message", { message, user, room });
     return false;
   });
+  
+  
+  $("#rooms").on("click", "div", ((event) => {
+    //event.target.id;
+    //emit roomchange event to server
+    socket.emit('room-change', event.target.id);
+    $("#currentChatroom").val(event.target.id);
+    })
+  );
+  
+  socket.on('room-change', data => {
+    $("#messages tbody").html(data);
+  });
+  
+  
+  
 });
