@@ -92,6 +92,6 @@ app.get('/signout', (req, res) => {
   res.redirect('/login')
 })
 
-server.listen(port, '0.0.0.0', function(err) {
-  console.log("Started listening on %s", app.url);
+server.listen(port, function(err) {
+  console.log(`listening on ${port}`);
 });
