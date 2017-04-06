@@ -8,7 +8,7 @@ const bodyParser = require('body-parser')
 const expressHandlebars = require("express-handlebars");
 const cp = require('cookie-parser');
 var path = require('path');
-const redisClient = require('./services/redis/createClient');
+// const redisClient = require('./services/redis/createClient');
 const {addMessage, getMessagesForRoom, compareTimes} = require('./services/redis/storeMessages')
 const {addRoom, getRooms} = require('./services/redis/addRoom');
 
