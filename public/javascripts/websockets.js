@@ -51,6 +51,9 @@ $(document).ready(function(){
         body: messageObj.body
       }
       addMessage($parent, message)
+      console.log($('#roommessages ul li:last').offset().top)
+      $("#roomMessages").scrollTop(500);
+
     }
   })
 
@@ -102,7 +105,7 @@ function initializeRoom(roomName){
   $navbarTitle.text(roomName)
   var $room = $('#roommessages');
   $room.html('');
-  $room.append('<ul></ul>');
+  $room.append('<ul id="roomMessages"></ul>');
 }
 
 
