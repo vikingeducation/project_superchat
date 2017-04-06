@@ -2,6 +2,7 @@
 <body>
 
 <h3 id="userNav" style="color: black">Not signed in</h3>
+<button type="submit" id="userLogOut" class="btn btn-default hidden">Sign Out</button>
 
 <div class="container" id="signUpContainer">
   <div class="row">
@@ -26,7 +27,7 @@
 <div class="container verifiedUser hidden">
       <div class="row">
         <div class="col-xs-6 col-md-3" id="bordered">
-          <div class="panel panel-default">
+          <div class="panel panel-default" id="overflowEnabled">
             <div class="panel-heading">
               <h3 class="panel-title">Cats</h3>
             </div>
@@ -88,8 +89,13 @@ var socket = io.connect('http://localhost:3000');
 
   socket.on('userAccepted', function(username) {
     $("#userNav").html(username);
-    $("#signUpContainer").hide();
+    $("#userLogOut").toggleClass('hidden');
+    $("#signUpContainer").toggleClass('hidden');
     $(".verifiedUser").toggleClass('hidden');
+  })
+
+  socket.on('userDenied', function(username) {
+    $("#userNav").html(username+ " is already taken.");
   })
 
   $("#submitBtn").click(function() {
@@ -104,6 +110,14 @@ var socket = io.connect('http://localhost:3000');
     socket.emit('postMessage', newMessage);
   })
 
+  $("#userLogOut").click(function() {
+    var currentUser = $("#userNav").html();
+    $("#userNav").html("Not signed in.");
+    $("#userLogOut").toggleClass('hidden');
+    $("#signUpContainer").toggleClass('hidden');
+    $(".verifiedUser").toggleClass('hidden');
+    socket.emit('userLoggedOut', currentUser);
+  })
   $("#userSubmit").click(function() {
     let newUser = $("#newUser").val();
     $("#newUser").val("");

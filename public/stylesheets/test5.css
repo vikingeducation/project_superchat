@@ -8,3 +8,9 @@ body {
 #bordered {
   border: 2px 2px 2px 2px;
 }
+
+#overflowEnabled {
+  overflow-y: auto;
+  height: 50%;
+  width: 100%;
+}
