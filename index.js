@@ -62,10 +62,10 @@ app.get('/', (req, res) => {
       roomNamesArr.forEach(roomNamesId => {
         roomNames.push(roomNamesId.substr(5))
       })
-      if (!roomNames.length) {
-        addRoom("Cats");
-        roomNames.push("Cats");
-      }
+      // if (!roomNames.length) {
+      //   addRoom("Cats");
+      //   roomNames.push("Cats");
+      // }
       getMessagesForRoom('Cats').then(messages => {
         console.log(messages);
         messages = messages.sort(compareTimes)
