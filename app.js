@@ -6,27 +6,27 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const chatOps = require("./lib/chatOps");
 
-
 //** For testing purposes only**/
 
 /**Initialize the database with a default classroom **/
-const redis = require('redis');
+const redis = require("redis");
 const redisClient = redis.createClient();
 redisClient.flushall();
 redisClient.lpush("rooms", "default");
 //Grab the default room and pull from it?
 
 let messageID = "message" + Date.now();
-redisClient.setnx(messageID, JSON.stringify({
-  user: "welcome",
-  message: "welcome to default",
-  room: "default"
-}));
+redisClient.setnx(
+  messageID,
+  JSON.stringify({
+    user: "welcome",
+    message: "welcome to default",
+    room: "default"
+  })
+);
 //Add this newly created message to the default's field in the rooms key
 redisClient.lpush("default", messageID);
 //* End Test Code **/////////
-
-
 
 //Require routes
 const index = require("./routes/index.js")(io);
@@ -74,7 +74,7 @@ io.on("connection", client => {
   pro.then(function onFulfilled(infoObj) {
     client.emit("connection", { messages: infoObj[0], rooms: infoObj[1] });
   });
-  
+
   client.on("new room", data => {
     //io.emit(new room) tells all the clients to update their rooms
     let pro = chatOps.makeNewRoom(data);
@@ -86,12 +86,10 @@ io.on("connection", client => {
   });
   client.on("new message", data => {
     //io.emit(new room) tells all the clients to update their rooms
-    let pro = chatOps.makeNewMessage(data);
-    pro.then(htmlString => {
-      if (htmlString) {
-        io.emit("new message", htmlString);
-      }
-    });
+    let htmlString = chatOps.makeNewMessage(data);
+    if (htmlString) {
+      io.emit("new message", htmlString);
+    }
   });
 });
 

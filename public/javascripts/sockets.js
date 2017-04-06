@@ -1,28 +1,24 @@
 $(document).ready(function() {
-  
-  var getCookies = function(){
+  var getCookies = function() {
     var pairs = document.cookie.split(";");
     var cookies = {};
-    for (var i=0; i<pairs.length; i++){
+    for (var i = 0; i < pairs.length; i++) {
       var pair = pairs[i].split("=");
       cookies[pair[0].trim()] = unescape(pair[1]).trim();
     }
     return cookies;
   };
   var theCookies = getCookies();
-  
-  
+
   var currentUrl = $(location).attr("href");
   console.log(location);
   var socket = io.connect(currentUrl);
   socket.on("connection", data => {
     console.log("We got connected!");
-    console.log(`data is ${ data }`);
+    console.log(`data is ${data}`);
 
-    
-    $('#messages tbody').append(data.messages);
-    
-    
+    $("#messages tbody").append(data.messages);
+
     //get the data
     //populate the webpage
     //data.rooms is an array
@@ -51,11 +47,11 @@ $(document).ready(function() {
 
   $("#newMessage").submit(event => {
     event.preventDefault();
-    let newMessage = $("#message").val().trim();
-    let usersName = theCookies.user || "Anon"; //Some function to get usersName
-    let currentChatroom = $("#currentChatroom").val() || "default"; //Some function
+    let message = $("#message").val().trim();
+    let user = theCookies.user || "Anon"; //Some function to get usersName
+    let room = $("#currentChatroom").val() || "default"; //Some function
     //name of user and name of current chatroom
-    socket.emit("new message", { newMessage, usersName, currentChatroom });
+    socket.emit("new message", { message, user, room });
     return false;
   });
 });
