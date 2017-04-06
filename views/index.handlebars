@@ -107,9 +107,9 @@ $(document).ready(function() {
 
   socket.on('userAccepted', function(username) {
     $("#userNav").html(username);
-    $("#userLogOut").hide();
-    $("#signUpContainer").hide();
-    $(".verifiedUser").show();
+    $("#userLogOut").toggleClass('hidden');
+    $("#signUpContainer").toggleClass('hidden');
+    $(".verifiedUser").toggleClass('hidden');
   })
 
   socket.on('userDenied', function(username) {
@@ -125,28 +125,25 @@ $(document).ready(function() {
   $(".rooms").click(function(event) {
     let selectedRoom = event.target;
     let nameOfRoom = $(selectedRoom).html();
-
-    $(`${nameOfRoom}panel`).hide();
-    console.log(`${nameOfRoom}panel`)
+    $(`.roomContainer`).addClass('hidden');
+    $(`#${nameOfRoom}panel`).toggleClass('hidden');
+    socket.emit('launchChatRoom', nameOfRoom);
+    // console.log(`${nameOfRoom}panel`)
   })
 
   $("#submitBtn").click(function() {
     let newMessage = $("#chatMessage").val();
     let room = $(".roomContainer").not(".hidden").find(".panel-title").html();
     $("#chatMessage").val("");
-    // let user = $("#userNav").html();
-    //
-    // $("#firstChatroom").append(`<h4>${user}</h4><p>${newMessage}</p><hr>`)
-    //append html for username, message body, and a break
     socket.emit('postMessage', newMessage, room);
   })
 
   $("#userLogOut").click(function() {
     var currentUser = $("#userNav").html();
     $("#userNav").html("Not signed in.");
-    $("#userLogOut").show();
-    $("#signUpContainer").hide();
-    $(".verifiedUser").show();
+    $("#userLogOut").toggleClass('hidden');
+    $("#signUpContainer").toggleClass('hidden');
+    $(".verifiedUser").toggleClass('hidden');
     socket.emit('userLoggedOut', currentUser);
   })
 
