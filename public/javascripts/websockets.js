@@ -4,7 +4,7 @@ $(document).ready(function(){
   $('.sidebar-nav').on('click', 'a', function(e){
     socket.emit('show messages', $(this).text());
     socket.emit('join room', $(this).text());
-    var activeRoom = $('#roommessages h2').text();
+    var activeRoom = $('.messages-header h2').text();
     if (activeRoom) {
       socket.emit('leave room', activeRoom);
     }
@@ -23,25 +23,27 @@ $(document).ready(function(){
 
   socket.on('join room', function(roomObj){
     var roomName = roomObj.roomName;
-    $(`.${roomName} p`).text(`${roomObj.number} members`);
+    var activeRoom = $('.messages-header h2').text();
+    if (roomObj.roomName === activeRoom) {
+      $('#room-members').text(`${roomObj.number} members`);
+    }
   })
 
-  socket.on('leave room', function(roomObj){
-    var roomName = roomObj.roomName;
-    $(`.${roomName} p`).text(`${roomObj.number} members`);
-  })
 
-  $('#submit-message').click(function(e){
-    e.preventDefault();
-    var body = $('#new-message').val();
-    var roomName = $('#roommessages h2').text();
-    var author = $("#logged-in-user").text();
-    $('#new-message').val('');
-    socket.emit('new message', {body, author, roomName});
+
+  $('#new-message').keypress(function(e){
+    if(e.which == 13){
+      e.preventDefault();
+      var body = $('#new-message').val();
+      var roomName = $('.messages-header h2').text();
+      var author = $("#current-user").text();
+      $('#new-message').val('');
+      socket.emit('new message', {body, author, roomName});
+    }
   })
 
   socket.on('new message', function(messageObj){
-    var activeRoom = $('#roommessages h2').text();
+    var activeRoom = $('.messages-header h2').text();
     if (activeRoom === messageObj.roomName) {
       $parent = $('#roommessages ul');
       var message = {
