@@ -55,14 +55,20 @@ $(document).ready(function(){
   $('#create-room-submit').click(function(e){
     e.preventDefault();
     var roomName = $('#create-room input').val();
-    socket.emit('create room', {roomName});
+    socket.emit('create room', roomName);
   })
 
   socket.on('create room', function(roomName){
-    var $newRoom = $('<li></li>')
+    var $newRoom = $('<li class="list-group-item"></li>');
     var $roomDiv = $(`<div class="${roomName}"></div>`);
-    var $roomName = $(`<h3 class="room">${roomName}</h3>`)
+    var $roomName = $(`<h3 class="room">${roomName}</h3>`);
     var $roomMembers = $('<p>0 members</p>');
+    var $list = $('.rooms-list');
+    $roomDiv.append($roomName);
+    $roomDiv.append($roomMembers);
+    $newRoom.append($roomDiv);
+    $list.append($newRoom);
+
   })
 })
 
