@@ -19,13 +19,13 @@ $(document).ready(function() {
     console.log("We got connected!");
     console.log(`data is ${data}`);
 
-    $("#messages tbody").append(data.messages);
+    $("#messages tbody").html(data.messages);
 
     //get the data
     //populate the webpage
     //data.rooms is an array
     //forEach
-    $("#rooms tbody").append(data.rooms);
+    $("#rooms tbody").html(data.rooms);
   });
 
   socket.on("new room", stringOHTML => {
@@ -74,4 +74,11 @@ $(document).ready(function() {
   socket.on("room-change", data => {
     $("#messages tbody").html(data.messages);
   });
+  
+  
+  
+  
+  
+  
+  
 });
