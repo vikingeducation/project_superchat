@@ -5,6 +5,7 @@ let injectedRoute = io => {
   const chatOps = require("../lib/chatOps");
 
   router.get("/", (req, res) => {
+    console.log("root path hit in index.js");
     let user = req.cookies.user;
     if (user) {
       res.render("chat");
