@@ -1,0 +1,56 @@
+<div class="row">
+  <div class="col-xs-9">
+    <h1>Welcome, {{greeting}}!</h1>
+    {{#unless update}}
+      <p>Please create a profile below!</p>
+      {{else}}
+        <p>Please update your info below!</p>
+    {{/unless}}
+  </div>
+</div>
+<div class="row row-spacing">
+  <div class="col-xs-9">
+
+  </div>
+</div>
+<div class="row">
+  <div class="col-xs-8">
+    <form class="form-horizontal" action="/users/profile/{{username}}" method="post">
+      <div class="form-group">
+        <label for="userName" class="col-xs-2 control-label">Username</label>
+        <div class="col-xs-5">
+          <input type="text" class="form-control" id="userName" placeholder="{{username}}" name="userName" readonly>
+        </div>
+
+      </div>
+      <div class="form-group">
+        <label for="userFirstname" class="col-xs-2 control-label">{{firstname}}</label>
+        <div class="col-xs-5">
+          <input type="text" class="form-control" id="userFirstname" placeholder="First name" name="firstname">
+        </div>
+
+      </div>
+      <div class="form-group">
+        <label for="userLastname" class="col-xs-2 control-label">{{lastname}}</label>
+        <div class="col-xs-5">
+          <input type="text" class="form-control" id="userLastname" placeholder="Last Name" name="lastname">
+
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="created" class="col-xs-2 control-label">Created</label>
+        <div class="col-xs-5">
+          <input type="text" class="form-control" id="created" placeholder="{{createdDate}}" name="created" readonly>
+        </div>
+  </div>
+  <div class="col-xs-offset-6">
+    <button type="submit" class="btn btn-primary">Save</button>
+  </div>
+
+
+
+
+    </form>
+  </div>
+
+</div>

@@ -23,7 +23,38 @@
 </head>
 
 <body>
+  <nav class="navbar navbar-default navbar-fixed-top navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="/">
+        {{title}}
+      </a>
+    </div>
+    {{#if username}}
+    <ul class="nav navbar-nav navbar-right">
+      <li><p class="navbar-text navbar-right navbar-padding">{{greeting}} signed in as <a href="/users/profile/{{username}}" class="username">{{username}}</a></p>
+      </li>
+      <li>
+        <form class="navbar-form navbar-right navbar-padding" role="login" action="/users/logout" method="get">
+
+        <button type="submit" class="btn btn-default">Log Out</button>
+        </form>
+      </li>
+    </ul>
+
+    {{else}}
+    <form class="navbar-form navbar-right" role="login" action="/users" method="post">
+    <div class="form-group">
+      <input type="text" class="form-control" placeholder="Username" name="username">
+    </div>
+    <button type="submit" class="btn btn-default">Log In</button>
+    </form>
+    {{/if}}
+  </div>
+
+</nav>
   <div class="container">
+
       {{{body}}}
   </div>
 
