@@ -6,7 +6,6 @@ const dataMgr = require('../bin/dataMgr');
 /* GET home page. */
 router.get('/', function(req, res, next) {
 
-  if (req.cookies.username !== undefined) {
     dataMgr.isUser(req.cookies.username).then(function(data) {
       if (data) {
         debug(`logged in with profile`);
@@ -35,18 +34,6 @@ router.get('/', function(req, res, next) {
       }
     });
 
-
-
-  } else {
-    debug(`not logged in`);
-    res.render('index', {
-      title: 'Super Chat',
-      username: null,
-      greeting: null,
-      firstname: null,
-      lastname: null
-    });
-  }
 
 });
 
