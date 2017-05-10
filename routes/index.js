@@ -5,17 +5,21 @@ const dataMgr = require('../bin/dataMgr');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  console.log(req.cookies.username);
   if (req.cookies.username !== undefined) {
     debug(`logged in with profile`);
-    dataMgr.getUser(req.cookies.username).then(function(data) {
+    let pList = [];
+    pList.push(dataMgr.getUser(req.cookies.username));
+    pList.push(dataMgr.listRooms());
+    Promise.all(pList).then(function(data) {
       res.render('index', {
         title: 'Super Chat',
         username: req.cookies.username,
-        greeting: data.firstname + ' ' + data.lastname,
-        firstname: data.firstname,
-        lastname: data.lastname
+        greeting: data[0].firstname + ' ' + data[0].lastname,
+        firstname: data[0].firstname,
+        lastname: data[0].lastname,
+        rooms: data[1]
       });
+
     });
   } else {
     debug(`not logged in`);

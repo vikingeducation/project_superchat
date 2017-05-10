@@ -12,12 +12,41 @@ var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 
+const dataMgr = require('./bin/dataMgr');
+// dispatcher for IO requests from client_sockets
+io.on('connection', client => {
+  console.log("New connection!")
+
+  client.on('addRoom', (roomName) => {
+    dataMgr.addRoom(roomName).then(function(){
+      io.emit('newRoom', roomName);
+    });
+  });
+
+  client.on('getMessages', (roomName) => {
+    dataMgr.getMessages(roomName).then(function(data){
+      client.emit('messageList', data);
+    })
+  });
+
+  client.on('sendMessage', (message) => {
+    dataMgr.sendMessage(message.room, message.user, message.text).then(function(data){
+      io.emit('newMessage', {room: message.room, user: message.user, text: message.text});
+    })
+  });
+});
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+app.use(function(req, res, next){
+  res.io = io;
+  req.io = io;
+  next();
+});
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
