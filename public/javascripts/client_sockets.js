@@ -9,7 +9,7 @@ socket.on('updateCount', function(data) {
 });
 
 socket.on('newRoom', function(data) {
-  $('#roomList li:last').after('<li class="list-group-item">' + data + '<button type="button" class="btn btn-info button-format btn-xs room-button" name="' + data + '">Show</button></li>');
+  $('#roomList').append('<li class="list-group-item">' + data + '<button type="button" class="btn btn-info button-format btn-xs room-button" name="' + data + '">Show</button></li>');
 });
 
 socket.on('messageList', function(data) {

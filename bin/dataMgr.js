@@ -3,6 +3,7 @@ const debug = require('debug')('dataMgr');
 const ROOMKEY = "rooms";
 const USERKEY = "users";
 
+// uncomment for clean-up
 // redisClient.flushall();
 
 // promise returns 1 for room add 0 for duplicate room
