@@ -35,6 +35,7 @@ socket.on('newMessage', function(data) {
 $('#addRoom').click(function() {
   let roomName = $('#roomValue').val();
   socket.emit('addRoom', roomName);
+  $('#roomValue').val('');
 });
 
 $('#sendMessage').click(function() {
