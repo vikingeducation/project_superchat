@@ -24,6 +24,10 @@ socket.on('messageList', function(data) {
 socket.on('newMessage', function(data) {
   if (activeRoom === data.room) {
     $('#messageList').append('<li class="list-group-item message-detail"><b>' + data.user + '</b>: ' + data.text + '</li>');
+  } else {
+    let selector = '[name="' + data.room + '"]';
+    $(selector).removeClass('btn-info');
+    $(selector).addClass('btn-warning');
   }
 });
 
@@ -47,6 +51,9 @@ $('#sendMessage').click(function() {
 $(document).on("click", '.room-button', function() {
   let roomName = $(this).attr("name");
   activeRoom = roomName;
+  let selector = '[name="' + roomName + '"]';
+  $(selector).removeClass('btn-warning');
+  $(selector).addClass('btn-info');
   $('.message-detail').remove();
   socket.emit('getMessages', roomName);
   $('#messageRoomName').html(': ' + roomName);
