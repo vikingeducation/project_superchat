@@ -1,0 +1,16 @@
+<div class="row">
+  <div class="six columns chat-container">
+    <h3>Messages</h3>
+    {{!--<hr>--}}
+    <div id="chat-messages">
+    </div>
+  </div>
+  <div class="six columns form-container">
+    <form action="/update" method="POST">
+      <h3>New Message</h3>
+      {{!--<hr>--}}
+      <textarea class="u-full-width" placeholder="Write a message" name="message"></textarea>
+      <input class="button-primary" type="submit" value="Submit">
+    </form>
+  </div>
+</div>
