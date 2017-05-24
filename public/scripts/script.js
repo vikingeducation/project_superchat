@@ -37,7 +37,7 @@ $(() => {
     if (messages.length === 0) {
       $chatMessages.append('<p>Nothing here yet!</p>');
     } else {
-      appendMessages(messages);
+      appendMessages(messages.reverse());
     }
   });
 });
