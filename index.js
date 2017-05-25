@@ -51,18 +51,19 @@ app.get('/logout', (req, res) => {
 
 app.get('/chatrooms', (req, res) => {
   let username = req.cookies.username;
-  if (!username) res.render('registration');
-
-  res.render('dashboard', { username });
+  if (!username) {
+    res.render('registration');
+  } else {
+    res.render('dashboard', { username });
+  }
 });
 
 app.post('/createroom', (req, res) => {
   let newRoom = req.body.newroom;
-  console.log(newRoom);
   let username = req.cookies.username;
   let p1 = createRoom(newRoom);
   let p2 = getAllRooms();
-  
+
   Promise.all([p1, p2]).then(values => {
     let rooms = values[1];
     io.sockets.emit('update rooms', rooms);
@@ -76,7 +77,6 @@ app.get('/chatroom/:room', (req, res) => {
 
   let room = req.params.room;
   let p1 = getPostsInRoom(room);
-  let roomPostsUpdate = `${room}PostsUpdate`;
 
   p1.then(posts => {
     res.render('chatlobby', { username, room });
@@ -87,14 +87,14 @@ app.post('/chatroom/:room/post', (req, res) =>{
   let username = req.cookies.username;
   let message = req.body.message;
   let room = req.params.room;
-  let roomPostsUpdate = `${ room }PostsUpdate`;
+  let updateRoomPosts = `update ${ room } posts`;
 
   let p1 = makePost(message, room, username);
   let p2 = getPostsInRoom(room);
 
   Promise.all([p1, p2]).then(values => {
     let messages = values[1];
-    io.sockets.emit(roomPostsUpdate, messages);
+    io.sockets.emit(updateRoomPosts, messages);
     res.redirect(`/chatroom/${ room }`);
   });
 });
@@ -103,7 +103,7 @@ io.on('connection', client => {
   // Only way I could find to get chatroom path variable available to this function
   let url = client.handshake.headers.referer.split('/');
   let room = decodeURI(url[url.length - 1]);
-  let roomPostsUpdate = `${ room }PostsUpdate`;
+  let updateRoomPosts = `update ${ room } posts`;
 
   let p1 = getAllRooms();
   let p2 = getPostsInRoom(room);
@@ -112,7 +112,7 @@ io.on('connection', client => {
     let rooms = values[0];
     let messages = values[1];
     client.emit('update rooms', rooms);
-    client.emit(roomPostsUpdate, messages);
+    client.emit(updateRoomPosts, messages);
   });
 
 });
@@ -120,15 +120,3 @@ io.on('connection', client => {
 server.listen(port, () => {
     console.log(`Currently listening on Port ${ port }`)
 });
-
-// So now what we're going to do is the following:
-// '/' will be a simple login page. 'if (req.cookies.username) redirect /chatroom/main/'
-// 'else login here'
-// every page will have if (!req.cookies.username) redirect '/'
-// then you'll have
-// /chatroom/:chatroom
-// checks if chatroom exists in current redis structure
-// req.params.chatroom is sent to getPostsInRoom/getPostsInRoom
-// the tricky part will be handling all the socket io events for the different channels
-// you also need /chatroom itself which will list all available chatrooms, stored in a separate redis structure
-//

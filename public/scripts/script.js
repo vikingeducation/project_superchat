@@ -4,7 +4,7 @@ $(() => {
   const $chatMessages = $('#chat-messages');
   const $roomsList = $('#rooms');
   let thisChatroom = $('#room-id').text();
-  let roomPostsUpdate = `${ thisChatroom }PostsUpdate`;
+  let updateRoomPosts = `update ${ thisChatroom } posts`;
 
   const appendMessages = messages => {
       messages.forEach(message => {
@@ -32,7 +32,7 @@ $(() => {
     }
   });
 
-  socket.on(roomPostsUpdate, messages => {
+  socket.on(updateRoomPosts, messages => {
     $chatMessages.html('');
     if (messages.length === 0) {
       $chatMessages.append('<p>Nothing here yet!</p>');
