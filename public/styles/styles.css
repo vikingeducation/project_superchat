@@ -1,0 +1,69 @@
+.header-bar {
+  color: white;
+  background-color: #222;
+  padding: 2em 0 .5em 10%;
+  margin-bottom: 2em;
+}
+
+main {
+  color: #444;
+}
+.chat-container {
+  border: solid 3px #666;
+  border-radius: 5px;
+  padding: 1em;
+}
+
+.form-container {
+  border: solid 3px #666;
+  border-radius: 5px;
+  padding: 1em;
+}
+
+h1 {
+  text-transform: uppercase;
+}
+
+p {
+  margin: 0;
+}
+
+h3 {
+  text-transform: capitalize;
+  border-bottom: solid 2px #666;
+}
+
+.logout {
+  position: absolute;
+  right: 2em;
+  top: 1.5em;
+  text-align: right;
+}
+
+.logout a {
+  text-decoration: none;
+  color: white;
+  border-bottom: solid 2px white;
+}
+
+.logout h5 {
+  margin: 0;
+}
+
+.username {
+  color: #33C3F0;
+}
+
+.each-room {
+  text-transform: capitalize;
+}
+
+#room-id {
+  display: none;
+}
+
+h1 a {
+  color: white;
+  text-decoration: none;
+  transition: color .5s ease;
+}
