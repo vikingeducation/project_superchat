@@ -61,7 +61,11 @@ app.post('/createroom', (req, res) => {
   console.log(newRoom);
   let username = req.cookies.username;
   let p1 = createRoom(newRoom);
-  p1.then(() => {
+  let p2 = getAllRooms();
+  
+  Promise.all([p1, p2]).then(values => {
+    let rooms = values[1];
+    io.sockets.emit('update rooms', rooms);
     res.redirect('/chatrooms');
   });
 });
@@ -83,10 +87,14 @@ app.post('/chatroom/:room/post', (req, res) =>{
   let username = req.cookies.username;
   let message = req.body.message;
   let room = req.params.room;
+  let roomPostsUpdate = `${ room }PostsUpdate`;
 
   let p1 = makePost(message, room, username);
+  let p2 = getPostsInRoom(room);
 
-  p1.then(() => {
+  Promise.all([p1, p2]).then(values => {
+    let messages = values[1];
+    io.sockets.emit(roomPostsUpdate, messages);
     res.redirect(`/chatroom/${ room }`);
   });
 });
