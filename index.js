@@ -68,10 +68,10 @@ app.get('/', (req, res) => {
       roomIDsArray.forEach(roomID => {
         roomNames.push(roomID.substr(5))
       })
-      // if (!roomNames.length) {
-      //    addRoom("Cats");
-      //   roomNames.push("Cats");
-      //  }
+      if (!roomNames.length) {
+         addRoom("Cats");
+        roomNames.push("Cats");
+       }
       getMessagesForRoom('Cats') //Cats is default room
       .then(messages => {
         messages = messages.sort(compareMessageTimes)
