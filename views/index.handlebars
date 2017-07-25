@@ -7,17 +7,17 @@
 
     <div class="chat-body">
         <div class="chat-rooms">
-            {{!-- {{each chatRoom}} --}}
+             {{!-- {{#each chatRoom}}  --}}
                 <div class="room">
-                    <h3>@key</h3>
-                    {{!-- {{each chatRoom.messages}} --}}
+                    <h3>test</h3>
+                     {{#each messagesArr}} 
                     <ul>
-                        {{!-- <li>{{chatRoom.messages.msgs}}</li> --}}
+                         <li>{{this.body}} and {{this.author}}</li> 
                     </ul>
-                    {{!-- {{/each}} --}}
+                     {{/each}} 
                 </div>
 
-            {{!-- {{/each}} --}}
+             {{!-- {{/each}}  --}}
         </div>
     </div>
 

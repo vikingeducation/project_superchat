@@ -15,14 +15,20 @@ app.set('view engine', 'handlebars');
 app.use(express.static(__dirname + '/public'));
 
 app.get('/', (req, res) => {
+    let messagesArr = [];
 
-    data.getMessages('Test')
+    data.getMessages('test')
     .then (messages => {
-        messages.map(element => { console.log(element)});
-    });
+        messages.map(element => {
+            messagesArr.push(JSON.parse(element));
+        });
 
-    console.log('hello');
-    res.render('index');
+         res.render('index', {"messagesArr": messagesArr});
+
+    })
+    .catch((reject) => {
+        console.log(reject);
+    });
 });
 
 app.listen(3000);
