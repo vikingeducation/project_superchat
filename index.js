@@ -12,14 +12,25 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.engine("handlebars", hbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
 
-var myUserName = "Word Eater was Here";
+let pathname = `${__dirname}/node_modules/socket.io-client/dist/`;
+console.log(pathname);
+app.use("/socket.io", express.static(pathname));
+app.use(bodyParser.urlencoded({extended: true}));
+
 io.on("connection", client => {
-  console.log("connection");
-  io.on("newChat", newMessage => {
-    console.log("new chat");
-    io.emit(newMessage);
-  });
+  console.log("connection made");
+//http://localhost:4000/socket.io/?EIO=3&transport=polling&t=Ls01klf 404 (Not Found)
+  // client.on("newChat", newMessage => {
+  //   console.log("new chat");
+  //   io.emit("newChat", newMessage);
+  // });
+
 });
+
+
+var myUserName = "Word Eater was Here";
+
+
 
 app.get("/", (req, res) => {
   if (req.cookies.username) {

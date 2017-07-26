@@ -6,6 +6,15 @@
 	<title>Chat Room</title>
 </head>
 <body>
-{{{body}}}
+	{{{body}}}
 </body>
+
+<script>
+
+	$(document).ready(() => {
+		const socket = io.connect("http://localhost:4000");
+		// socket.emit('event');
+	})
+
+</script>
 </html>
