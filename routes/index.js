@@ -1,13 +1,13 @@
-var express = require('express');
+var express = require("express");
 var router = express.Router();
 
-const { loadModule, saveModule } = require('../lib/redis_wrapper');
-const { getUsers } = loadModule;
+const { loadModule, saveModule } = require("../lib/redis_wrapper");
+const { getModelData } = loadModule;
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
-	getUsers(0).then(console.log);
-	res.render('index', { title: 'Express' });
+router.get("/", function(req, res, next) {
+	getModelData("users").then(console.log);
+	res.render("index", { title: "Express" });
 });
 
 module.exports = router;
