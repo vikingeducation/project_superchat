@@ -11,9 +11,16 @@ app.engine("handlebars", hbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
 
 app.use(
-  "/socket-io",
-  express.static(__dirname + "node_modules/socket-io-client/dist/")
+  "/socket.io",
+  express.static(__dirname + "/node_modules/socket.io-client/dist/")
 );
+
+console.log(__dirname + "/node_modules/socket.io-client/dist/");
+
+// app.use(
+//   "/socket-",
+//   express.static(__dirname + "node_modules/socket.io-client/dist/")
+// );
 
 app.get("/", (req, res) => {
   redis.loadMessages(messages => {
@@ -24,16 +31,16 @@ app.get("/", (req, res) => {
 
 // let messageIDs = [1, 2];
 
-io.on("connection", (client) => {
-	console.log("New connection");
+io.on("connection", client => {
+  console.log("New connection");
 
-	client.on("newMessage", (data) => {
-		var p = saveMessage(data.body, data.author, data.room);
+  client.on("newMessage", data => {
+    var p = saveMessage(data.body, data.author, data.room);
 
-		p.then(() => {
-			io.emit("updateMessages", data);
-		})
-	});
+    p.then(() => {
+      io.emit("updateMessages", data);
+    });
+  });
 });
 
 // redis.saveMessage("Hi there", "me", "main-room");

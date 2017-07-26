@@ -30,23 +30,26 @@
 
 
       <script>
-        var socket = io.connect('http://localhost:3000')
+        var socket = io.connect('http://localhost:3030')
 
-        $("#messageForm").on("submit", (e) => {
-          e.preventDefault();
-          alert("This worked!");
-          var data = {}
+        $(document).ready(function() {
+          $("#messageForm").on("submit", (e) => {
+            e.preventDefault();
+            alert("This worked!");
+            var data = {}
 
-          data.body = $("input[name='message']").val();
-          data.author = "Anonymous";
-          data.room = "main-room";
+            data.body = $("input[name='message']").val();
+            data.author = "Anonymous";
+            data.room = "main-room";
 
-          socket.emit("newMessage", data);
-        });
+            socket.emit("newMessage", data);
+          });
 
-        socket.on("updateMessages", (data) => {
-          $("#allMessages").prepend($(`<div class=message><p>${data.body}</p><p>${data.author}</p></div>`));
-        });
+          socket.on("updateMessages", (data) => {
+            $("#allMessages").prepend($(`<div class=message><p>${data.body}</p><p>${data.author}</p></div>`));
+          });
+        })
+
 
 
       </script>
