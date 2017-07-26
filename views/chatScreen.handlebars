@@ -1,23 +1,10 @@
 Chat Here
 <div name="storedName"> {{username}}</div>
+
 <p name="PostedMessages"> Chat Message here </p>
-<div >
-	<input  id="message" type="text">
-	<button id="postChatMessage" type="button">Post Chat</button>
+<div id="postChatMessage">
+	<textarea class="message"></textarea>
+	<button id="submitPost">Post Chat</button>
 </div>
 
-<script>
-
-var socket = io.connect("http://localhost:4000");
-
-$("#postChatMessage").on("click",function(e){
-
-	socket.emit("newChat",$("#message").value);
-});
-
-socket.on("newMessage", (newChatMessage) => {
-$("#PostedMessages").val() += newChatMessage;
-
-})
-
-</script>
+<script src="js/chat_room.js"></script>
