@@ -5,12 +5,43 @@ Eric and Will
 
 
 
-Rooms:
-    hash: {room-name: number-of-users }
+'room' -> hash:
+    room-name: number-of-users
 
-Users:
-    hash: {user-name: room}
+'users' -> hash:
+    user-name: room
 
-Posts:
-    list:
-        room: [author-name, body ,author-name, body, author-name, body,]
+Posts -> list:
+    room-name: [author-name, body ,author-name, body, author-name, body,]
+    room-name: [author-name, body ,author-name, body, author-name, body,]
+    room-name: [author-name, body ,author-name, body, author-name, body,]
+
+
+
+'rooms' -> hash
+    roomId: name
+    roomId: name
+    roomId: name
+
+'members' -> hash
+    roomId: count
+    roomId: count
+    roomId: count
+
+roomId -> list
+    [postId, postId, postId, postId]
+roomId -> list
+    [postId, postId, postId, postId]
+roomId -> list
+    [postId, postId, postId, postId]
+
+'authors' -> hash
+    postId: author
+    postId: author
+    postId: author
+
+'messages' -> hash
+    postId: message
+    postId: messsage
+    postId: message
+
