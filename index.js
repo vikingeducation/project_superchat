@@ -2,35 +2,32 @@ const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
 const hbs = require("express-handlebars");
+
 const server = require("http").createServer(app);
 const io = require("socket.io")(server);
 const cookieParser = require("cookie-parser");
-const port = 4000;
 const redisTools = require("./lib/redis_tools");
+const port = 4000;
+
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.engine("handlebars", hbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
+app.use(express.static(`${__dirname}/public`));
 
 let pathname = `${__dirname}/node_modules/socket.io-client/dist/`;
 console.log(pathname);
 app.use("/socket.io", express.static(pathname));
 app.use(bodyParser.urlencoded({extended: true}));
 
-io.on("connection", client => {
-  console.log("connection made");
-//http://localhost:4000/socket.io/?EIO=3&transport=polling&t=Ls01klf 404 (Not Found)
-  // client.on("newChat", newMessage => {
-  //   console.log("new chat");
-  //   io.emit("newChat", newMessage);
-  // });
+
+io.on("connection", (client) => {
+  client.on("message", newMessage => {
+    console.log("new chat");
+    io.emit("message", newMessage);
+  });
 
 });
-
-
-var myUserName = "Word Eater was Here";
-
-
 
 app.get("/", (req, res) => {
   if (req.cookies.username) {
@@ -46,6 +43,7 @@ app.get("/", (req, res) => {
   }
 });
 
+
 app.post("/", (req, res) => {
   //check username that is entered
   //TODO: confirm req.body.name as syntax
@@ -55,17 +53,13 @@ app.post("/", (req, res) => {
     res.redirect("/");
   } else {
     console.log("exists");
-    //window.alert("Your username exists");
-    //res.end();
   }
-
-  //console.log(res.cookie["username"]);
 });
 
 var checkUsernameExist = function(name) {
   return redisTools.getUsernames().includes(name);
 };
 
-app.listen(port, () => {
+server.listen(4000, () => {
   console.log("Serving!");
 });
