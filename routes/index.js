@@ -18,6 +18,7 @@ router.get('/', function(req, res, next) {
 		res.redirect('/login');
 	} else {
 		_getHomePageData().then(homePageData => {
+			homePageData.username = req.cookies.username;
 			res.render('index', homePageData);
 		});
 	}

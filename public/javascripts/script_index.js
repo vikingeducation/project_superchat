@@ -5,9 +5,10 @@ function _pageInit() {
 	const socket = io.connect('http://localhost:3000');
 
 	// Assign event handlers.
-	socket.on('message_sent', data => {
-		let $el = $('<h6>', { text: `${data.body}` });
-
+	socket.on('message_sent', msgObj => {
+		let $el = $('<h6>', {
+			html: `<strong>${msgObj.username}:</strong> ${msgObj.body}`
+		});
 		$('#message-container').append($el);
 	});
 
@@ -15,7 +16,7 @@ function _pageInit() {
 		let message = $('#message-input').val();
 		socket.emit('send_message', {
 			body: message,
-			user_id: 0,
+			user_id: readCookie('user_id'),
 			room_id: 0
 		});
 		e.preventDefault();

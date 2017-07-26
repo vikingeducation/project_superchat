@@ -43,8 +43,8 @@ io.on('connection', client => {
 });
 
 const { saveMessage, saveUser } = require('../lib/redis_wrapper').saveModule;
-const { userExists } = require('../lib/redis_wrapper').loadModule;
-const { hashSync: encodePassword } = require("bcryptjs");
+const { userExists, getUsers } = require('../lib/redis_wrapper').loadModule;
+const { hashSync: encodePassword } = require('bcryptjs');
 
 function _handleSendMessage(msgObj) {
 	// {
@@ -60,7 +60,11 @@ function _handleSendMessage(msgObj) {
 		console.log(
 			`New message: [ UserID: ${msgObj.user_id}, RoomID: ${msgObj.room_id}, Body: ${msgObj.body} ]`
 		);
-		this.emit('message_sent', msgObj);
+
+		getUsers(msgObj.user_id).then(user => {
+			msgObj.username = user[0].username;
+			this.emit('message_sent', msgObj);
+		});
 	});
 }
 
@@ -75,10 +79,16 @@ function _handleNewUser(userObj) {
 					`New message: User data was saved! [ UserID: ${userObj.username}, RoomID: ${userObj.password} ]`
 				);
 
-				this.emit('user_created', userObj);
+				// Get the newly created user's id from redis.
+				getUsers().then(users => {
+					let userId = users.find(user => user.username === userObj.username)
+						.id;
+					userObj.id = userId;
+					this.emit('user_created', userObj);
+				});
 			});
 		}
-	})
+	});
 }
 
 /**
