@@ -31,23 +31,37 @@
         <input id='create-room-form' type=text />
         <button>Create Room</button>
       </form>
+    </div>
 
+    <div id="messageContainer">
+
+      <div id="allMessages" class="container">
+        {{#each messages as |message|}}
+          <div class="message row">
+            <div class="col-xs-12">
+              <p>
+                {{message.body}}
+              </p>
+              <p>
+                {{message.author}}
+              </p>
+            </div>
+          </div>
+        {{/each}}
+      </div>
     </div>
 
 
 
-
-
-
 <script>
-  var socket = io.connect("http://localhost:3030")
+  var socket = io.connect("http://localhost:3000")
 
-  $("#messageForm").on("submit", (e) => {
+  $(".messageForm").on("submit", (e) => {
     e.preventDefault();
     var data = {}
     data.body = $("input[name='message']").val();
     data.author = document.cookie.replace(/(?:(?:^|.*;\s*)user\s*\=\s*([^;]*).*$)|^.*$/, "$1");
-    data.room = "main-room";
+    data.room = $(this).attr("id");
     socket.emit("newMessage", data);
   });
 
@@ -57,10 +71,10 @@
     socket.emit("newRoom", data);
   });
 
-  $('.rooms').on('click', (e)=> {
+  $('#rooms').on('click', ".room", (e)=> {
     let roomName = $(this).attr('id');
     socket.emit('showRoom', roomName)
-  })
+  });
 
   socket.on("updateMessages", (data) => {
     $("#allMessages").prepend($(`<div class='message row'><div class='col-xs-12'><p>${data.body}</p><p>${data.author}</p></div></div>`));
@@ -70,9 +84,12 @@
     $("#rooms").prepend($(`<div class='room' id=${data}><h3>${data}</h3></div>`));
   });
 
+  socket.on("roomLoaded", (output) => {
+    let messageForm = `<div class="form form-group"><form id="${output.roomName}" class="messageForm"><input type="text" name="message" class="form-control"/><button>Send Message</button></form></div>`
+    $("#messageContainer").append(messageForm);
+  });
 
-
-
+  roomHandler();
 </script>
-  </body>
+</body>
 </html>

@@ -56,7 +56,6 @@ io.on("connection", client => {
     var p = redis.saveMessage(data.body, data.author, data.room);
 
     p.then(() => {
-      console.log("Promise found!");
       io.emit("updateMessages", data);
     });
   });
@@ -67,6 +66,17 @@ io.on("connection", client => {
     p.then(() => {
       io.emit("updateRooms", data);
     });
+  });
+
+  client.on("showRoom", data => {
+  	redis.loadRoomMessages(data, (messages) => {
+  		let output = {
+  			messages: messages,
+  			roomName: data
+  		}
+  		
+  		client.emit("roomLoaded", output);
+  	});
   });
 });
 
