@@ -13,7 +13,7 @@ function exitRoom(room) {
 
 function createRoom(room) {
   let Obj = { postCount: 0 };
-  return redisClient.hmsetAsync(name, Obj);
+  return redisClient.hmsetAsync(room, Obj);
 }
 
 function newMessage(room, user, message) {

@@ -53,7 +53,8 @@ io.on("connection", client => {
     });
   });
 
-  io.on("created room", room => {
+  client.on("created room", room => {
+    console.log('recieved created room event')
     createRoom(room).then(room => {
       io.emit("room created", room);
     });
