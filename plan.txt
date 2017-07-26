@@ -1,0 +1,20 @@
+Login screen:
+message [rm# user: text]
+counter when 10
+///later on save: move all the messages to external file
+
+message list push pop
+[] of last n messages
+
+
+ChatRoom:
+{message: {user:
+text:  }}
+  Display previous n messages
+  display username next to messages
+
+redisserver.
+rediserver.users if user exists append x
+redisserver.rooms.messages[room:msg1,msg2]
+>>>save user with cookie
+jack: im the all thin::::::::king all seeing
