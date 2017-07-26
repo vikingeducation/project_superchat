@@ -14,9 +14,12 @@ $("#submitPost").on("click", e => {
   });
 });
 
+
+
 socket.on("newChatMessageFromServer", newChatMessage => {
   console.log("working");
-  $("#PostedMessages").text($("#PostedMessages").text() + newChatMessage);
+  $(".messages").append($(`<h3>Author: ${newChatMessage.userName}</h3>`))
+  $(".messages").append($(`<p>Message: ${newChatMessage.message}</p>`))
 });
 
 //

@@ -22,7 +22,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 io.on("connection", client => {
   client.on("newChatMessage", newMessage => {
-    console.log(newMessage);
+    redisTools.storeMessage(newMessage);
 
     io.emit("newChatMessageFromServer", newMessage);
   });
