@@ -28,9 +28,16 @@ app.use(
 );
 
 app.get("/", (req, res) => {
-  let data = getAllData();
-  data.userName = req.cookies.userName;
-  res.render("index.handlebars", { data });
+  let data;
+  var p = new Promise(resolve => {
+    data = getAllData();
+    console.log(data);
+    resolve(data);
+  }).then(data => {
+    //data.userName = req.cookies.userName;
+    res.statusCode = 200;
+    res.render("index.handlebars", { data });
+  });
 });
 
 io.on("connection", client => {
