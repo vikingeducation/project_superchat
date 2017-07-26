@@ -15,7 +15,7 @@ app.use(
   express.static(__dirname + "/node_modules/socket.io-client/dist/")
 );
 
-console.log(__dirname + "/node_modules/socket.io-client/dist/");
+// server.listen(3000)
 
 // app.use(
 //   "/socket-",
@@ -24,7 +24,6 @@ console.log(__dirname + "/node_modules/socket.io-client/dist/");
 
 app.get("/", (req, res) => {
   redis.loadMessages(messages => {
-    console.log(messages);
     res.render("index", { messages: messages });
   });
 });
@@ -35,13 +34,15 @@ io.on("connection", client => {
   console.log("New connection");
 
   client.on("newMessage", data => {
-    var p = saveMessage(data.body, data.author, data.room);
+    var p = redis.saveMessage(data.body, data.author, data.room);
 
     p.then(() => {
-      io.emit("updateMessages", data);
+    	console.log("Promise found!");
+    	io.emit("updateMessages", data);
     });
   });
 });
+
 
 // redis.saveMessage("Hi there", "me", "main-room");
 
@@ -51,6 +52,7 @@ io.on("connection", client => {
 //   }
 // }
 
-app.listen(3000, "0.0.0.0", (req, res) => {
-  console.log("listening on port 3000");
-});
+// app.listen(3000, (req, res) => {
+//   console.log("listening on port 3000");
+// });
+server.listen(3000);
