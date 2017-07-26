@@ -8,25 +8,15 @@
   },
   "repository": {
     "type": "git",
-<<<<<<< HEAD
-    "url": "git+https://github.com/KaraThrash/project_superchat.git"
-=======
     "url": "git+https://github.com/Alex-Willenbrink/project_superchat.git"
->>>>>>> 6faf6749475806e41f55d8b2ad18a08dadac75fd
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-<<<<<<< HEAD
-    "url": "https://github.com/KaraThrash/project_superchat/issues"
-  },
-  "homepage": "https://github.com/KaraThrash/project_superchat#readme"
-=======
     "url": "https://github.com/Alex-Willenbrink/project_superchat/issues"
   },
   "homepage": "https://github.com/Alex-Willenbrink/project_superchat#readme",
   "dependencies": {
     "redis": "^2.7.1"
   }
->>>>>>> 6faf6749475806e41f55d8b2ad18a08dadac75fd
 }
