@@ -13,6 +13,13 @@ app.engine("handlebars", hbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
 
 var myUserName = "Word Eater was Here";
+io.on("connection", client => {
+  console.log("connection");
+  io.on("newChat", newMessage => {
+    console.log("new chat");
+    io.emit(newMessage);
+  });
+});
 
 app.get("/", (req, res) => {
   if (req.cookies.username) {
@@ -20,39 +27,33 @@ app.get("/", (req, res) => {
     //go to chat
     myUserName = req.cookies.username;
     console.log("Cookie was stored");
-    res.render("chatScreen");
+    res.render("chatScreen", { username: myUserName });
   } else {
-
     //cont go to chat //login?
     //post data//then check the name they enter against names saved
     res.render("loginScreen");
   }
 });
 
-
 app.post("/", (req, res) => {
   //check username that is entered
   //TODO: confirm req.body.name as syntax
-  if(!checkUserNameExist(req.body.name)) {
+  if (!checkUsernameExist(req.body.name)) {
     res.cookie("username", req.body.name);
-
-    res.redirect('/');
+    redisTools.storeUsername(req.body.name);
+    res.redirect("/");
   } else {
-    window.alert("Your username exists");
-    res.end();
+    console.log("exists");
+    //window.alert("Your username exists");
+    //res.end();
   }
 
-
-  console.log(res.cookie["username"]);
-
+  //console.log(res.cookie["username"]);
 });
 
-const checkUsernameExist = ( name ) => {
+var checkUsernameExist = function(name) {
   return redisTools.getUsernames().includes(name);
-}
-
-
-
+};
 
 app.listen(port, () => {
   console.log("Serving!");
