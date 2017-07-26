@@ -35,10 +35,9 @@ io.on('connection', client => {
 	console.log('New connection request granted');
 
 	// Assign event handlers.
-	client.on('send_message', _handleSendMessage);
+	client.on('send_message', _handleSendMessage.bind(client));
 });
 
-const serverClient = require('socket.io-client')('http://localhost:3000');
 const { saveMessage } = require('../lib/redis_wrapper').saveModule;
 function _handleSendMessage(msgObj) {
 	// {
@@ -49,11 +48,12 @@ function _handleSendMessage(msgObj) {
 
 	// Set the gmt_created property.
 	msgObj.gmt_created = new Date().getTime();
+
 	saveMessage(msgObj).then(() => {
 		console.log(
-			`New message: [ UserID: ${msgObj.user_id}, RoomID: ${msgObj.room_id}, Body: ${msgObj.body}`
+			`New message: [ UserID: ${msgObj.user_id}, RoomID: ${msgObj.room_id}, Body: ${msgObj.body} ]`
 		);
-		serverClient.emit('message_sent', msgObj);
+		this.emit('message_sent', msgObj);
 	});
 }
 
