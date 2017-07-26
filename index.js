@@ -16,7 +16,7 @@ app.set("view engine", "handlebars");
 app.use(express.static(`${__dirname}/public`));
 
 let pathname = `${__dirname}/node_modules/socket.io-client/dist/`;
-console.log(pathname);
+//console.log(pathname);
 app.use("/socket.io", express.static(pathname));
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -24,7 +24,7 @@ io.on("connection", client => {
   redisTools.getMessages().then(
     newData => {
       io.emit("ChatFromLogin", newData);
-      console.log(newData);
+      //console.log(newData);
     }
     // resolve();
   );
@@ -37,7 +37,7 @@ io.on("connection", client => {
       })
       .then(
         data => {
-          console.log(`data: ${data}`);
+          //console.log(`data: ${data}`);
         },
         err => {
           console.error(err);
@@ -72,7 +72,7 @@ app.post("/", (req, res) => {
       redisTools.storeUsername(req.body.name);
       res.redirect("/");
     } else {
-      res.end();
+      //res.end();
     }
   });
 });

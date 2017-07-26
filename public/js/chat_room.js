@@ -1,11 +1,5 @@
 const socket = io.connect("http://localhost:4000");
 
-// $("#submitPost").submit((e) => {
-// 	e.preventDefault();
-// 	socket.emit("newChat", $("#message").val());
-// 	console.log("also working");
-// });
-
 $("#submitPost").on("click", e => {
   e.preventDefault();
   socket.emit("newChatMessage", {
@@ -23,13 +17,17 @@ socket.on("ChatFromLogin", newChatMessageArray => {
   }
 });
 socket.on("newChatMessageFromServer", newChatMessage => {
-  console.log("working");
-  $(".messages").append(
-    $(`<h3 float:top>Author: ${newChatMessage.userName}</h3>`)
+  var list = document.getElementById("msgList");
+  var newItem = document.createElement("LI");
+
+  var textnode = document.createTextNode(
+    newChatMessage.userName + " : " + newChatMessage.message
   );
-  $(".messages").append(
-    $(`<p float:top>Message: ${newChatMessage.message}</p>`)
-  );
+  newItem.appendChild(textnode);
+  list.insertBefore(newItem, list.childNodes[0]);
+
+  //$(".messages").append($(`<li >Author: ${newChatMessage.userName}</li>`));
+  //$(".messages").append($(`<li >Message: ${newChatMessage.message}</li>`));
 });
 
 //
