@@ -6,25 +6,31 @@ const redisClient = redis.createClient();
 //room: membercount
 function joinRoom(room) => {
   return new Promise((resolve, reject) => {
-    if
-    redisClient.hincrby('chatRooms', room, 1)
-
+    resolve(redisClient.hincrby('chatRooms', room, 1))
   }
 }
 
 function exitRoom(room) => {
-  redisClient.hdecrby('chatRooms', room, 1)
+  return new Promise((resolve, reject) => {
+    resolve(redisClient.hdecrby('chatRooms', room, 1))
+  }
 }
 
 function createRoom(room) => {
-  let Obj = {postCount: 0}
-  redisClient.hmset(name, Obj)
-
+  return new Promise((resolve, reject) => {
+    let Obj = {postCount: 0}
+    resolve(redisClient.hmset(name, Obj))
+  }
 }
 
-function newMessage() => {
+function newMessage(room, user, message) => {
+  return new Promise((resolve, reject) => {
+    redisClient.hgetall(data ()=>{
+      return 
 
-
+    })
+    resolve(redisClient.hset(room, ))
+  }
 }
 
 function getAllData() => {
