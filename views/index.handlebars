@@ -9,10 +9,15 @@
     integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
     crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-  
+
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
   </head>
   <body>
+
+    <h1>Welcome {{user}}!</h1>
+    <form method=post action='/logout'>
+      <button>log out</button>
+    </form>
     <div class="form form-group">
       <form id="messageForm">
         <input type="text" name="message" class="form-control"/>
@@ -37,14 +42,14 @@
 
 
 <script>
-  var socket = io.connect("http://localhost:3000")
+  var socket = io.connect("http://localhost:3030")
 
   $("#messageForm").on("submit", (e) => {
     e.preventDefault();
     var data = {}
 
     data.body = $("input[name='message']").val();
-    data.author = "Anonymous";
+    data.author = document.cookie.split('=')[1]
     data.room = "main-room";
 
     socket.emit("newMessage", data);
