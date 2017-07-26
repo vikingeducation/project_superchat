@@ -27,7 +27,7 @@ function newMessage(room, user, message) {
       redisClient.hsetAsync(room, { postCount: i, userKey: message });
     })
     .then(() => {
-      redisClient.keys(room).then(data =>  {
+      redisClient.keys(room).then(data => {
         return data.slice(data.length - 2).push(room);
       });
     });
@@ -36,14 +36,14 @@ function newMessage(room, user, message) {
 function getAllData() {
   var endData = {};
   redisClient.keysAsync("*").then(data => {
-    data = data.filter(el => el !== "chatRooms");
-    data.forEach(el => {
+    let newData = data.filter(el => el !== "chatRooms");
+    newData.forEach(el => {
       redisClient.hgetallAsync(el).then(data => {
         endData[el] = data;
-        return endData;
       });
     });
   });
+  return endData;
 }
 
 module.exports = {
