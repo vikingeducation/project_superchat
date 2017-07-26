@@ -15,22 +15,18 @@ app.set("view engine", "handlebars");
 let pathname = `${__dirname}/node_modules/socket.io-client/dist/`;
 console.log(pathname);
 app.use("/socket.io", express.static(pathname));
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({ extended: true }));
 
 io.on("connection", client => {
   console.log("connection made");
-//http://localhost:4000/socket.io/?EIO=3&transport=polling&t=Ls01klf 404 (Not Found)
-  // client.on("newChat", newMessage => {
-  //   console.log("new chat");
-  //   io.emit("newChat", newMessage);
-  // });
-
+  //http://localhost:4000/socket.io/?EIO=3&transport=polling&t=Ls01klf 404 (Not Found)
+  client.on("newChat", newMessage => {
+    console.log(newMessage);
+    io.emit("newCshat", newMessage);
+  });
 });
 
-
 var myUserName = "Word Eater was Here";
-
-
 
 app.get("/", (req, res) => {
   if (req.cookies.username) {
@@ -66,6 +62,6 @@ var checkUsernameExist = function(name) {
   return redisTools.getUsernames().includes(name);
 };
 
-app.listen(port, () => {
+server.listen(port, () => {
   console.log("Serving!");
 });
