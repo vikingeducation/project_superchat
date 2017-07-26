@@ -1,31 +1,59 @@
 $(document).ready(() => {
   var socket = io.connect;
 
-  //listen for login with jquery
-  //emit "login"
+let q = {
+  $login: $("#login"),
+  $post: $("#post"),
+  $join: $(".join"),
+  $exit: $(".exit"),
+  $create: $("#create")
+}
 
-  //use jquery to listen for joining a room
-  //socket.emit "room joined"
-  //room->current
+var currentRoom;
 
-  //use jquery to listen for leaving a room
-  //socket.emit "room left"
+q.login.click((event)=>{
+  //save to cookies
+})
 
-  //use jquery to listen for creating a room
-  //socket.emit "room created"
+q.join.click((event)=>{
+  var room = event.target.html()
+  socket.emit("joined room", room);
+  currentRoom = room;
+})
 
-  //use jquery to listen for new message
+q.exit.click((event)=>{
+  var room = event.target.val();
+  socket.emit("room left", room)
+  currentRoom = "";
+})
+
+q.post.click((event)=>{
   //socket.emit "new message"
+}
 
-  //socket.on  "joined-room"
+q.create.click((event)=>{
+  //socket.emit "room created"
+}
+
+
+socket.on("room joined", ()=>{
   //display [room]
 
-  //socket.on  "exited-room"
+})
+
+socket.on("room exited", ()=>{
   //hide [room], display room options
 
-  //socket.on  "createdRoom"
+})
+
+socket.on("room created", ()=>{
   //append room with jquery
 
-  //socket.on  "newMessage"
+})
+
+socket.on("message saved", ()=>{
   //append message with jquery
+
+})
+
 });

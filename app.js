@@ -8,10 +8,10 @@ const cookieParser = require("cookie-parser");
 const redis = require("redis");
 const redisClient = redis.createClient();
 const {
-  getAllData, 
-  newMessage, 
-  createRoom, 
-  exitRoom, 
+  getAllData,
+  newMessage,
+  createRoom,
+  exitRoom,
   joinRoom
 } = require('./services/redis_handler')
 
@@ -26,7 +26,7 @@ app.get("/", (req, res) => {
   res.end("hi!");
 });
 
-io.on('connection', client => { 
+io.on('connection', client => {
   let data = redisClient.getAllData();
   res.render(index.handlebars)
 }
@@ -51,10 +51,11 @@ io.on('created room', (room) => {
 } )
 
 io.on('newMessage', (data) => {
-  let room = data[0]
-  let user = 
+  let room = data[2]
+  let user = data[0].split(":")[1]
+  let message = data[1];
   newMessage(room, user, message).then( () => {
-    io.emit('newMessage', data)
+    io.emit('message saved', data)
   });
 } )
 

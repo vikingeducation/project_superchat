@@ -18,31 +18,38 @@ function createRoom(room) {
 
 function newMessage(room, user, message) {
   let i;
-  return redisClient.hgetall(room, chatRoom => {
-    i = chatRoom.postCount;
-    i++;
-    let userKey = i + ":" + user;
-    redisClient.hsetAsync(room, { postCount: i, userKey: message });
-  });
+  redisClient
+    .hgetallAsync(room)
+    .then(chatRoom => {
+      i = chatRoom.postCount;
+      i++;
+      let userKey = i + ":" + user;
+      redisClient.hsetAsync(room, { postCount: i, userKey: message });
+    })
+    .then(() => {
+      redisClient.keys(room).then(data => {
+        return data.slice(data.length - 2).push(room);
+      });
+    });
 }
 
 function getAllData() {
   var endData = {};
-  redisClient.keys("*", (data) => {
+  redisClient.keysAsync("*").then(data => {
     data = data.filter(el => el !== "chatRooms");
     data.forEach(el => {
-      redisClient.hgetall(el, (data) => {
+      redisClient.hgetallAsync(el).then(data => {
         endData[el] = data;
+        return endData;
       });
     });
   });
-  return endData;
 }
 
 module.exports = {
-  getAllData, 
-  newMessage, 
-  createRoom, 
-  exitRoom, 
+  getAllData,
+  newMessage,
+  createRoom,
+  exitRoom,
   joinRoom
 };
