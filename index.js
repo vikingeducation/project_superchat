@@ -22,7 +22,15 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 io.on("connection", client => {
   client.on("newChatMessage", newMessage => {
-    redisTools.storeMessage(newMessage);
+    redisTools.storeMessage(newMessage)
+    .then(() => {
+      redisTools.getMessages()
+    })
+    .then((data) => {
+      console.log(`data: ${data}`);
+    }, (err) => {
+      console.error(err);
+    })
 
     io.emit("newChatMessageFromServer", newMessage);
   });
@@ -45,13 +53,17 @@ app.get("/", (req, res) => {
 app.post("/", (req, res) => {
   //check username that is entered
   //TODO: confirm req.body.name as syntax
-  if (!checkUsernameExist(req.body.name)) {
-    res.cookie("username", req.body.name);
-    redisTools.storeUsername(req.body.name);
-    res.redirect("/");
-  } else {
-    console.log("exists");
-  }
+  redisTools.getUsernames()
+  .then((usernames) => {
+    console.log(usernames);
+    if(!usernames.includes(req.body.name)) {
+      res.cookie("username", req.body.name);
+      redisTools.storeUsername(req.body.name);
+      res.redirect("/");
+    } else {
+      res.end();
+    }
+  })
 });
 
 var checkUsernameExist = function(name) {
