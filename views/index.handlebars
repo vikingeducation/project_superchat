@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>chat room</title>
+    <script src='/socket.io/socket.io.js'></script>
+    <script
+    src="https://code.jquery.com/jquery-3.2.1.min.js"
+    integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+    crossorigin="anonymous"></script>
+  </head>
+  <body>
+    <form>
+      <input type="text" name="message"/>
+      <button type="submit" name="button"></button>
+    </form>
+
+    {{#each messages as |message|}}
+      <div class=message>
+        <p>
+          {{message.body}}
+        </p>
+        <p>
+          {{message.author}}
+        </p>
+      </div>
+      {{/each}}
+
+
+      <script>
+        var socket = io.connect('http://localhost:3030')
+
+        $('form')
+
+
+      </script>
+  </body>
+</html>
