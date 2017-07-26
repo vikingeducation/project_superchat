@@ -6,6 +6,7 @@ $(document).ready(() => {
 
   //use jquery to listen for joining a room
   //socket.emit "room joined"
+  //room->current
 
   //use jquery to listen for leaving a room
   //socket.emit "room left"

@@ -3,26 +3,6 @@ const redisClient = Promise.promisifyAll(require("redis").createClient());
 
 //room: membercount
 
-function handleEvent(event, room, user, message) {
-  return new Promise(resolve => {
-    switch (event) {
-      case joinRoom:
-        joinRoom(room).then(resolve());
-        break;
-      case exitRoom:
-        exitRoom(room).then(resolve());
-        break;
-      case createRoom:
-        createRoom(room).then(resolve());
-        break;
-      case newMessage:
-        newMessage(room, user, message).then(resolve(data));
-        break;
-      default:
-    }
-  });
-}
-
 function joinRoom(room) {
   return redisClient.hincrbyAsync("chatRooms", room, 1);
 }
@@ -38,7 +18,7 @@ function createRoom(room) {
 
 function newMessage(room, user, message) {
   let i;
-  return redisClient.hgetallAsync(room, chatRoom => {
+  return redisClient.hgetall(room, chatRoom => {
     i = chatRoom.postCount;
     i++;
     let userKey = i + ":" + user;
@@ -48,10 +28,10 @@ function newMessage(room, user, message) {
 
 function getAllData() {
   var endData = {};
-  redisClient.keysAsync("*").then(data => {
+  redisClient.keys("*", (data) => {
     data = data.filter(el => el !== "chatRooms");
     data.forEach(el => {
-      redisClient.hgetallAsync(el).then(() => {
+      redisClient.hgetall(el, (data) => {
         endData[el] = data;
       });
     });
@@ -59,6 +39,10 @@ function getAllData() {
   return endData;
 }
 
-console.log(getAllData());
-
-module.exports = {};
+module.exports = {
+  getAllData, 
+  newMessage, 
+  createRoom, 
+  exitRoom, 
+  joinRoom
+};

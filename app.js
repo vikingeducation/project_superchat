@@ -7,6 +7,13 @@ const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const redis = require("redis");
 const redisClient = redis.createClient();
+const {
+  getAllData, 
+  newMessage, 
+  createRoom, 
+  exitRoom, 
+  joinRoom
+} = require('./services/redis_handler')
 
 app.engine("handlebars", exphbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
@@ -19,29 +26,38 @@ app.get("/", (req, res) => {
   res.end("hi!");
 });
 
-//io.connection =>
+io.on('connection', client => { 
+  let data = redisClient.getAllData();
+  res.render(index.handlebars)
+}
 
-//listen for page load
+io.on('joined room', (room)=> {
+  joinRoom(room).then( () => {
+    client.emit('room joined')
+  });
+} )
 
-//read redis data / store in object =>
-//render HBS with data
+io.on('exited room', (room)=>{
+  exitRoom(room).then( () => {
+    client.emit('room exited')
+  });
+} )
 
-//io.on (joined room)
-//joinRoom() =>
-//.then(room) emit "joined [room]"
 
-//io.on (exit room)
+io.on('created room', (room) => {
+  createRoom(room).then( (room) => {
+    io.emit('room created', room)
+  });
+} )
 
-//exitRoom() =>
-//.then(room) emit "exited [room]"
+io.on('newMessage', (data) => {
+  let room = data[0]
+  let user = 
+  newMessage(room, user, message).then( () => {
+    io.emit('newMessage', data)
+  });
+} )
 
-//io.on (createRoom)
-//createRoom() =>
-//.then emit "created [room]"
-
-//io.on (newMessage)
-//newMessage(room, user, message) =>
-//.then emit "message added"
 
 server.listen(3000, () => {
   console.log(`Listening on localhost:3000`);
