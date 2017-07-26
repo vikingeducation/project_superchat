@@ -21,9 +21,15 @@ app.get("/", (req, res) => {
   if (!req.cookies.user) {
     res.render("login");
   } else {
-    redis.loadMessages(messages => {
+    // redis.loadMessages(messages => {
+    // res.render("index", {
+    //   messages: messages,
+    //   user: req.cookies.user
+    //   });
+    redis.getRooms().then(rooms => {
+      console.log(rooms);
       res.render("index", {
-        messages: messages,
+        rooms: rooms,
         user: req.cookies.user
       });
     });
@@ -40,7 +46,7 @@ app.post("/", (req, res) => {
 
 app.post("/logout", (req, res) => {
   res.clearCookie("user");
-  res.redirect("/");
+  res.redirect("/ ");
 });
 
 io.on("connection", client => {
@@ -52,6 +58,14 @@ io.on("connection", client => {
     p.then(() => {
       console.log("Promise found!");
       io.emit("updateMessages", data);
+    });
+  });
+
+  client.on("newRoom", data => {
+    var p = redis.saveRoom(data);
+
+    p.then(() => {
+      io.emit("updateRooms", data);
     });
   });
 });
