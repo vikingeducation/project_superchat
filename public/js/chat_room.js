@@ -6,15 +6,17 @@ const socket = io.connect("http://localhost:4000");
 // 	console.log("also working");
 // });
 
-$("#submitPost").on("click", (e) => {
-	e.preventDefault();
-	socket.emit("message", $(".message").val());
+$("#submitPost").on("click", e => {
+  e.preventDefault();
+  socket.emit("newChatMessage", {
+    userName: $(".storedName").text(),
+    message: $(".message").val()
+  });
 });
 
+socket.on("newChatMessageFromServer", newChatMessage => {
+  console.log("working");
+  $("#PostedMessages").text($("#PostedMessages").text() + newChatMessage);
+});
 
-socket.on("newMessage", (newChatMessage) => {
-	console.log("working");
-	$("#PostedMessages").val() += newChatMessage;
-})
-
-// 	
+//

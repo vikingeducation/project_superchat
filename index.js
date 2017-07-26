@@ -21,9 +21,10 @@ app.use("/socket.io", express.static(pathname));
 app.use(bodyParser.urlencoded({ extended: true }));
 
 io.on("connection", client => {
-  client.on("message", newMessage => {
-    console.log("new chat");
-    io.emit("message", newMessage);
+  client.on("newChatMessage", newMessage => {
+    console.log(newMessage);
+
+    io.emit("newChatMessageFromServer", newMessage);
   });
 });
 
