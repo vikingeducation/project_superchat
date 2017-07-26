@@ -13,13 +13,23 @@ $("#submitPost").on("click", e => {
     message: $(".message").val()
   });
 });
+socket.on("ChatFromLogin", newChatMessageArray => {
+  console.log("working");
+  let k = 0;
+  while (k < newChatMessageArray.length) {
+    $(".messages").append($(`<h3 >${newChatMessageArray[k]}</h3>`));
 
-
-
+    k++;
+  }
+});
 socket.on("newChatMessageFromServer", newChatMessage => {
   console.log("working");
-  $(".messages").append($(`<h3>Author: ${newChatMessage.userName}</h3>`))
-  $(".messages").append($(`<p>Message: ${newChatMessage.message}</p>`))
+  $(".messages").append(
+    $(`<h3 float:top>Author: ${newChatMessage.userName}</h3>`)
+  );
+  $(".messages").append(
+    $(`<p float:top>Message: ${newChatMessage.message}</p>`)
+  );
 });
 
 //

@@ -1,17 +1,3 @@
-<<<<<<< HEAD
-const redisClient = require("redis").createClient();
-//redisClient.usernames = redisClient.usernames || [];
-
-const storeUsername = function(username) {
-  return new Promise((resolve, reject) => {
-    redisClient.lpush("usernames", username, (err, reply) => {
-      if (err) reject(err);
-      // User data storage worked correctly
-      // redisClient.end() => do this if not working correctly
-
-      resolve();
-    });
-=======
 const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
@@ -35,65 +21,66 @@ app.use("/socket.io", express.static(pathname));
 app.use(bodyParser.urlencoded({ extended: true }));
 
 io.on("connection", client => {
+  redisTools.getMessages().then(
+    newData => {
+      io.emit("ChatFromLogin", newData);
+      console.log(newData);
+    }
+    // resolve();
+  );
+
   client.on("newChatMessage", newMessage => {
-    redisTools.storeMessage(newMessage)
-    .then(() => {
-      redisTools.getMessages()
-    })
-    .then((data) => {
-      console.log(`data: ${data}`);
-    }, (err) => {
-      console.error(err);
-    })
+    redisTools
+      .storeMessage(newMessage)
+      .then(() => {
+        redisTools.getMessages();
+      })
+      .then(
+        data => {
+          console.log(`data: ${data}`);
+        },
+        err => {
+          console.error(err);
+        }
+      );
 
     io.emit("newChatMessageFromServer", newMessage);
->>>>>>> f7498f77cca9b3041af3d75fb3fa8251388f8651
   });
-};
+});
 
-const storeMessage = function(messageObj) {
-  return new Promise((resolve, reject) => {
-    // console.log(messageObj);
-    // console.log(Object.keys(messageObj));
+app.get("/", (req, res) => {
+  if (req.cookies.username) {
+    console.log(`username: ${req.cookies["username"]}`);
+    //go to chat
+    myUserName = req.cookies.username;
+    console.log("Cookie was stored");
+    res.render("chatScreen", { username: myUserName });
+  } else {
+    //cont go to chat //login?
+    //post data//then check the name they enter against names saved
+    res.render("loginScreen");
+  }
+});
 
-    // redisClient.lpush("messages", {
-    //   username: messageObj.username,
-    //   message: messageObj.message
-    // });
-    redisClient.lpush("messages", messageObj.message);
-    if (err) reject(err);
-    console.log(redisClient.messages);
-    resolve();
-  });
-};
-
-<<<<<<< HEAD
-const getMessages = function() {};
-=======
 app.post("/", (req, res) => {
   //check username that is entered
   //TODO: confirm req.body.name as syntax
-  redisTools.getUsernames()
-  .then((usernames) => {
+  redisTools.getUsernames().then(usernames => {
     console.log(usernames);
-    if(!usernames.includes(req.body.name)) {
+    if (!usernames.includes(req.body.name)) {
       res.cookie("username", req.body.name);
       redisTools.storeUsername(req.body.name);
       res.redirect("/");
     } else {
       res.end();
     }
-  })
+  });
 });
->>>>>>> f7498f77cca9b3041af3d75fb3fa8251388f8651
 
-var getUsernames = () => {
-  return redisClient.usernames;
+var checkUsernameExist = function(name) {
+  return redisTools.getUsernames().includes(name);
 };
-storeUsername.usernames = redisClient.usernames;
 
-module.exports = {
-  storeUsername,
-  getUsernames,
-  storeMessage
-};
+server.listen(4000, () => {
+  console.log("Serving!");
+});
