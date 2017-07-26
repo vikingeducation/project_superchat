@@ -18,6 +18,15 @@
     <form method=post action='/logout'>
       <button>log out</button>
     </form>
+
+    <div id="rooms">
+      {{#each rooms as |room|}}
+        <div>
+          <h3 id="{{room}}">{{room}}</h3>
+        </div>
+      {{/each}}
+    </div>
+
     <div class="form form-group">
       <form id="messageForm">
         <input type="text" name="message" class="form-control"/>
@@ -42,14 +51,14 @@
 
 
 <script>
-  var socket = io.connect("http://localhost:3030")
+  var socket = io.connect("http://localhost:3000")
 
   $("#messageForm").on("submit", (e) => {
     e.preventDefault();
     var data = {}
 
     data.body = $("input[name='message']").val();
-    data.author = document.cookie.split('=')[1]
+    data.author = document.cookie.replace(/(?:(?:^|.*;\s*)user\s*\=\s*([^;]*).*$)|^.*$/, "$1");
     data.room = "main-room";
 
     socket.emit("newMessage", data);
