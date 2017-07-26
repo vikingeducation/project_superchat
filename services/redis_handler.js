@@ -6,7 +6,7 @@ const redisClient = redis.createClient();
 //room: membercount
 function joinRoom(room) => {
   return new Promise((resolve, reject) => {
-    if 
+    if
     redisClient.hincrby('chatRooms', room, 1)
 
   }
@@ -27,3 +27,11 @@ function newMessage() => {
 
 }
 
+function getAllData() => {
+
+
+}
+
+module.exports = {
+  
+}
