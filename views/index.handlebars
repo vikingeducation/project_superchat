@@ -10,27 +10,43 @@
     crossorigin="anonymous"></script>
   </head>
   <body>
-    <form>
+    <form id="messageForm">
       <input type="text" name="message"/>
-      <button type="submit" name="button"></button>
+      <button>Send Message</button>
     </form>
 
-    {{#each messages as |message|}}
-      <div class=message>
-        <p>
-          {{message.body}}
-        </p>
-        <p>
-          {{message.author}}
-        </p>
-      </div>
+    <div id="allMessages">
+      {{#each messages as |message|}}
+        <div class=message>
+          <p>
+            {{message.body}}
+          </p>
+          <p>
+            {{message.author}}
+          </p>
+        </div>
       {{/each}}
+    </div>
 
 
       <script>
-        var socket = io.connect('http://localhost:3030')
+        var socket = io.connect('http://localhost:3000')
 
-        $('form')
+        $("#messageForm").on("submit", (e) => {
+          e.preventDefault();
+          alert("This worked!");
+          var data = {}
+
+          data.body = $("input[name='message']").val();
+          data.author = "Anonymous";
+          data.room = "main-room";
+
+          socket.emit("newMessage", data);
+        });
+
+        socket.on("updateMessages", (data) => {
+          $("#allMessages").prepend($(`<div class=message><p>${data.body}</p><p>${data.author}</p></div>`));
+        });
 
 
       </script>

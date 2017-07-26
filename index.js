@@ -24,9 +24,17 @@ app.get("/", (req, res) => {
 
 // let messageIDs = [1, 2];
 
-io.on("connection", (
-  console.log('new connection')
-) => {});
+io.on("connection", (client) => {
+	console.log("New connection");
+
+	client.on("newMessage", (data) => {
+		var p = saveMessage(data.body, data.author, data.room);
+
+		p.then(() => {
+			io.emit("updateMessages", data);
+		})
+	});
+});
 
 // redis.saveMessage("Hi there", "me", "main-room");
 
