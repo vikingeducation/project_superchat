@@ -1,7 +1,7 @@
-var express = require('express');
+var express = require("express");
 var router = express.Router();
 
-const { loadModule, saveModule } = require('../lib/redis_wrapper');
+const { loadModule, saveModule } = require("../lib/redis_wrapper");
 const {
 	getUsers,
 	getMessages,
@@ -13,7 +13,7 @@ const {
 const { saveUser, saveMessage, saveRoom } = saveModule;
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
+router.get("/", function(req, res, next) {
 	// GET TESTING
 	//
 	// getUsers().then(console.log);
@@ -26,9 +26,13 @@ router.get('/', function(req, res, next) {
 	// getMessagesByUserId(1).then(console.log);
 
 	// SAVE TESTING
-	//
+	let saved = saveUser({ username: "billy", password: "billy" });
+	console.log(saved, "??");
+	// .catch(err => {
+	// 	console.error(err.stack);
+	// });
 
-	res.render('index', { title: 'Express' });
+	res.render("index", { title: "Express" });
 });
 
 module.exports = router;
