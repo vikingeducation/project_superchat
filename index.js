@@ -10,4 +10,8 @@ const io = require("socket.io")(server);
 
 let messageIDs = [1, 2];
 
-redis.loadMessages(messageIDs);
+// redis.saveMessage("Hi there", "me", "main-room");
+
+redis.loadMessages((messages) => {
+	console.log(messages);
+});
