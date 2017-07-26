@@ -1,22 +1,7 @@
-const { saveModule } = require('./lib/redis_wrapper');
+const { saveModule } = require("./lib/redis_wrapper");
 const { saveUser, saveMessage, saveRoom } = saveModule;
 
-const { hashSync: encodePassword } = require('bcryptjs');
-
-// saveUser({ username: 'billy', password: 'billy' }).then(result => {
-// 	console.log(!!result);
-// });
-// saveRoom({ name: 'An Awesome Room' }).then(result => {
-// 	console.log(!!result);
-// });
-// saveMessage({
-// 	body: 'An awesome message, hi VCS!',
-// 	gmt_created: 0,
-// 	user_id: 0,
-// 	room_id: 0
-// }).then(result => {
-// 	console.log(!!result);
-// });
+const { hashSync: encodePassword } = require("bcryptjs");
 
 for (let u = 0; u < 10; u++) {
 	saveUser({
@@ -39,5 +24,3 @@ for (let r = 0; r < 10; r++) {
 		});
 	}
 }
-
-process.exit(1);
