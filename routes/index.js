@@ -14,9 +14,13 @@ const { saveUser, saveMessage, saveRoom } = saveModule;
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-	_getHomePageData().then(homePageData => {
-		res.render('index', homePageData);
-	});
+	if (!req.cookies.username) {
+		res.redirect('/login');
+	} else {
+		_getHomePageData().then(homePageData => {
+			res.render('index', homePageData);
+		});
+	}
 });
 
 function _getHomePageData() {
@@ -32,6 +36,7 @@ function _getHomePageData() {
 
 				// Pass back to handler.
 				resolve({
+					page: 'index',
 					title: 'Super Chat',
 					rooms: rooms,
 					users: users

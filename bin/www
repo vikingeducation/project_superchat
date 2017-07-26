@@ -35,7 +35,7 @@ io.on('connection', client => {
 	console.log('New connection request granted');
 
 	// Assign event handlers.
-	client.on('send_message', _handleSendMessage.bind(client));
+	client.on('send_message', _handleSendMessage.bind(io));
 });
 
 const { saveMessage } = require('../lib/redis_wrapper').saveModule;
@@ -60,7 +60,6 @@ function _handleSendMessage(msgObj) {
 /**
  * Listen on provided port, on all network interfaces.
  */
-
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
