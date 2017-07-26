@@ -1,43 +1,64 @@
-const redis = require('redis');
-const redisClient = redis.createClient();
-
-
+const Promise = require("bluebird");
+const redisClient = Promise.promisifyAll(require("redis").createClient());
 
 //room: membercount
-function joinRoom(room) => {
-  return new Promise((resolve, reject) => {
-    resolve(redisClient.hincrby('chatRooms', room, 1))
-  }
+
+function handleEvent(event, room, user, message) {
+  return new Promise(resolve => {
+    switch (event) {
+      case joinRoom:
+        joinRoom(room).then(resolve());
+        break;
+      case exitRoom:
+        exitRoom(room).then(resolve());
+        break;
+      case createRoom:
+        createRoom(room).then(resolve());
+        break;
+      case newMessage:
+        newMessage(room, user, message).then(resolve(data));
+        break;
+      default:
+    }
+  });
 }
 
-function exitRoom(room) => {
-  return new Promise((resolve, reject) => {
-    resolve(redisClient.hdecrby('chatRooms', room, 1))
-  }
+function joinRoom(room) {
+  return redisClient.hincrbyAsync("chatRooms", room, 1);
 }
 
-function createRoom(room) => {
-  return new Promise((resolve, reject) => {
-    let Obj = {postCount: 0}
-    resolve(redisClient.hmset(name, Obj))
-  }
+function exitRoom(room) {
+  return redisClient.hdecrbyAsync("chatRooms", room, 1);
 }
 
-function newMessage(room, user, message) => {
-  return new Promise((resolve, reject) => {
-    redisClient.hgetall(data ()=>{
-      return 
-
-    })
-    resolve(redisClient.hset(room, ))
-  }
+function createRoom(room) {
+  let Obj = { postCount: 0 };
+  return redisClient.hmsetAsync(name, Obj);
 }
 
-function getAllData() => {
-
-
+function newMessage(room, user, message) {
+  let i;
+  return redisClient.hgetallAsync(room, chatRoom => {
+    i = chatRoom.postCount;
+    i++;
+    let userKey = i + ":" + user;
+    redisClient.hsetAsync(room, { postCount: i, userKey: message });
+  });
 }
 
-module.exports = {
-  
+function getAllData() {
+  var endData = {};
+  redisClient.keysAsync("*").then(data => {
+    data = data.filter(el => el !== "chatRooms");
+    data.forEach(el => {
+      redisClient.hgetallAsync(el).then(() => {
+        endData[el] = data;
+      });
+    });
+  });
+  return endData;
 }
+
+console.log(getAllData());
+
+module.exports = {};
