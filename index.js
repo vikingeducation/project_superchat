@@ -27,7 +27,6 @@ app.get("/", (req, res) => {
     //   user: req.cookies.user
     //   });
     redis.getRooms().then(rooms => {
-      console.log(rooms);
       res.render("index", {
         rooms: rooms,
         user: req.cookies.user
@@ -39,6 +38,7 @@ app.get("/", (req, res) => {
 app.post("/", (req, res) => {
   let user = req.body.user;
   redis.saveUser(user);
+  console.log(user);
   res.cookie("user", user);
 
   res.redirect("/");
@@ -46,7 +46,7 @@ app.post("/", (req, res) => {
 
 app.post("/logout", (req, res) => {
   res.clearCookie("user");
-  res.redirect("/ ");
+  res.redirect("/");
 });
 
 io.on("connection", client => {
@@ -69,14 +69,14 @@ io.on("connection", client => {
   });
 
   client.on("showRoom", data => {
-  	redis.loadRoomMessages(data, (messages) => {
-  		let output = {
-  			messages: messages,
-  			roomName: data
-  		}
-  		
-  		client.emit("roomLoaded", output);
-  	});
+    redis.loadRoomMessages(data, messages => {
+      let output = {
+        messages: messages,
+        roomName: data
+      };
+
+      client.emit("roomLoaded", output);
+    });
   });
 });
 
