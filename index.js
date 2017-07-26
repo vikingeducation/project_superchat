@@ -39,7 +39,7 @@ app.post("/", (req, res) => {
   let user = req.body.user;
   redis.saveUser(user);
   console.log(user);
-  res.cookie("user", user);
+  res.cookie("user", user, {httpOnly: false});
 
   res.redirect("/");
 });
