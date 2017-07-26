@@ -4,7 +4,7 @@ const app = express();
 
 // Socket.io
 const server = require('http').createServer(app);
-const socket = require('./lib/controllers/sockets')(server);
+require('./lib/controllers/sockets')(server);
 app.use(
   '/socket.io',
   express.static(__dirname + 'node_modules/socket.io-client/dist/')
@@ -29,8 +29,8 @@ app.set('view engine', 'handlebars');
 app.use('/public', express.static(`${__dirname}/public`));
 
 // Router
-const router = require('./lib/controllers/routes')(socket);
-app.use('/', router);
+const router = require('./lib/controllers/routes');
+app.get('/', router);
 
 // Start server!
 const env = require('./env');
