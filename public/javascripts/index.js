@@ -12,7 +12,9 @@ let q = {
 var currentRoom;
 
 q.login.click((event)=>{
-  //save to cookies
+  let name = event.target.val();
+  // works?
+  socket.emit('login', name)
 })
 
 q.join.click((event)=>{
@@ -23,16 +25,18 @@ q.join.click((event)=>{
 
 q.exit.click((event)=>{
   var room = event.target.val();
-  socket.emit("room left", room)
+  socket.emit("exited room", room)
   currentRoom = "";
 })
 
-q.post.click((event)=>{
-  //socket.emit "new message"
+q.post.click((event) => {
+  //get room, user, msg
+  socket.emit("newMessage", )
 }
 
 q.create.click((event)=>{
-  //socket.emit "room created"
+  //get room
+  socket.emit("created room")
 }
 
 

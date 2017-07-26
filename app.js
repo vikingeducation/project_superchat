@@ -22,43 +22,51 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(__dirname + "/public/"));
 
+app.use('/socket.io', express.static(__dirname + "/node_modules/socket.io-client-dist/"));
+
 app.get("/", (req, res) => {
-  res.end("hi!");
+  let data = getAllData();
+  data.userName = req.cookie.userName
+  res.render(index.handlebars);
 });
 
+
+
+
 io.on('connection', client => {
-  let data = redisClient.getAllData();
-  res.render(index.handlebars)
-}
+  
 
-io.on('joined room', (room)=> {
-  joinRoom(room).then( () => {
-    client.emit('room joined')
-  });
-} )
+  io.on('joined room', (room)=> {
+    joinRoom(room).then( () => {
+      client.emit('room joined')
+    });
+  } )
 
-io.on('exited room', (room)=>{
-  exitRoom(room).then( () => {
-    client.emit('room exited')
-  });
-} )
+  io.on('exited room', (room)=>{
+    exitRoom(room).then( () => {
+      client.emit('room exited')
+    });
+  } )
 
+  io.on('created room', (room) => {
+    createRoom(room).then( (room) => {
+      io.emit('room created', room)
+    });
+  } )
 
-io.on('created room', (room) => {
-  createRoom(room).then( (room) => {
-    io.emit('room created', room)
-  });
-} )
+  io.on('newMessage', (data) => {
+    let room = data[2]
+    let user = data[0].split(":")[1]
+    let message = data[1];
+    newMessage(room, user, message).then( () => {
+      io.emit('message saved', data)
+    });
+  } )
 
-io.on('newMessage', (data) => {
-  let room = data[2]
-  let user = data[0].split(":")[1]
-  let message = data[1];
-  newMessage(room, user, message).then( () => {
-    io.emit('message saved', data)
-  });
-} )
-
+  io.on('login', (name) =>{
+    res.cookie('user', userName)
+  })
+})
 
 server.listen(3000, () => {
   console.log(`Listening on localhost:3000`);
