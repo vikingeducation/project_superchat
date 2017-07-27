@@ -23,6 +23,18 @@ function handle() {
       $.get(`/login/${id}/${userName}`);
     }
   });
+  $("#roomsListForm").on("click", "button", event => {
+    event.preventDefault();
+    let roomName = $("#roomsListForm input").val();
+    actions.onNewRoom(roomName);
+  });
+  $("#roomsListForm").on("keydown", "input", event => {
+    if (event.keyCode === 13) {
+      event.preventDefault();
+      let roomName = $("#roomsListForm input").val();
+      actions.onNewRoom(roomName);
+    }
+  });
 
   // Handle bad username
   socket.on("invalidUserName", startup => {
@@ -37,6 +49,7 @@ function handle() {
   // Log in handler
   socket.on("validUserName", userName => {
     $("#login").hide();
+    $("#roomsListForm").show();
     socket.emit("registerUser", userName);
     actions.logIn(userName);
   });
@@ -46,11 +59,12 @@ function handle() {
     $("#rooms").empty();
     $("#login").show();
     $("#userStuff").hide();
+    $("#roomsListForm").hide();
     $.get("/logout");
   });
 
   // Add a new room to the page
-  socket.on("addRoom", roomName => {
+  socket.on("joinRoom", roomName => {
     actions.buildRoom(roomName);
   });
 
@@ -115,6 +129,23 @@ let actions = {
     $userStuff.show();
     $userStuff.find("h3").text(userName);
     document.cookie = "superChatUsername=" + userName;
+  },
+  onNewRoom: function(roomName) {
+    socket.emit("checkRoomName", roomName, available => {
+      if (available) {
+        //jQuery things
+        let newRoom = `
+        <button class='btn btn-info' data-id=${roomName}>
+          ${roomName}
+        </button>
+        `;
+        $("#roomsList").append($(newRoom));
+      } else {
+        //
+        alert("That room already exists, just join it silly billy.");
+        $("#roomsListForm input").val("");
+      }
+    });
   }
 };
 

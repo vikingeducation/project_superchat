@@ -8,10 +8,25 @@
   <form class="col-sm-6 col-md-4">
     <section class="form-group">
       <label for="username">Username:</label>
-      <input type="text" class="form-control">
+      <input type="text" name='username' class="form-control">
     </section>
     <button type="button" class="btn btn-default">Log In</button>
   </form>
+</section>
+<section id='roomsListForm' class="row">
+  <form class="col-sm-6 col-md-4">
+    <section class="form-group">
+      <label for="roomName">Create a Room!</label>
+      <input type="text" name='roomName' class="form-control">
+    </section>
+    <button type="button" class="btn btn-default">Create!</button>
+  </form>
+</section>
+<section class='row'>
+  <h2>Rooms</h2>
+  <article id='roomsList' class="col-xs-12">
+    <!-- rooms inserted dynamically here -->
+  </article>
 </section>
 <section id="rooms" class="row">
 
