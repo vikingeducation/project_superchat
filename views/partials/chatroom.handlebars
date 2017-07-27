@@ -1,4 +1,4 @@
-<div class="panel panel-info">
+<div data-room-id="{{room.id}}" id="chatroom-panel" class="panel panel-info">
 	<header class="panel-heading">
 		<h3 class="panel-title">
 			{{#if room.roomname}}
@@ -10,7 +10,7 @@
 	</header>
 	<section id="messages-block" class="panel-body">
 		{{#each messages as |message|}}
-			{{>message user=../user message=message}}
+			{{>message message=message}}
 		{{/each}}
 	</section>
 </div>

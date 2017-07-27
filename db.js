@@ -3,6 +3,12 @@ const { saveUser, saveMessage, saveRoom } = saveModule;
 
 const { hashSync: encodePassword } = require("bcryptjs");
 
+saveUser({
+	username: "benny",
+	password: "12345",
+	room_id: -1
+});
+
 for (let r = 0; r < 5; r++) {
 	saveRoom({
 		roomname: `An Awesome Room ${r + 1}`
@@ -12,7 +18,7 @@ for (let r = 0; r < 5; r++) {
 		saveMessage({
 			body: `An awesome message ${m + 1}, hi VCS!`,
 			gmt_created: new Date().getTime(),
-			user_id: m + 1,
+			user_id: 1,
 			room_id: r + 1
 		});
 	}
