@@ -1,28 +1,37 @@
-$(document).ready(() => {
-  $(".chatroom-div").hide();
-  $(".exit").hide();
-
-  if ($("#header").html().split(" ").slice(1).join(" ") === "Anonymous") {
-    $("#create-form").hide();
-    $(".chatroom").hide();
-  }
-
-  var socket = io.connect("localhost:3000");
-
+$(document).ready(() => { 
   let q = {
     $login: $("#login"),
     $post: $(".post"),
     $join: $(".join"),
     $exit: $(".exit"),
-    $create: $("#create")
+    $create: $("#create"),
+    $logout: $('#logout')
   };
+  
+  $(".chatroom-div").hide();
+  $(".exit").hide();
+
+
+  if ($("#header").html().split(" ").slice(1).join(" ") === "Anonymous") {
+    $("#create-form").hide();
+    $(".chatroom").hide();
+    q.$logout.hide();
+  }
+
+  var socket = io.connect("localhost:3000");
 
   var currentRoom;
   var createdRoom;
 
   q.$login.click(() => {
     $(".chatroom").show();
+    q.$logout.show();
   });
+
+  q.$logout.click(event => {
+    q.$logout.hide();
+  })
+
 
   q.$join.click(event => {
     var room = $(event.target).html().split(" ").slice(1).join(" ");
@@ -35,6 +44,7 @@ $(document).ready(() => {
     $(`#${currentRoom}-post`).show();
     $(`#exit-${currentRoom}`).show();
   });
+
 
   q.$exit.click(event => {
     var room = $(event.target).html().split(" ").slice(1).join(" ");
