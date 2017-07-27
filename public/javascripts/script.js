@@ -1,4 +1,4 @@
-var socket = io.connect("http://localhost:3030");
+var socket = io.connect("http://localhost:3000");
 
 let formHandler = function() {
   $(".messageForm").on("submit", e => {
@@ -19,6 +19,8 @@ let formHandler = function() {
 };
 
 $(document).ready(function() {
+  // Emit events
+
   $("#create-room").on("submit", e => {
     e.preventDefault();
     let data = $("#create-room-form").val();
@@ -32,14 +34,19 @@ $(document).ready(function() {
     socket.emit("showRoom", roomName);
   });
 
+
+  // Listen for events
+
   socket.on("updateMessages", data => {
     console.log(data);
     console.log(data.room);
 
     $(`#messages${data.room}`).prepend(
-      $(
-        `<div class='message row'><div class='col-xs-12'><p><span>${data.author}: </span>${data.body}</p></div></div>`
-      )
+      $(`<div class='message row'>
+          <div class='col-xs-12'>
+            <p><span>${data.author}: </span>${data.body}</p>
+          </div>
+        </div>`)
     );
     if ($(`#messages${data.room}`).length === 0) {
       $(`#newMessage${data.room}`).text("new message");
@@ -48,14 +55,18 @@ $(document).ready(function() {
 
   socket.on("updateRooms", data => {
     $("#rooms").prepend(
-      $(
-        `<div class='room' id="${data}"><h3>${data}</h3><span id="newMessage${data}"></span></div>`
-      )
+      $(`<div class='room' id="${data}">
+          <h3>${data}</h3><span id="newMessage${data}"></span>
+        </div>`)
     );
   });
 
   socket.on("roomLoaded", output => {
     let messageFormHBS = Handlebars.templates["message_form"](output);
+
+    $(".active").removeClass("active");
+
+    $(`div#${output.room}`).addClass("active");
     $messages = $("#messageContainer");
     $messages.empty();
     $messages.append(messageFormHBS);
