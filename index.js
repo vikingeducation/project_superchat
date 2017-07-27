@@ -28,7 +28,9 @@ app.get("/", (req, res) => {
   if (!req.cookies.user) {
     res.render("login");
   } else {
+  	console.log(req.cookies.user);
     redis.getRooms(req.cookies.user).then(rooms => {
+    	console.log(rooms);
       res.render("index", {
         rooms: rooms,
         user: req.cookies.user
