@@ -13,6 +13,23 @@ function _pageInit() {
 	const $messageContainer = $('#message-container');
 	const $usersContainer = $('#users-container');
 
+	$('#add-room-form').on('submit', function(e) {
+		let $roomInput = $('#add-room-input');
+		let roomName = $roomInput.val();
+		console.log(roomName);
+		socket.emit('new_room', {
+			roomname: roomName
+		});
+
+		$roomInput.val('');
+		e.preventDefault();
+	});
+
+	socket.on('room_created', roomObj => {
+		let newRoom = `<a data-room-id="${roomObj.id}" href="#" class="list-group-item">${roomObj.roomname}</a>`;
+		$('#rooms-block').append(newRoom);
+	});
+
 	$('#room-list').on('click', 'a.list-group-item', function(e) {
 		let $target = $(e.target);
 

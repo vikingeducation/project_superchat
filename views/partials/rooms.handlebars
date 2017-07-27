@@ -1,4 +1,4 @@
-<div class="list-group">
+<div id="rooms-block" class="list-group">
 	{{#each rooms as |room|}}
 			{{#if room.active}}
 				<a data-room-id="{{room.id}}" href="#" class="list-group-item active">{{room.roomname}}</a>
@@ -7,3 +7,10 @@
 			{{/if}}
 	{{/each}}
 </div>
+
+<form id="add-room-form">
+	<div class="form-group">
+		<label for="add-room-input">Create Room</label>
+		<input type="text" class="form-control" id="add-room-input" />
+	</div>
+</form>
