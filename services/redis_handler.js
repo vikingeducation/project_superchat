@@ -21,15 +21,10 @@ function getAllData() {
         redisClient.hgetallAsync(chatName)
       );
       Promise.all(promArray).then(chatRooms => {
-        resolve();
+        resolve(chatRooms);
       });
     });
   });
-}
-
-function stripAuthorIndex(chatRooms) {
-  let newData = [];
-  chatRooms.forEach(room => {});
 }
 
 module.exports = {
