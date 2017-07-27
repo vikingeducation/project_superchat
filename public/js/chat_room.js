@@ -1,5 +1,12 @@
 const socket = io.connect("http://localhost:3000");
 
+$("#createRoom").on("click", e => {
+  e.preventDefault();
+  socket.emit("newChatRoom", {
+    roomName: $(".roomName").text()
+  });
+});
+
 $("#submitPost").on("click", e => {
   e.preventDefault();
   socket.emit("newChatMessage", {

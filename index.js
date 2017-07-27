@@ -17,40 +17,11 @@ app.engine("handlebars", hbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
 app.use(express.static(`${__dirname}/public`));
 
-<<<<<<< HEAD
-let pathname = `${__dirname}/node_modules/socket.io-client/dist/`;
-//console.log(pathname);
-app.use("/socket.io", express.static(pathname));
+app.use(
+  "/socket.io",
+  express.static(`${__dirname}/node_modules/socket.io-client/dist/`)
+);
 app.use(bodyParser.urlencoded({ extended: true }));
-
-io.on("connection", client => {
-  redisTools.getMessages().then(
-    newData => {
-      io.emit("ChatFromLogin", newData);
-      //console.log(newData);
-    }
-    // resolve();
-  );
-
-  client.on("newChatMessage", newMessage => {
-    redisTools
-      .storeMessage(newMessage)
-      .then(() => {
-        redisTools.getMessages();
-      })
-      .then(
-        data => {
-          //console.log(`data: ${data}`);
-        },
-        err => {
-          console.error(err);
-        }
-      );
-=======
-
-app.use("/socket.io", express.static(`${__dirname}/node_modules/socket.io-client/dist/`));
-app.use(bodyParser.urlencoded({ extended: true }));
->>>>>>> 3dc22dbcc60168535faad932e0375dbcb01c662d
 
 // io.on("connection", client => {
 //   redisTools.storeMessage("messages",
@@ -90,6 +61,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // });
 
 app.get("/", (req, res) => {
+  console.log(req.cookies);
   if (req.cookies.username) {
     res.redirect("/chatrooms");
   } else {
@@ -98,79 +70,56 @@ app.get("/", (req, res) => {
 });
 
 app.post("/", (req, res) => {
-<<<<<<< HEAD
-<<<<<<< HEAD
-  //check username that is entered
-  //TODO: confirm req.body.name as syntax
-  redisTools.getUsernames().then(usernames => {
-    console.log(usernames);
-    if (!usernames.includes(req.body.name)) {
-      res.cookie("username", req.body.name);
-      redisTools.storeUsername(req.body.name);
-      res.redirect("/");
-    } else {
-      //res.end();
-    }
-  });
-=======
-=======
-  res.cookie("username", res.body.name);
+  console.log(req.body.name);
+  //res.cookie("username", req.body.name);
 
   // Safety make sure we don't make 2 USER_IDS
-  getUsernames()
-  .then((usernames) => {
-    if(usernames.include(req.body.name)) {
-      res.cookie("username", res.body.name)
+  getUsernames().then(usernames => {
+    console.log(usernames);
+    if (usernames.includes(req.body.name)) {
       res.redirect("/");
     } else {
-      generateUserInfo()
-    .then(() => {
-      res.redirect("/");
-    })
+      res.cookie("username", req.body.name);
+      generateUserInfo(req.body.name).then(() => {
+        res.redirect("/");
+      });
     }
-  })
-}
-
-
-
-app.get("/chatrooms", (req, res) => {
-
-})
-
->>>>>>> edc3bedeb2e17a33cbf8b087af22f750055e67a1
-
-  // redisTools.generateUserInfo(req.body.name)
-  // .then(() => {
-  //   console.log("successfully stored data");
-  //   console.log("getting userids");
-  //   return getUserIds()
-  // })
-  // .then((userIds) => {
-  //   console.log(`userIds: ${userIds}`);
-  //   console.log(`randId: ${userIds[2]}`);
-  //   return getUsername(userIds[2])
-  // })
-  // .then((randUsername) => {
-  //   console.log(randUsername);
-  //   res.end();
-  // })
-
-  // redisTools.getUsernames().then(usernames => {
-  //   console.log(usernames);
-  //   if (!usernames.includes(req.body.name)) {
-  //     res.cookie("username", req.body.name);
-  //     redisTools.storeUsername(req.body.name);
-  //     res.redirect("/");
-  //   } else {
-  //     res.end();
-  //   }
-  // });
->>>>>>> 3dc22dbcc60168535faad932e0375dbcb01c662d
+  });
 });
 
- checkUsernameExist = function(name) {
+app.get("/chatrooms", (req, res) => {
+  res.render("chatLobby", { username: req.cookie.username });
+});
 
-};
+// redisTools.generateUserInfo(req.body.name)
+// .then(() => {
+//   console.log("successfully stored data");
+//   console.log("getting userids");
+//   return getUserIds()
+// })
+// .then((userIds) => {
+//   console.log(`userIds: ${userIds}`);
+//   console.log(`randId: ${userIds[2]}`);
+//   return getUsername(userIds[2])
+// })
+// .then((randUsername) => {
+//   console.log(randUsername);
+//   res.end();
+// })
+
+// redisTools.getUsernames().then(usernames => {
+//   console.log(usernames);
+//   if (!usernames.includes(req.body.name)) {
+//     res.cookie("username", req.body.name);
+//     redisTools.storeUsername(req.body.name);
+//     res.redirect("/");
+//   } else {
+//     res.end();
+//   }
+// });
+//});
+
+checkUsernameExist = function(name) {};
 
 server.listen(3000, () => {
   console.log("Serving gormet lobster!");
