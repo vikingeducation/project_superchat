@@ -3,7 +3,7 @@
 }
 
 .active {
-  background-color: #cef;
+  background-color: #9df;
 }
 
 .author {
@@ -13,12 +13,28 @@
 
 .scrolling {
   overflow-y: scroll;
-  max-height: 70vh;
-  min-height: 40vh;
+  max-height: 50vh;
+  min-height: 20vh;
   overflow-x: hidden;
 }
 
 .panel-body {
   max-height: 70vh;
   min-height: 40vh;
+}
+
+.label {
+  font-size: 10px;
+}
+
+.room {
+  border-top: 2px solid #ccc;
+}
+
+.room:first-child {
+  border-top: none;
+}
+
+.room:hover {
+  background-color: #def;
 }

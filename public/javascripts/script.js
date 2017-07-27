@@ -1,4 +1,4 @@
-var socket = io.connect("http://localhost:3030");
+var socket = io.connect("http://localhost:3000");
 
 let formHandler = function() {
   $(".messageForm").on("submit", e => {
@@ -43,14 +43,14 @@ $(document).ready(function() {
         </div>`)
     );
     if ($(`#messages${data.room}`).length === 0) {
-      $(`#newMessage${data.room}`).text("new message");
+      $(`#newMessage${data.room}`).text("new");
     }
   });
 
   socket.on("updateRooms", data => {
     $("#rooms").prepend(
       $(`<div class='room' id="${data}">
-          <h3>${data}</h3><span id="newMessage${data}"></span>
+          <h3>${data} <span id="newMessage${data}" class="label label-danger"></span></h3>
         </div>`)
     );
   });
