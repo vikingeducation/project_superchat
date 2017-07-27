@@ -71,7 +71,7 @@ $(document).ready(function() {
     $messages = $("#messageContainer");
     $messages.empty().append(messageFormHBS).addClass("panel-body");
     $messages.parent().addClass("panel panel-default");
-    $(`#${output.room} span`).text("");
+    $(`#${output.room} span.label`).text("");
     formHandler();
   });
 

@@ -81,7 +81,7 @@ io.on("connection", client => {
 
   client.on("leaveRoom", room => {
     redis.leaveRoom(user, room).then(() => {
-      client.emit("leftRoom");
+      client.emit("leftRoom", room);
     });
   });
 });
