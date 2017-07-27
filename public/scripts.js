@@ -85,7 +85,6 @@ function handle() {
 
   // Add a new post to a room
   socket.on("addPost", messageObj => {
-    //console.log(messageObj);
     actions.buildPost(messageObj);
   });
 
@@ -125,7 +124,6 @@ let actions = {
     let body = $("<p>").text(messageObj.message);
     li.append(title).append(body);
     let targetText = '[data-id="' + messageObj.roomName + '"]';
-    console.log(targetText);
     $(targetText).children("ul").prepend(li);
   },
   newPost: function(event) {
@@ -135,6 +133,7 @@ let actions = {
     let $textBox = $target.siblings("section").children("textarea");
     let message = $textBox.val();
     $textBox.val("");
+    console.log(roomName, message);
     socket.emit("addPost", roomName, message);
   },
   logIn: function(userName) {
@@ -157,8 +156,9 @@ let actions = {
     });
   },
   buildNewRoom: function(roomName) {
+    console.log(roomName);
     let newRoom = `
-        <button class='btn btn-info' data-id=${roomName}>
+        <button class='btn btn-info' data-id="${roomName}">
           ${roomName}
         </button>
         `;
