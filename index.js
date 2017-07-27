@@ -27,11 +27,6 @@ app.get("/", (req, res) => {
   if (!req.cookies.user) {
     res.render("login");
   } else {
-    // redis.loadMessages(messages => {
-    // res.render("index", {
-    //   messages: messages,
-    //   user: req.cookies.user
-    //   });
     redis.getRooms().then(rooms => {
       res.render("index", {
         rooms: rooms,
@@ -44,7 +39,6 @@ app.get("/", (req, res) => {
 app.post("/", (req, res) => {
   let user = req.body.user;
   redis.saveUser(user);
-  console.log(user);
   res.cookie("user", user, { httpOnly: false });
 
   res.redirect("/");

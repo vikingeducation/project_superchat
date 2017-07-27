@@ -1,10 +1,11 @@
-var socket = io.connect("http://localhost:3000");
+var socket = io.connect("http://localhost:3030");
 
 let formHandler = function() {
   $(".messageForm").on("submit", e => {
     e.preventDefault();
     var data = {};
     data.body = $("input[name='message']").val();
+    $("input").val("");
     data.author = document.cookie.replace(
       /(?:(?:^|.*;\s*)user\s*\=\s*([^;]*).*$)|^.*$/,
       "$1"
@@ -12,6 +13,7 @@ let formHandler = function() {
 
     data.author = data.author.replace("%20", " ");
     data.room = $(".messageForm").attr("id");
+    console.log(data);
     socket.emit("newMessage", data);
   });
 };
@@ -46,19 +48,8 @@ $(document).ready(function() {
 
   socket.on("roomLoaded", output => {
     let messageFormHBS = Handlebars.templates["message_form"](output);
-    // let messageForm = `<div class="form form-group"><form id="${output.roomName}" class="messageForm"><input type="text" name="message" class="form-control"/><button>Send Message</button></form></div>`;
     $("#messageContainer").empty();
     $("#messageContainer").append(messageFormHBS);
-    // let allMessages = "";
-    // let messageDiv = $(
-    //   `<div id="messages${output.roomName}" class="container"></div>`
-    // );
-    // output.messages.forEach(message => {
-    // let thisMessage = `<div class="message row"><div class="col-xs-12"><p><span>${message.author}: </span>${message.body}</p></div></div>`;
-    // allMessages += thisMessage;
-    // });
-    // messageDiv.append(allMessages);
-    // $("#messageContainer").append(messageDiv);
     formHandler();
   });
 });
