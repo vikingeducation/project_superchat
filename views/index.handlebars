@@ -1,9 +1,10 @@
-{{#if data.userName}}
 
-  <h1>Welcome {{data.userName}}</h1>
-{{else}}
-  <h1>Welcome Anonymous</h1>
-{{/if}}
+<h1>Welcome {{name}}</h1>
+
+  <div class='container'>
+    <div class='row'>
+
+
 
 <form id='login-form'>
   <div class='form-group'>
@@ -21,6 +22,11 @@
       <button id='create' class='btn btn-success' type='button'>Create</button>
 </form>
 
+</div>
+
+
+
+
 {{#each data as |room|}}
   <div id={{room}}>
     <h1>{{room}}</h1>
@@ -32,3 +38,6 @@
 {{/each}}
 
 
+
+
+</div>

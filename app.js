@@ -46,6 +46,7 @@ app.post("/clear", (req, res) => {
 });
 
 io.on("connection", client => {
+  
   client.on("created room", room => {
     console.log("recieved created room event");
     createRoom(room).then(room => {
@@ -56,7 +57,7 @@ io.on("connection", client => {
   client.on("newMessage", data => {
     let returnData = data;
     let room = data[2];
-    let user = data[0].split(":")[1];
+    let user = data[0];
     let message = data[1];
     newMessage(room, user, message).then(() => {
       io.emit("message saved", returnData);
