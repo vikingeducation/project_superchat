@@ -26,6 +26,7 @@ app.use(
 app.use(bodyParser.urlencoded({ extended: true }));
 
 io.on("connection", client => {
+  // /client.on();
   // send all current chats to rooms
   getRoomNames().then(roomNames => {
     client.emit("updateRooms", roomNames);
@@ -40,10 +41,9 @@ io.on("connection", client => {
   });
 });
 
-
 app.get("/", (req, res) => {
   console.log(req.cookies);
-  (req.cookies.username) ? (res.redirect("/chatrooms")) : (res.render("loginScreen"))
+  req.cookies.username ? res.redirect("/chatrooms") : res.render("loginScreen");
 });
 
 app.post("/", (req, res) => {
@@ -71,13 +71,15 @@ app.get("/chatrooms", (req, res) => {
 app.get("/chatrooms/:chatroom", (req, res) => {
   let chatRoom = req.params.chatroom;
   console.log(req.params.chatroom);
-  if(req.cookies.username) {
+  if (!req.cookies.username) {
     res.redirect("/");
+  } else {
+    res.render("chatScreen", {
+      roomName: chatRoom,
+      username: req.cookies.username
+    });
   }
-
-  res.render("chatScreen", { roomName: chatRoom });
-
-})
+});
 
 server.listen(3000, () => {
   console.log("Serving gormet lobster!");
