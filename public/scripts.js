@@ -14,13 +14,13 @@ function handle() {
   $("#login").on("click", "button", event => {
     event.preventDefault();
     let userName = $("#login input").val();
-    socket.emit("checkUsername", userName);
+    $.get(`/login/${id}/${userName}`);
   });
   $("#login").on("keydown", "input", event => {
     if (event.keyCode === 13) {
       event.preventDefault();
       let userName = $("#login input").val();
-      socket.emit("checkUsername", userName);
+      $.get(`/login/${id}/${userName}`);
     }
   });
 
@@ -37,22 +37,16 @@ function handle() {
   // Log in handler
   socket.on("validUserName", userName => {
     $("#login").hide();
+    socket.emit("registerUser", userName);
     actions.logIn(userName);
   });
 
   // Log out hander
   $("#userStuff").on("click", "button", event => {
-    // Remove Rooms
-    // $("#rooms").children().each(child => {
-    //   $(child).delete();
-    // });
     $("#rooms").empty();
     $("#login").show();
     $("#userStuff").hide();
-    //document.cookie.superChatUsername = "";
-    // let name = getName();
-    let name = "wilbur";
-    socket.emit("logOut", name);
+    $.get("/logout");
   });
 
   // Add a new room to the page
@@ -109,12 +103,10 @@ let actions = {
     // Get post details, trigger server event
     let $target = $(event.target);
     let roomName = $target.closest("article").attr("data-id");
-    // let author = getName();
-    let author = "wilbur";
     let $textBox = $target.siblings("section").children("textarea");
     let message = $textBox.val();
     $textBox.val("");
-    socket.emit("addPost", roomName, author, message);
+    socket.emit("addPost", roomName, message);
   },
   logIn: function(userName) {
     $("#login input").val("");

@@ -11,12 +11,11 @@ app.use(
 );
 
 // Session
-const session = require("express-session");
+const cookieSession = require("cookie-session");
 app.use(
-  session({
-    secret: "DzibDjZGbwDzibDjZGbw",
-    resave: false,
-    saveUninitialized: true
+  cookieSession({
+    name: "session",
+    secret: "DzibDjZGbwDzibDjZGbw"
   })
 );
 
