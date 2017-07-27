@@ -1,7 +1,7 @@
-const { saveModule } = require('./lib/redis_wrapper');
+const { saveModule } = require("./lib/redis_wrapper");
 const { saveUser, saveMessage, saveRoom } = saveModule;
 
-const { hashSync: encodePassword } = require('bcryptjs');
+const { hashSync: encodePassword } = require("bcryptjs");
 
 for (let r = 0; r < 5; r++) {
 	saveRoom({
@@ -12,8 +12,8 @@ for (let r = 0; r < 5; r++) {
 		saveMessage({
 			body: `An awesome message ${m + 1}, hi VCS!`,
 			gmt_created: new Date().getTime(),
-			user_id: m,
-			room_id: r
+			user_id: m + 1,
+			room_id: r + 1
 		});
 	}
 }
