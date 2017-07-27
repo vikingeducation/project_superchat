@@ -7,8 +7,9 @@ const io = require("socket.io")(server);
 const cookieParser = require("cookie-parser");
 const redisTools = require("./lib/redis_tools");
 
-// const { getUserIds, getUsername } = require("./lib/getUserInfo");
-const { getUsernames } = require("./lib/login_redis");
+// const { getUserIds, getUsername } = require("./lib/get_user_info");
+const { getUsernames } = require("./lib/get_user_info");
+const { generateUserInfo } = require("./lib/redis_tools");
 
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -59,15 +60,36 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get("/", (req, res) => {
   if (req.cookies.username) {
-    console.log(`username: ${req.cookies["username"]}`);
-    myUserName = req.cookies.username;
-    res.render("chatScreen", { username: myUserName });
+    res.redirect("/chatrooms");
   } else {
     res.render("loginScreen");
   }
 });
 
 app.post("/", (req, res) => {
+  res.cookie("username", res.body.name);
+
+  // Safety make sure we don't make 2 USER_IDS
+  getUsernames()
+  .then((usernames) => {
+    if(usernames.include(req.body.name)) {
+      res.cookie("username", res.body.name)
+      res.redirect("/");
+    } else {
+      generateUserInfo()
+    .then(() => {
+      res.redirect("/");
+    })
+    }
+  })
+}
+
+
+
+app.get("/chatrooms", (req, res) => {
+
+})
+
 
   // redisTools.generateUserInfo(req.body.name)
   // .then(() => {
@@ -97,9 +119,9 @@ app.post("/", (req, res) => {
   // });
 });
 
-// var checkUsernameExist = function(name) {
-//   return redisTools.getUsernames().includes(name);
-// };
+ checkUsernameExist = function(name) {
+
+};
 
 server.listen(3000, () => {
   console.log("Serving gormet lobster!");
