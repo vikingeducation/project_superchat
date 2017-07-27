@@ -39,12 +39,10 @@ app.get("/", (req, res) => {
 
 app.post("/", (req, res) => {
   let user = req.body.user;
-  redis.saveUser(user).then(() => {
-    res.cookie("user", user, { httpOnly: false });
-    redis.saveRoom(user).then(user => {
-      res.redirect("/");
-    });
-  });
+  redis.saveUser(user);
+  res.cookie("user", user, { httpOnly: false });
+
+  res.redirect("/");
 });
 
 app.post("/logout", (req, res) => {
@@ -81,7 +79,7 @@ io.on("connection", client => {
 
   client.on("leaveRoom", room => {
     redis.leaveRoom(user, room).then(() => {
-      client.emit("leftRoom", room);
+      client.emit("leftRoom");
     });
   });
 });
