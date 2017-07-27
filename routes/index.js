@@ -1,16 +1,13 @@
 var express = require('express');
 var router = express.Router();
 
-const { loadModule, saveModule } = require('../lib/redis_wrapper');
 const {
 	getUsers,
-	getMessages,
 	getRooms,
-	getMessagesByRoomId,
 	getUsersByRoomId,
+	getMessagesByRoomId,
 	getMessagesByUserId
-} = loadModule;
-const { saveUser, saveMessage, saveRoom } = saveModule;
+} = require('../lib/redis_wrapper').loadModule;
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -25,25 +22,19 @@ router.get('/', function(req, res, next) {
 });
 
 function _getHomePageData() {
-	return getRooms().then(rooms => {
-		return new Promise(resolve => {
-			getUsers().then(users => {
-				// Sort each list of data by id.
-				[rooms, users].forEach(arr => {
-					arr.sort((a, b) => {
-						return a.id - b.id;
-					});
-				});
-
-				// Pass back to handler.
-				resolve({
-					page: 'index',
-					title: 'Super Chat',
-					rooms: rooms,
-					users: users
-				});
-			});
+	return Promise.all([getRooms(), getUsers()]).then(results => {
+		// Sort each array by id.
+		results = results.map(arr => {
+			arr.sort((a, b) => a.id - b.id);
+			return arr;
 		});
+		let [rooms, users] = results;
+		return {
+			page: 'index',
+			title: 'Super Chat',
+			rooms: rooms,
+			users: users
+		};
 	});
 }
 
