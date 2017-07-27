@@ -29,6 +29,7 @@
 
 .room {
   border-top: 2px solid #ccc;
+  cursor: pointer;
 }
 
 .room:first-child {
@@ -37,4 +38,10 @@
 
 .room:hover {
   background-color: #def;
+}
+
+.leaveRoom {
+  font-size: 12px;
+  color: #ccc;
+  cursor: pointer;
 }

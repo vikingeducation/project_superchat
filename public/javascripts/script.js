@@ -19,7 +19,7 @@ let formHandler = function() {
 let onLeaveRoom = function() {
   $(".leaveRoom").on("click", function(e) {
     e.stopPropagation();
-    let roomName = $(this).parent().attr("id");
+    let roomName = $(this).parent().parent().attr("id");
     socket.emit("leaveRoom", roomName);
   });
 };
@@ -59,7 +59,11 @@ $(document).ready(function() {
     onLeaveRoom();
     $("#rooms").prepend(
       $(`<div class='room' id="${data}">
-          <span class="leaveRoom">X</span><h3>${data} <span id="newMessage${data}" class="label label-danger"></span></h3>
+          <h3>
+            <span class="leaveRoom">X</span>
+            ${data} 
+            <span id="newMessage${data}" class="label label-danger"></span>
+          </h3>
         </div>`)
     );
   });

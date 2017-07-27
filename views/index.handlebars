@@ -17,7 +17,11 @@
             <div id="rooms">
               {{#each rooms as |room|}}
                 <div class='room' id="{{room}}">
-                  <span class="leaveRoom">X</span><h3>{{room}} <span id="newMessage{{room}}" class="label label-danger"></span></h3>
+                  <h3>
+                    <span class="leaveRoom">X</span>
+                    {{room}} 
+                    <span id="newMessage{{room}}" class="label label-danger"></span>
+                  </h3>
                 </div>
               {{/each}}
 
