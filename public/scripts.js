@@ -23,6 +23,8 @@ function handle() {
       $.get(`/login/${id}/${userName}`);
     }
   });
+
+  // Add new room!
   $("#roomsListForm").on("click", "button", event => {
     event.preventDefault();
     let roomName = $("#roomsListForm input").val();
@@ -34,6 +36,22 @@ function handle() {
       let roomName = $("#roomsListForm input").val();
       actions.onNewRoom(roomName);
     }
+  });
+
+  // Add a new room to the display
+  socket.on("addNewRoom", roomName => {
+    actions.buildNewRoom(roomName);
+  });
+
+  // Add a new room to the page
+  socket.on("joinRoom", roomName => {
+    actions.buildRoom(roomName);
+  });
+
+  // Handle Joining a room
+  $("#roomsList").on("click", "button", event => {
+    let roomName = $(event.target).attr("data-id");
+    socket.emit("tryJoinRoom", roomName);
   });
 
   // Handle bad username
@@ -49,6 +67,7 @@ function handle() {
   // Log in handler
   socket.on("validUserName", userName => {
     $("#login").hide();
+    $("#roomsList").show();
     $("#roomsListForm").show();
     socket.emit("registerUser", userName);
     actions.logIn(userName);
@@ -59,13 +78,9 @@ function handle() {
     $("#rooms").empty();
     $("#login").show();
     $("#userStuff").hide();
+    $("#roomsList").hide();
     $("#roomsListForm").hide();
     $.get("/logout");
-  });
-
-  // Add a new room to the page
-  socket.on("joinRoom", roomName => {
-    actions.buildRoom(roomName);
   });
 
   // Add a new post to a room
@@ -128,31 +143,25 @@ let actions = {
     let $userStuff = $("#userStuff");
     $userStuff.show();
     $userStuff.find("h3").text(userName);
-    document.cookie = "superChatUsername=" + userName;
   },
   onNewRoom: function(roomName) {
     socket.emit("checkRoomName", roomName, available => {
+      $("#roomsListForm input").val("");
       if (available) {
-        //jQuery things
-        let newRoom = `
+        // Add Room
+        actions.buildNewRoom(roomName);
+      } else {
+        // Or not ;p
+        alert("That room already exists, just join it silly billy.");
+      }
+    });
+  },
+  buildNewRoom: function(roomName) {
+    let newRoom = `
         <button class='btn btn-info' data-id=${roomName}>
           ${roomName}
         </button>
         `;
-        $("#roomsList").append($(newRoom));
-      } else {
-        //
-        alert("That room already exists, just join it silly billy.");
-        $("#roomsListForm input").val("");
-      }
-    });
+    $("#roomsList article").append($(newRoom));
   }
 };
-
-function getName() {
-  let cookieArr = decodeURIComponent(document.cookie).split(":");
-  let userNameArr = cookieArr.filter(el => {
-    return el.includes("superChatUsername");
-  });
-  return userNameArr[0].replace("superChatUsername=", "");
-}

@@ -1,11 +1,6 @@
-#login {
-  display: none;
-}
-
-#userStuff {
-  display: none;
-}
-
+#login,
+#userStuff,
+#roomsList,
 #roomsListForm {
   display: none;
 }
