@@ -7,28 +7,28 @@
 
     <div class="chat-body">
         <div class="chat-rooms">
-             {{!-- {{#each chatRoom}}  --}}
-                <div class="room">
-                    <h3>test</h3>
-                     {{#each messagesArr}} 
-                    <ul>
-                         <li>{{this.body}} and {{this.author}}</li> 
-                    </ul>
-                     {{/each}} 
-                </div>
+            {{!-- {{#each chatRoom}} --}}
+            <div id="room" class="room">
+                <h3>test</h3>
+                <ul id="message-content">
+                    {{#each messagesArr}}
+                        <li>{{this.body}} and {{this.author}}</li>
+                    {{/each}}
+                </ul>
+            </div>
 
-             {{!-- {{/each}}  --}}
+            {{!-- {{/each}} --}}
         </div>
     </div>
 
     <div class="chat-form">
         <div class="inputs">
-                <input placeholder="Enter message here" name="messageInput" id="messageInput">
-                <button id="submit">Post</button>
+            <input placeholder="Enter message here" name="messageInput" id="messageInput">
+            <button id="submit">Post</button>
         </div>
     </div>
 
 
 
-    </div>
+</div>
 </div>

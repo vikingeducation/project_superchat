@@ -6,6 +6,12 @@ const server = require('http').createServer(app);
 const io = require('socket.io')(server);
 let serverSocket;
 
+app.use(
+    "/socket.io",
+    express.static(__dirname + "node_modules/socket.io-client/dist/")
+);
+
+
 //set up handlebars
 const exphbs = require('express-handlebars');
 app.engine('handlebars', exphbs({
@@ -24,9 +30,11 @@ app.get('/', (req, res) => {
 
     .then (messages => {
         messages.map(element => {
+            console.log(element);
             messagesArr.push(JSON.parse(element));
         });
 
+        console.log(messagesArr);
         res.render('index', {"messagesArr": messagesArr});
 
     })
@@ -40,9 +48,13 @@ app.get('/', (req, res) => {
 io.on('connection', client => {
 
     client.on('addMsg', (msgProfile) => {
-        data.storeMessages(msgProfile.msg, msgProfile.author);
+        console.log(msgProfile);
+        data.storeMessages('test', msgProfile);
+        
+        io.emit('updateClient', msgProfile);
+
     });
 
 });
 
-app.listen(3000);
+server.listen(3000);

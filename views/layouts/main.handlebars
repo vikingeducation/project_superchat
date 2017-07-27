@@ -34,9 +34,23 @@
         $(document).ready(function () {
 
             let socket = io.connect('http://localhost:3000');
+            let profile = {};
 
             $("#submit").on("click", () => {
-                //store info in object and emit to server
+
+                profile.body = $("#messageInput").val();
+                profile.author = "Anon" //default author for now
+
+                $("#messageInput").val('');
+
+                socket.emit('addMsg', profile);
+            
+            });
+
+            socket.on('updateClient', (profile) => {
+                
+                $("#room ul").append(`<li>${profile.body} and ${profile.author}</li>`); //do this on socket listen so updates real time across all clients
+
             });
 
         });
