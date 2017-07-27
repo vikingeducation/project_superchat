@@ -24,6 +24,21 @@ function handle() {
     }
   });
 
+  //leave a room
+  $("#rooms").on("click", ".leave", event => {
+    let roomName = $(event.target).attr("data-id");
+    actions.removeRoomFromPage(roomName);
+  });
+  //delete a room
+  $("#rooms").on("click", ".delete", event => {
+    let roomName = $(event.target).attr("data-id");
+    actions.removeRoomFromPage(roomName);
+    //remove from database
+    socket.emit("deleteRoom", roomName);
+    let targetText = 'button[data-id="' + roomName + '"]';
+    $(targetText).remove();
+  });
+
   // Add new room!
   $("#roomsListForm").on("click", "button", event => {
     event.preventDefault();
@@ -103,18 +118,31 @@ let actions = {
       .addClass("col-sm-6 col-md-4 col-lg-3")
       .attr("data-id", roomName);
     let h = $("<h2>").text(roomName);
+    let removeBtn = $("<button>")
+      .text("Delete Room")
+      .addClass("btn btn-danger delete")
+      .attr("data-id", roomName);
+    let leaveBtn = $("<button>")
+      .text("Leave Room")
+      .addClass("btn btn-warning leave")
+      .attr("data-id", roomName);
     let ul = $("<ul>");
     let form = $("<form>");
     let section = $("<section>").addClass("form-group");
     let label = $("<label>").attr("for", "post").text("Make a new post:");
     let text = $("<textarea>").attr("name", "post").addClass("form-control");
     let button = $("<button>")
-      .addClass("btn btn-submit post-button")
+      .addClass("btn btn-success post-button")
       .text("Post something plz")
       .attr("type", "button");
     section.append(label).append(text);
     form.append(section).append(button);
-    article.append(h).append(form).append(ul);
+    article
+      .append(h)
+      .append(leaveBtn)
+      .append(removeBtn)
+      .append(form)
+      .append(ul);
     $("#rooms").append(article);
   },
   buildPost: function(messageObj) {
@@ -163,5 +191,11 @@ let actions = {
         </button>
         `;
     $("#roomsList article").append($(newRoom));
+  },
+  removeRoomFromPage: function(roomName) {
+    //let roomName = $(event.target).attr("data-id");
+    socket.emit("leaveRoom", roomName);
+    let targetText = 'article[data-id="' + roomName + '"]';
+    $(targetText).remove();
   }
 };
