@@ -19,3 +19,7 @@ p {
 .individual-post {
   border: 1px solid blue;
 }
+
+.hidden {
+  display: none;
+}
