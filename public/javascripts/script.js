@@ -1,4 +1,4 @@
-var socket = io.connect("http://localhost:3030");
+var socket = io.connect("http://localhost:3000");
 
 let formHandler = function() {
   $(".messageForm").on("submit", e => {
@@ -48,8 +48,11 @@ $(document).ready(function() {
 
   socket.on("roomLoaded", output => {
     let messageFormHBS = Handlebars.templates["message_form"](output);
-    $("#messageContainer").empty();
-    $("#messageContainer").append(messageFormHBS);
+    $messages = $("#messageContainer");
+    $messages.empty();
+    $messages.append(messageFormHBS);
+    $messages.parent().addClass("panel panel-default");
+    $messages.addClass("panel-body");
     formHandler();
   });
 });
