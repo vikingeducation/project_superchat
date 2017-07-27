@@ -2,7 +2,7 @@ $(document).ready(() => {
   $(".chatroom-div").hide();
   $(".exit").hide();
 
-  if ($("#header").html().split(" ").slice(1).join(' ') === "Anonymous") {
+  if ($("#header").html().split(" ").slice(1).join(" ") === "Anonymous") {
     $("#create-form").hide();
     $(".chatroom").hide();
   }
@@ -11,7 +11,7 @@ $(document).ready(() => {
 
   let q = {
     $login: $("#login"),
-    $post: $("#post"),
+    $post: $(".post"),
     $join: $(".join"),
     $exit: $(".exit"),
     $create: $("#create")
@@ -28,7 +28,7 @@ $(document).ready(() => {
     var room = $(event.target).html().split(" ").slice(1).join(" ");
     currentRoom = room;
     $(`#${createdRoom}`).hide();
-    $('.buttons').hide();
+    $(".buttons").hide();
     $(`#${currentRoom}-buttons`).show();
     $(".chatroom-div").hide();
     $(`#${currentRoom}`).show();
@@ -40,8 +40,8 @@ $(document).ready(() => {
     var room = $(event.target).html().split(" ").slice(1).join(" ");
     $(".chatroom-div").hide();
     $(`#${currentRoom}`).hide();
-    $('.exit').hide();
-    $('.buttons').show();
+    $(".exit").hide();
+    $(".buttons").show();
     currentRoom = "";
   });
 
@@ -49,9 +49,7 @@ $(document).ready(() => {
     let user =
       decodeURIComponent(document.cookie)
         .split(" ")
-        .filter(el => {
-          el.slice(0, 3) === "user";
-        })
+        .filter(el => el[0].concat(el[1], el[2], el[3]) === "user")
         .join("")
         .split("=")[1] || "Anonymous";
     let room = currentRoom;
@@ -70,15 +68,6 @@ $(document).ready(() => {
     createdRoom = room;
   });
 
-  // socket.on("room joined", ()=>{
-  //   //display [room]
-
-  // })
-
-  // socket.on("room exited", ()=>{
-  //   //hide [room], display room options
-// `<div class='chatroom col-xs-10 offset-xs-1'><h1>${thisRoom}</h1><button class='join btn btn-primary'>Join ${thisRoom}</button><button id="exit-${thisRoom}" class='exit btn btn-warning'>Leave Room</button><div class='chatroom-div hidden' id='${thisRoom}'><h2>Posts: 0</h2><form class='form-group'><label for='post'>Post a Message</label><input name='post' class='form-group' type='text' id='${thisRoom}-post'></div><button class='post btn btn-success' type='button'>Post</button></form></div></div>`
-  //ensure server emits room
   socket.on("room created", () => {
     let thisRoom = createdRoom;
     $(
@@ -88,11 +77,11 @@ $(document).ready(() => {
               <button class="join btn btn-primary">Join ${thisRoom}</button>
               <button id="exit-${thisRoom}" class="exit btn btn-warning">Leave Room</button>
             </div>
-            <div class="chatroom-div" id= ${thisRoom}>
-              <h2>Posts: {{post}}</h2>
+            <div class="chatroom-div" id="${thisRoom}">
+              <h2 id="${thisRoom}-posts">Posts: {{post}}</h2>
               <form>
                 <div class="form-group">
-                  <label for="post" class="form-group" type="text" id="${thisRoom}-post">
+                  <label for="post" class="form-group" type="text">
                     <input type="text" class="form-group" name="post" id="${thisRoom}-post">
             </div>
             <button class="post btn btn-success" type="button">Post</button>
@@ -102,9 +91,8 @@ $(document).ready(() => {
     ).appendTo($("#chats-container"));
     $(".chatroom-div").hide();
     $(`#exit-${thisRoom}`).hide();
-    $('.post').hide();
-    //re-find .join
-    q.$join = $(".join");
+    $(".post").hide();
+    location.reload(true);
   });
 
   socket.on("message saved", data => {
@@ -113,7 +101,9 @@ $(document).ready(() => {
     let message = data[1];
     $(
       `<div class='individual-post'><p>${message}</p><p>Posted by <strong>${user}</strong></p></div>`
-    ).appendTo($(".chatroom-div"));
-    // make .chatroom-div unique
+    ).appendTo($(`#${room}`));
+    $(`#${room}-posts`).html(
+      "Posts: " + (($(`#${room}-posts`).html().split(" ")[1] *= 1) + 1)
+    );
   });
 });

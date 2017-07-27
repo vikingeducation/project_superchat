@@ -33,11 +33,11 @@
               <button class="join btn btn-primary">Join {{@key}}</button>
               <button id="exit-{{@key}}" class="exit btn btn-warning">Leave Room</button>
             </div>
-            <div class="chatroom-div" id= {{@key}}>
-              <h2>Posts: {{post}}</h2>
+            <div class="chatroom-div" id="{{@key}}">
+              <h2 id="{{@key}}-posts">Posts: {{post}}</h2>
               <form>
                 <div class="form-group">
-                  <label for="post" class="form-group" type="text" id="{{@key}}-post">
+                  <label for="post" class="form-group" type="text">
                     <input type="text" class="form-group" name="post" id="{{@key}}-post">
             </div>
             <button class="post btn btn-success" type="button">Post</button>

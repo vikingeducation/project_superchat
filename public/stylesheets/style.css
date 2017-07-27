@@ -1,5 +1,9 @@
-.chatroom {
-  border: 1px solid black;
+.chatroom:nth-child(odd) {
+  background: lightblue;
+}
+
+.chatroom:nth-child(even) {
+  background: lightyellow;
 }
 
 h1 {
@@ -17,7 +21,9 @@ p {
 }
 
 .individual-post {
-  border: 1px solid blue;
+  border: 1px solid black;
+  margin: 4px 0;
+  padding: 4px;
 }
 
 .hidden {

@@ -7,10 +7,17 @@ function createRoom(room) {
 }
 
 function newMessage(room, user, message) {
-  redisClient.hgetallAsync(room).then(chatRoom => {
-    let i = chatRoom[chatRoom] + 1;
-    let userIndexed = i + ":" + user;
-    redisClient.hmsetAsync(room, { [room]: i, [userIndexed]: message });
+  return new Promise(resolve => {
+    redisClient.hgetallAsync(room).then(chatRoom => {
+      redisClient.hincrbyAsync(room, room, 1).then(num => {
+        let userIndexed = num + ":" + user;
+        redisClient
+          .hmsetAsync(room, { [room]: num, [userIndexed]: message })
+          .then(() => {
+            resolve();
+          });
+      });
+    });
   });
 }
 
@@ -21,10 +28,30 @@ function getAllData() {
         redisClient.hgetallAsync(chatName)
       );
       Promise.all(promArray).then(chatRooms => {
-        resolve(chatRooms);
+        resolve(removeUserIndexes(chatRooms));
       });
     });
   });
+}
+
+function removeUserIndexes(chatRooms) {
+  //[{}, {}, {}]
+  let newRoom = {};
+  let newData = [];
+  chatRooms.forEach(el => {
+    //{}
+    Object.keys(el).forEach((ele, idx) => {
+      // [chatroom, author, author]
+      if (idx !== 0) {
+        newRoom[ele.split(":")[1]] = el[ele];
+      } else {
+        newRoom[ele] = el[ele];
+      }
+    });
+    newData.push(newRoom);
+    newRoom = {};
+  });
+  return newData;
 }
 
 module.exports = {

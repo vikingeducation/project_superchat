@@ -57,6 +57,7 @@ io.on("connection", client => {
     let room = data[2];
     let user = data[0];
     let message = data[1];
+    console.log(returnData);
     newMessage(room, user, message).then(() => {
       io.emit("message saved", returnData);
     });
