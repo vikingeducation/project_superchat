@@ -65,7 +65,7 @@ io.on("connection", client => {
 
   client.on("newRoom", data => {
     redis.saveRoom(user, data).then(() => {
-      io.emit("updateRooms", data);
+      client.emit("updateRooms", data);
     });
   });
 

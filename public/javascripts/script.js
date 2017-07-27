@@ -56,7 +56,6 @@ $(document).ready(function() {
   });
 
   socket.on("updateRooms", data => {
-    onLeaveRoom();
     $("#rooms").prepend(
       $(`<div class='room' id="${data}">
           <h3>
@@ -66,6 +65,8 @@ $(document).ready(function() {
           </h3>
         </div>`)
     );
+
+    onLeaveRoom();
   });
 
   socket.on("roomLoaded", output => {
