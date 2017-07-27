@@ -7,6 +7,7 @@ router.get('/', function(req, res, next) {
 		res.redirect('/');
 	} else {
 		res.render('login', {
+			layout: 'login',
 			page: 'login',
 			title: 'Please enter a username for Super Chat'
 		});

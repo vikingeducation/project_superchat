@@ -11,15 +11,17 @@ const {
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-	getUsersByRoomId(-1).then(console.log);
-
 	if (!req.cookies.username) {
 		res.redirect('/login');
 	} else {
-		_getHomePageData().then(homePageData => {
-			homePageData.username = req.cookies.username;
-			res.render('index', homePageData);
-		});
+		_getHomePageData()
+			.then(homePageData => {
+				homePageData.username = req.cookies.username;
+				res.render('index', homePageData);
+			})
+			.catch(err => {
+				console.log(err.stack, '??????');
+			});
 	}
 });
 
@@ -31,6 +33,7 @@ function _getHomePageData() {
 			return arr;
 		});
 		let [rooms, users] = results;
+
 		return {
 			page: 'index',
 			title: 'Super Chat',

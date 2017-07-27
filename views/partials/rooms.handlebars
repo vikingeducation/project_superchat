@@ -1,7 +1,9 @@
-<ul>
+<div class="list-group">
 	{{#each rooms as |room|}}
-		<li>
-			{{room.roomname}}
-		</li>
+			{{#if room.active}}
+				<a data-room-id="{{room.id}}" href="#" class="list-group-item active">{{room.roomname}}</a>
+			{{else}}
+				<a data-room-id="{{room.id}}" href="#" class="list-group-item">{{room.roomname}}</a>
+			{{/if}}
 	{{/each}}
-</ul>
+</div>

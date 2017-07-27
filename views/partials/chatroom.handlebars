@@ -1,0 +1,16 @@
+<div class="panel panel-info">
+	<header class="panel-heading">
+		<h3 class="panel-title">
+			{{#if room.roomname}}
+				{{room.roomname}}
+			{{else}}
+				Enter a room to continue...
+			{{/if}}
+		</h3>
+	</header>
+	<section id="messages-block" class="panel-body">
+		{{#each messages as |message|}}
+			{{>message user=user message=message}}
+		{{/each}}
+	</section>
+</div>

@@ -3,6 +3,29 @@ body {
 	font-family: 'Ubuntu', sans-serif;
 }
 
+.chat-container {
+	position: relative;
+	min-height: 600px;
+}
+
+div#message-container {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+}
+
+aside#side-nav {
+	float: right;
+}
+
+div.aside-panel {
+	max-height: 50%;
+}
+
+.panel-info {
+	height: 100%;
+}
+
 a {
 	color: #00b7ff;
 }
