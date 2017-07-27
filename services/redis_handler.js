@@ -2,8 +2,8 @@ const Promise = require("bluebird");
 const redisClient = Promise.promisifyAll(require("redis").createClient());
 
 function createRoom(room) {
-  let Obj = { [room]: 0 };
-  return redisClient.hmsetAsync(room, Obj);
+  //let Obj = { [room]: 0 };
+  return redisClient.hsetAsync(room, room, 0);
 }
 
 function newMessage(room, user, message) {

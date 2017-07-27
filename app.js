@@ -34,10 +34,10 @@ app.get("/", (req, res) => {
   });
 });
 
-app.post("/", (req, res) => {
+app.post("/name", (req, res) => {
   let userName = req.body.name;
   res.cookie("user", userName);
-  redirect("/");
+  res.redirect("/");
 });
 
 app.post("/clear", (req, res) => {
@@ -46,11 +46,9 @@ app.post("/clear", (req, res) => {
 });
 
 io.on("connection", client => {
-  
   client.on("created room", room => {
-    console.log("recieved created room event");
-    createRoom(room).then(room => {
-      io.emit("room created", room);
+    createRoom(room).then(() => {
+      io.emit("room created");
     });
   });
 
