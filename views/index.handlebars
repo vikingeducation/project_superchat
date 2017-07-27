@@ -1,0 +1,59 @@
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12">
+
+      <h1 id="heading">SUPER CHAT</h1>
+    </div>
+  </div>
+
+  <div class="row">
+
+      <div class="col-sm-4">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Only Chatroom</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each urls as |value key|}}
+            <tr>
+              <td>
+                {{value}}
+              </td>
+              <td>
+                <a href='{{key}}' target='_blank'>localhost:3000/{{key}}</a>
+              </td>
+              <td id='{{key}}'>{{lookup ../counts key}}</td>
+            </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="col-sm-4">
+        <form action="/" method="post">
+          <div class="form-group">
+            <label for="message">New Message</label>
+            <textarea class="form-control" placeholder="Message" id="message" name="message"></textarea>
+          </div>
+
+            <button type="submit" class="btn btn-default">Send</button>
+        </form>
+      </div>
+
+    </div>
+  </div>
+
+
+</div>
+
+<script>
+  var socket = io.connect('http://localhost:3000');
+
+  socket.on('increment count', function(url, count) {
+    var urlID = '#'.concat(url);
+    console.log(urlID);
+    $(urlID).text(count);
+  });
+</script>
