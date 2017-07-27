@@ -39,10 +39,12 @@ app.get("/", (req, res) => {
 
 app.post("/", (req, res) => {
   let user = req.body.user;
-  redis.saveUser(user);
-  res.cookie("user", user, { httpOnly: false });
-
-  res.redirect("/");
+  redis.saveUser(user).then(() => {
+    res.cookie("user", user, { httpOnly: false });
+    redis.saveRoom(user).then(user => {
+      res.redirect("/");
+    });
+  });
 });
 
 app.post("/logout", (req, res) => {
