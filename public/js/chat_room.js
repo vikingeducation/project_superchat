@@ -3,19 +3,24 @@ const socket = io.connect("http://localhost:3000");
 // $(".roomName").text();
 // $(".storedName").text();
 socket.on("newMessageFromServer", newChatMessage => {
+  // $("#PostedMessages").prepend(`${newChatMessage}`);
+ let newElement = document.createElement("P:"
+ newitem.val = newchatMessage.message)
+
   document
     .getElementById("msgList")
-    .insertBefore(createNewMessage(newChatMessage), list.childNodes[0]);
+    .prepend($(createNewMessage(newChatMessage)));
 });
 
 function createNewMessage(passedMessage) {
   return `
-  <li> ${passedMessage.username} </li>
-    <li> ${passedMessage.message} </li>
+  <h3> ${passedMessage.username} </h3>
+  <p> ${passedMessage.message} </p>
   `;
 }
 
-$("#createMessage").on("click", e => {
+$("#submitPost").on("click", e => {
+  console.log("fjfjf");
   e.preventDefault();
   socket.emit("newMessage", {
     roomName: $(".roomName").val(),
