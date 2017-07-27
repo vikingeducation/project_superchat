@@ -6,6 +6,9 @@ function _pageInit() {
 	// Connect to our backend.
 	const socket = io.connect('http://localhost:3000');
 
+	const $messageContainer = $('#message-container');
+	const $usersContainer = $('#users-container');
+
 	$('#room-list').on('click', 'a.list-group-item', function(e) {
 		let $target = $(e.target);
 
@@ -21,40 +24,33 @@ function _pageInit() {
 		$target.addClass('active');
 
 		// Emit event to change and leave rooms.
-		if (inChatRoom) {
+		if (_inChatRoom) {
 			socket.emit('leave_room', {
 				id: roomId,
 				user_id: userId
 			});
+			_inChatRoom = false;
 		}
-		socket.emit('join_room', {
-			id: roomId,
-			user_id: userId
+		if (!_inChatRoom) {
+			socket.emit('join_room', {
+				id: roomId,
+				user_id: userId
+			});
+			$('#message-form').removeClass('hidden');
+			_inChatRoom = true;
+		}
+		//Ajax our new chat room.
+		$.ajax(`/room/${roomId}`, {
+			context: $messageContainer
+		}).done(function(data) {
+			this.html(data);
 		});
-
-		// Ajax our new chat room.
-		$.ajax();
 	});
 
-	// socket.on('room_left', userList => {
-	// 	console.log(userList);
-	// });
-	//
-	// // Assign event handlers.
-	// socket.on('message_sent', msgObj => {
-	// 	let $el = $('<h6>', {
-	// 		html: `<strong>${msgObj.username}:</strong> ${msgObj.body}`
-	// 	});
-	// 	$('#message-container').append($el);
-	// });
-	//
-	// $('#message-form').on('submit', function(e) {
-	// 	let message = $('#message-input').val();
-	// 	socket.emit('send_message', {
-	// 		body: message,
-	// 		user_id: readCookie('user_id'),
-	// 		room_id: 0
-	// 	});
-	// 	e.preventDefault();
-	// });
+	socket.on('room_joined', userList => {
+		$usersContainer.empty();
+		userList.forEach(user => {
+			$usersContainer.append(`<li>${user.username}</li>`);
+		});
+	});
 }

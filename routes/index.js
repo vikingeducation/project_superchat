@@ -14,9 +14,14 @@ router.get('/', function(req, res, next) {
 	if (!req.cookies.username) {
 		res.redirect('/login');
 	} else {
-		_getHomePageData()
+		_getHomePageData(req.cookies.user_id)
 			.then(homePageData => {
-				homePageData.username = req.cookies.username;
+				// homePageData.rooms = homePageData.rooms.map(room => {
+				// 	if (room.id === homePageData.user.room_id) {
+				// 		room.active = true;
+				// 	}
+				// 	return room;
+				// });
 				res.render('index', homePageData);
 			})
 			.catch(err => {
@@ -25,20 +30,19 @@ router.get('/', function(req, res, next) {
 	}
 });
 
-function _getHomePageData() {
-	return Promise.all([getRooms(), getUsers()]).then(results => {
+function _getHomePageData(userId) {
+	return Promise.all([getUsers(userId), getRooms()]).then(results => {
 		// Sort each array by id.
 		results = results.map(arr => {
 			arr.sort((a, b) => a.id - b.id);
 			return arr;
 		});
-		let [rooms, users] = results;
-
+		let [user, rooms] = results;
 		return {
 			page: 'index',
 			title: 'Super Chat',
-			rooms: rooms,
-			users: users
+			user: user[0],
+			rooms: rooms
 		};
 	});
 }
