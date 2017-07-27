@@ -31,7 +31,7 @@ app.use(
 );
 const io = require('socket.io')(server);
 const socketWrapper = require('../lib/socket_wrapper');
-io.on('connection', socketWrapper);
+io.on('connection', socketWrapper(io));
 
 /**
  * Listen on provided port, on all network interfaces.
