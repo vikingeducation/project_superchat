@@ -1,4 +1,4 @@
-var socket = io.connect("http://localhost:3030");
+var socket = io.connect("http://localhost:3000");
 
 let formHandler = function() {
   $(".messageForm").on("submit", e => {
@@ -17,8 +17,9 @@ let formHandler = function() {
 };
 
 let onLeaveRoom = function() {
-  $(".leaveRoom").on("click", () => {
-    let roomName = this.parent().attr("id");
+  $(".leaveRoom").on("click", function(e) {
+    e.stopPropagation();
+    let roomName = $(this).parent().attr("id");
     socket.emit("leaveRoom", roomName);
   });
 };
