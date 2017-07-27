@@ -1,40 +1,38 @@
-var express = require("express");
+var express = require('express');
 var router = express.Router();
-const Promise = require("bluebird");
+const Promise = require('bluebird');
 
 const {
 	getUsers,
 	getRooms,
 	getUsersByRoomId,
 	getMessagesByRoomId
-} = require("../lib/redis_wrapper").loadModule;
+} = require('../lib/redis_wrapper').loadModule;
 
 /* GET home page. */
-router.get("/:roomId", function(req, res, next) {
+router.get('/:roomId', function(req, res, next) {
 	if (!req.cookies.username) {
-		res.redirect("/login");
+		res.redirect('/login');
 	} else {
 		let roomId = req.params.roomId;
 		let userId = req.cookies.user_id;
 		Promise.all([
 			getUsers(userId),
 			getRooms(roomId),
-			getUsersByRoomId(roomId),
+			getUsers(),
 			getMessagesByRoomId(roomId)
 		]).then(dataArray => {
 			let [user, room, users, messages] = dataArray;
-			let ownedMessages = [];
-
 			messages = messages.map(message => {
-				message.username = users.find(
-					user => user.id === message.user_id
-				).username;
-
+				let userObj = users.find(user => {
+					return user.id === message.user_id;
+				});
+				message.username = userObj.username;
 				return message;
 			});
+			messages.sort((a, b) => a.id - b.id);
 
-			console.log(messages, "messages");
-			res.render("room", {
+			res.render('room', {
 				layout: false,
 				room: room[0],
 				user: user[0],
