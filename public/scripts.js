@@ -5,14 +5,11 @@ const socket = io.connect("http://localhost:3000");
 function handle() {
   //let socket = io.connect("http:localhost/3000");
 
-  // Show login form if user is not logged in
-  let userName = document.cookie.superChatUsername;
-  if (!userName) {
-    $("#login").show();
-  } else {
-    actions.logIn(userName);
-  }
+  //send req to server, to check if I'm logged in
+  const id = socket.id;
+  $.get("/check_login/" + id);
 
+  //Event Listeners here
   // Handle login submit
   $("#login").on("click", "button", event => {
     event.preventDefault();
@@ -28,9 +25,13 @@ function handle() {
   });
 
   // Handle bad username
-  socket.on("invalidUserName", () => {
-    $("#login input").val("");
-    alert("Username already taken. Try Again.");
+  socket.on("invalidUserName", startup => {
+    if (startup) {
+      $("#login").show();
+    } else {
+      $("#login input").val("");
+      alert("Username already taken. Try Again.");
+    }
   });
 
   // Log in handler
@@ -72,6 +73,7 @@ function handle() {
   });
 }
 
+//Handlers
 let actions = {
   buildRoom: function(roomName) {
     // Create a room with some jQuery magics
