@@ -10,7 +10,8 @@ const redisTools = require("./lib/redis_tools");
 // const { getUserIds, getUsername } = require("./lib/get_user_info");
 const { getUsernames } = require("./lib/get_user_info");
 const { getRoomNames } = require("./lib/room_info");
-const { generateUserInfo, generateRoomInfo } = require("./lib/redis_tools");
+const { generateUserInfo, generateRoomInfo,  } = require("./lib/redis_tools");
+
 
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -39,6 +40,10 @@ io.on("connection", client => {
       console.log("worked");
     });
   });
+
+  client.on("newMessage", newMessage => {
+    console.log(newMessage);
+  })
 });
 
 app.get("/", (req, res) => {
@@ -49,7 +54,6 @@ app.get("/", (req, res) => {
 app.post("/", (req, res) => {
   console.log(req.body.name);
   res.cookie("username", req.body.name);
-  //res.cookie("username", req.body.name);
 
   // Safety make sure we don't make 2 USER_IDS
   getUsernames().then(usernames => {
