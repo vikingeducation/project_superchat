@@ -7,12 +7,12 @@
   </form>
 </div>
 
-<div id="messages{{room}}" class="container">
+<div id="messages{{room}}" class="container scrolling">
   {{#each messages as |message|}}
     <div class="message row">
       <div class="col-xs-12">
         <p>
-        <span>{{message.author}}: </span>
+        <span class="author">{{message.author}}: </span>
           {{message.body}}
         </p>
       </div>

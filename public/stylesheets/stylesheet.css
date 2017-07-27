@@ -1,7 +1,24 @@
 .add-margin {
-	margin-top: 20px;
+  margin-top: 20px;
 }
 
 .active {
-	background-color: #cef;
+  background-color: #cef;
+}
+
+.author {
+  font-weight: bold;
+  color: green;
+}
+
+.scrolling {
+  overflow-y: scroll;
+  max-height: 70vh;
+  min-height: 40vh;
+  overflow-x: hidden;
+}
+
+.panel-body {
+  max-height: 70vh;
+  min-height: 40vh;
 }

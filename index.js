@@ -53,18 +53,13 @@ io.on("connection", client => {
   console.log("New connection");
 
   client.on("newMessage", data => {
-    console.log(data);
-    var p = redis.saveMessage(data.body, data.author, data.room);
-
-    p.then(() => {
+    redis.saveMessage(data.body, data.author, data.room).then(() => {
       io.emit("updateMessages", data);
     });
   });
 
   client.on("newRoom", data => {
-    var p = redis.saveRoom(data);
-
-    p.then(() => {
+    redis.saveRoom(data).then(() => {
       io.emit("updateRooms", data);
     });
   });

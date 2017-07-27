@@ -15,7 +15,7 @@
         alias2 = container.escapeExpression;
 
       return (
-        '    <div class="message row">\r\n      <div class="col-xs-12">\r\n        <p>\r\n        <span>' +
+        '    <div class="message row">\r\n      <div class="col-xs-12">\r\n        <p>\r\n        <span class="author">' +
         alias2(
           alias1(
             (stack1 = blockParams[0][0]) != null ? stack1.author : stack1,
@@ -78,7 +78,7 @@
               : helper
           )
         ) +
-        '" class="container">\r\n' +
+        '" class="container scrolling">\r\n' +
         ((stack1 = helpers.each.call(
           alias1,
           depth0 != null ? depth0.messages : depth0,
