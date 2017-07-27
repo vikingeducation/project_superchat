@@ -1,8 +1,8 @@
+@import url('https://fonts.googleapis.com/css?family=Ubuntu:400,700');
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+	font-family: 'Ubuntu', sans-serif;
 }
 
 a {
-  color: #00B7FF;
+	color: #00b7ff;
 }

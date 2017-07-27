@@ -14,8 +14,26 @@
   <link rel="stylesheet" href="stylesheets/style.css"/>
 </head>
 <body>
-	<h1>{{title}}</h1>
+  <header class="container">
+    <h1>{{title}}</h1>
+    <h2>Welcome {{username}}</h2>
+  </header>
 
   {{{body}}}
+  <footer class="container">
+    <section class="row">
+      <div class="col-sm-12">
+        <form id="message-form">
+          <div class="form-group">
+            <label for="message-input" ></label>
+            <input class="form-control" id="message-input">
+          </div>
+
+          <button class="btn btn-default">Submit</button>
+        </form>
+      </div>
+    </section>
+  </footer>
 </body>
 </html>
+

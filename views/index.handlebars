@@ -1,34 +1,42 @@
-<header>
-	<h2>Welcome {{username}}</h2>
-	<form id="message-form">
-		<div class="form-group">
-			<label for="message-input" ></label>
-			<input class="form-control" id="message-input">
+<main class="container">
+	<section class="row">
+		<div id="message-container" class="col-sm-9">
+			<div class="panel panel-info">
+				<header class="panel-heading">
+					<h3 class="panel-title">Current Room Name</h3>
+				</header>
+				<section class="panel-body"></section>
+			</div>
 		</div>
 
-		<button class="btn btn-default">Submit</button>
-	</form>
-</header>
+		<aside id="side-nav" class="col-sm-3">
+			<div id="room-list" class="panel panel-primary">
+				<header class="panel-heading">
+					<h3 class="panel-title">Rooms</h3>
 
-<main class="container">
-	<div id="message-container">
+				</header>
+				
 
-	</div>
+
+				<section class="panel-body">
+					{{>rooms}}
+				</section>
+			</div>
+
+			<div id="user-list" class="panel panel-success">
+				<header class="panel-heading">
+					<h3 class="panel-title">Users</h3>
+				</header>
+
+				<section class="panel-body">
+					{{>users}}
+				</section>
+			</div>
+		</aside>
+	</section>
 </main>
 
 
-<br /><br />
-<ul>
-	{{#each rooms as |room|}}
-		<li>
-			{{room.roomname}}
-		</li>
-	{{/each}}
-</ul>
-<ul>
-	{{#each users as |user|}}
-		<li>
-			{{user.username}}
-		</li>
-	{{/each}}
-</ul>
+
+
+
