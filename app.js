@@ -10,9 +10,7 @@ const redisClient = redis.createClient();
 const {
   getAllData,
   newMessage,
-  createRoom,
-  exitRoom,
-  joinRoom
+  createRoom
 } = require("./services/redis_handler");
 
 app.engine("handlebars", exphbs({ defaultLayout: "main" }));
@@ -28,49 +26,41 @@ app.use(
 );
 
 app.get("/", (req, res) => {
-  let data;
-  var p = new Promise(resolve => {
-    data = getAllData();
-    console.log(data);
-    resolve(data);
-  }).then(data => {
-    //data.userName = req.cookies.userName;
-    res.statusCode = 200;
-    res.render("index.handlebars", { data });
+  getAllData().then(data => {
+    res.render("index.handlebars", {
+      data,
+      name: req.cookies.user || "Anonymous"
+    });
   });
 });
 
+app.post("/", (req, res) => {
+  let userName = req.body.name;
+  res.cookie("user", userName);
+  redirect("/");
+});
+
+app.post("/clear", (req, res) => {
+  res.cookie("user", "Anonymous");
+  res.redirect("/");
+});
+
 io.on("connection", client => {
-  io.on("joined room", room => {
-    joinRoom(room).then(() => {
-      client.emit("room joined");
-    });
-  });
-
-  io.on("exited room", room => {
-    exitRoom(room).then(() => {
-      client.emit("room exited");
-    });
-  });
-
   client.on("created room", room => {
-    console.log('recieved created room event')
+    console.log("recieved created room event");
     createRoom(room).then(room => {
       io.emit("room created", room);
     });
   });
 
-  io.on("newMessage", data => {
+  client.on("newMessage", data => {
+    let returnData = data;
     let room = data[2];
     let user = data[0].split(":")[1];
     let message = data[1];
     newMessage(room, user, message).then(() => {
-      io.emit("message saved", data);
+      io.emit("message saved", returnData);
     });
-  });
-
-  io.on("login", name => {
-    res.cookie("user", userName);
   });
 });
 

@@ -1,6 +1,6 @@
 $(document).ready(() => {
   var socket = io.connect;
-  
+
 
   let q = {
     $login: $("#login"),
