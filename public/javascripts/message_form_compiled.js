@@ -42,7 +42,7 @@
         alias4 = container.escapeExpression;
 
       return (
-        '<div class="form form-group">\r\n  <form class="messageForm" id=' +
+        '<div class="form form-group">\r\n  <form class="messageForm" id="' +
         alias4(
           (
             (helper =
@@ -60,7 +60,7 @@
               : helper
           )
         ) +
-        '>\r\n    <input type="text" name="message" class="form-control"/>\r\n    <button>Send Message</button>\r\n  </form>\r\n</div>\r\n\r\n<div id="messages' +
+        '">\r\n    <div class="form-group">\r\n      <input type="text" name="message" class="form-control"/>\r\n    </div>\r\n    <button class="btn btn-default">Send Message</button>\r\n  </form>\r\n</div>\r\n\r\n<div id="messages' +
         alias4(
           (
             (helper =
@@ -78,7 +78,25 @@
               : helper
           )
         ) +
-        '" class="container">\r\n' +
+        '" class="container">\r\n  <h2>' +
+        alias4(
+          (
+            (helper =
+              (helper =
+                helpers.room || (depth0 != null ? depth0.room : depth0)) != null
+                ? helper
+                : alias2),
+            typeof helper === alias3
+              ? helper.call(alias1, {
+                  name: "room",
+                  hash: {},
+                  data: data,
+                  blockParams: blockParams
+                })
+              : helper
+          )
+        ) +
+        "</h2>\r\n" +
         ((stack1 = helpers.each.call(
           alias1,
           depth0 != null ? depth0.messages : depth0,

@@ -1,5 +1,5 @@
 <div class="form form-group">
-  <form class="messageForm" id={{room}}>
+  <form class="messageForm" id="{{room}}">
     <div class="form-group">
       <input type="text" name="message" class="form-control"/>
     </div>
@@ -8,6 +8,7 @@
 </div>
 
 <div id="messages{{room}}" class="container">
+  <h2>{{room}}</h2>
   {{#each messages as |message|}}
     <div class="message row">
       <div class="col-xs-12">

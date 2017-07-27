@@ -1,4 +1,4 @@
-var socket = io.connect("http://localhost:3000");
+var socket = io.connect("http://localhost:3030");
 
 let formHandler = function() {
   $(".messageForm").on("submit", e => {
@@ -13,7 +13,7 @@ let formHandler = function() {
 
     data.author = data.author.replace("%20", " ");
     data.room = $(".messageForm").attr("id");
-    console.log(data);
+    console.log(data.room);
     socket.emit("newMessage", data);
   });
 };
@@ -33,16 +33,24 @@ $(document).ready(function() {
   });
 
   socket.on("updateMessages", data => {
+    console.log(data);
+    console.log(data.room);
+
     $(`#messages${data.room}`).prepend(
       $(
         `<div class='message row'><div class='col-xs-12'><p><span>${data.author}: </span>${data.body}</p></div></div>`
       )
     );
+    if ($(`#messages${data.room}`).length === 0) {
+      $(`#newMessage${data.room}`).text("new message");
+    }
   });
 
   socket.on("updateRooms", data => {
     $("#rooms").prepend(
-      $(`<div class='room' id=${data}><h3>${data}</h3></div>`)
+      $(
+        `<div class='room' id="${data}"><h3>${data}</h3><span id="newMessage${data}"></span></div>`
+      )
     );
   });
 

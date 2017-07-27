@@ -53,6 +53,7 @@ io.on("connection", client => {
   console.log("New connection");
 
   client.on("newMessage", data => {
+    console.log(data);
     var p = redis.saveMessage(data.body, data.author, data.room);
 
     p.then(() => {
@@ -74,7 +75,6 @@ io.on("connection", client => {
         messages: messages,
         room: data
       };
-
       client.emit("roomLoaded", output);
     });
   });
