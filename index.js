@@ -25,34 +25,17 @@ app.use(
 app.use(bodyParser.urlencoded({ extended: true }));
 
 io.on("connection", client => {
-<<<<<<< HEAD
   // send all current chats to rooms
   getRoomNames().then(roomNames => {
     client.emit("updateRooms", roomNames);
   });
-=======
-  
-  // send all current chats to rooms
-  getRoomNames()
-  .then((roomNames) => {
-    client.emit("updateRooms", roomNames);
-  })
-
->>>>>>> d74df601d750fa61d1ab68d0449efa4bef4c0184
 
   client.on("newChatRoom", newChatRoom => {
     io.emit("newChatRoomFromServer", newChatRoom);
     console.log(`newchatRoom: ${newChatRoom}`);
-<<<<<<< HEAD
     generateRoomInfo(newChatRoom).then(() => {
       console.log("worked");
     });
-=======
-    generateRoomInfo(newChatRoom)
-    .then(() => {
-        console.log("worked");
-      })
->>>>>>> d74df601d750fa61d1ab68d0449efa4bef4c0184
   });
 });
 
@@ -76,10 +59,6 @@ app.post("/", (req, res) => {
     if (usernames.includes(req.body.name)) {
       res.redirect("/");
     } else {
-<<<<<<< HEAD
-=======
-
->>>>>>> d74df601d750fa61d1ab68d0449efa4bef4c0184
       generateUserInfo(req.body.name).then(() => {
         res.redirect("/");
       });
@@ -91,10 +70,6 @@ app.get("/chatrooms", (req, res) => {
   res.render("chatLobby", { username: req.cookies.username });
 });
 
-<<<<<<< HEAD
-=======
-
->>>>>>> d74df601d750fa61d1ab68d0449efa4bef4c0184
 server.listen(3000, () => {
   console.log("Serving gormet lobster!");
 });
