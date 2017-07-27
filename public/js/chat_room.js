@@ -8,6 +8,7 @@ $("#createRoom").on("click", e => {
 // Will add button of new chat room
 socket.on("newChatRoomFromServer", newChatRoom => {
   console.log("working Here");
+  let chatButton = createRoom(roomName);
   $("#ChatRoomList").append($(`<button class="${newChatRoom}">${newChatRoom}</button>`));
 });
 
@@ -15,6 +16,18 @@ socket.on("updateRooms", roomNames => {
   console.log(roomNames);
   console.log("Wow, so many rooms");
   roomNames.forEach((roomName) => {
-    $("#ChatRoomList").append($(`<button class="${roomName}">${roomName}</button>`));
+    let chatButton = createRoom(roomName);
+    console.log(chatButton);
+    $("#ChatRoomList").append($(`${chatButton}`));
   })
 })
+
+function createRoom(roomName) {
+  return`
+    <br>
+  <form method="GET" action="/chatrooms/${roomName}">
+    <button class="${roomName} submit">${roomName}</button>
+  </form>
+  <br>
+  `
+}
