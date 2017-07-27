@@ -25,9 +25,8 @@ app.use(
 app.use(bodyParser.urlencoded({ extended: true }));
 
 io.on("connection", client => {
-
+  
   // send all current chats to rooms
-
   getRoomNames()
   .then((roomNames) => {
     client.emit("updateRooms", roomNames);
