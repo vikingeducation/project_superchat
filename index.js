@@ -18,6 +18,10 @@ app.use(
 );
 
 app.use("/", express.static(__dirname + "/public"));
+app.use(
+  "/handlebars",
+  express.static(__dirname + "/node_modules/handlebars/dist/")
+);
 
 app.get("/", (req, res) => {
   if (!req.cookies.user) {
