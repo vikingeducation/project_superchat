@@ -49,7 +49,7 @@
 
             socket.on('updateClient', (profile) => {
                 
-                $("#room ul").append(`<li>${profile.body} and ${profile.author}</li>`); //do this on socket listen so updates real time across all clients
+                $("#room ul").append(`<li>${profile.body} - By ${profile.author}</li>`); //do this on socket listen so updates real time across all clients
 
             });
 

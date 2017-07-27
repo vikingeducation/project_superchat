@@ -1,0 +1,39 @@
+.all-content{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.chat-header {
+    background-color: darkslategrey;
+    width: 100%;
+}
+
+.chat-header h1 {
+    color: white
+}
+
+.content{
+    padding: 20px;
+}
+
+.room {
+    border: 0.5px solid gray;
+    border-radius: 5px;
+
+    margin: 20px;
+}
+
+.message-header {
+    display: inline;
+    background-color: darkslategrey;
+    color: white
+}
+
+ul {
+    list-style-type: none;
+}
+li {
+    margin: 20px 20px 20px 0;
+}
