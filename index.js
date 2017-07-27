@@ -9,7 +9,8 @@ const redisTools = require("./lib/redis_tools");
 
 // const { getUserIds, getUsername } = require("./lib/get_user_info");
 const { getUsernames } = require("./lib/get_user_info");
-const { generateUserInfo } = require("./lib/redis_tools");
+const { getRoomNames } = require("./lib/room_info");
+const { generateUserInfo, generateRoomInfo } = require("./lib/redis_tools");
 
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -23,42 +24,20 @@ app.use(
 );
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// io.on("connection", client => {
-//   redisTools.storeMessage("messages",
-//
-//   );
-//   console.log("working");
-//   redisTools.getMessages()
-//   .then((messages) => {
-//     console.log(typeof messages[6]);
-//   })
-//
-//   redisTools.getMessages().then(
-//     newData => {
-//       io.emit("ChatFromLogin", newData);
-//       console.log(newData);
-//     }
-//     // resolve();
-//   );
-//
-//   client.on("newChatMessage", newMessage => {
-//     redisTools
-//       .storeMessage(newMessage)
-//       .then(() => {
-//         redisTools.getMessages();
-//       })
-//       .then(
-//         data => {
-//           console.log(`data: ${data}`);
-//         },
-//         err => {
-//           console.error(err);
-//         }
-//       );
-//
-//     io.emit("newChatMessageFromServer", newMessage);
-//   });
-// });
+io.on("connection", client => {
+  // send all current chats to rooms
+  getRoomNames().then(roomNames => {
+    client.emit("updateRooms", roomNames);
+  });
+
+  client.on("newChatRoom", newChatRoom => {
+    io.emit("newChatRoomFromServer", newChatRoom);
+    console.log(`newchatRoom: ${newChatRoom}`);
+    generateRoomInfo(newChatRoom).then(() => {
+      console.log("worked");
+    });
+  });
+});
 
 app.get("/", (req, res) => {
   console.log(req.cookies);
@@ -71,6 +50,7 @@ app.get("/", (req, res) => {
 
 app.post("/", (req, res) => {
   console.log(req.body.name);
+  res.cookie("username", req.body.name);
   //res.cookie("username", req.body.name);
 
   // Safety make sure we don't make 2 USER_IDS
@@ -79,7 +59,6 @@ app.post("/", (req, res) => {
     if (usernames.includes(req.body.name)) {
       res.redirect("/");
     } else {
-      res.cookie("username", req.body.name);
       generateUserInfo(req.body.name).then(() => {
         res.redirect("/");
       });
@@ -88,38 +67,8 @@ app.post("/", (req, res) => {
 });
 
 app.get("/chatrooms", (req, res) => {
-  res.render("chatLobby", { username: req.cookie.username });
+  res.render("chatLobby", { username: req.cookies.username });
 });
-
-// redisTools.generateUserInfo(req.body.name)
-// .then(() => {
-//   console.log("successfully stored data");
-//   console.log("getting userids");
-//   return getUserIds()
-// })
-// .then((userIds) => {
-//   console.log(`userIds: ${userIds}`);
-//   console.log(`randId: ${userIds[2]}`);
-//   return getUsername(userIds[2])
-// })
-// .then((randUsername) => {
-//   console.log(randUsername);
-//   res.end();
-// })
-
-// redisTools.getUsernames().then(usernames => {
-//   console.log(usernames);
-//   if (!usernames.includes(req.body.name)) {
-//     res.cookie("username", req.body.name);
-//     redisTools.storeUsername(req.body.name);
-//     res.redirect("/");
-//   } else {
-//     res.end();
-//   }
-// });
-//});
-
-checkUsernameExist = function(name) {};
 
 server.listen(3000, () => {
   console.log("Serving gormet lobster!");
