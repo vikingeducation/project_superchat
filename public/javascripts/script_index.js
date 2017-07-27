@@ -4,6 +4,15 @@ function _pageInit() {
 	// Connect to our backend.
 	const socket = io.connect('http://localhost:3000');
 
+	socket.emit('leave_room', {
+		id: 4,
+		user_id: 11
+	});
+
+	socket.on('room_left', userList => {
+		console.log(userList);
+	});
+
 	// Assign event handlers.
 	socket.on('message_sent', msgObj => {
 		let $el = $('<h6>', {
