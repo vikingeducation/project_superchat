@@ -1,7 +1,7 @@
-const { saveModule } = require('./lib/redis_wrapper');
+const { saveModule } = require("./lib/redis_wrapper");
 const { saveUser, saveMessage, saveRoom } = saveModule;
 
-const { hashSync: encodePassword } = require('bcryptjs');
+const { hashSync: encodePassword } = require("bcryptjs");
 
 for (let u = 0; u < 10; u++) {
 	saveUser({
@@ -13,7 +13,7 @@ for (let u = 0; u < 10; u++) {
 
 for (let r = 0; r < 10; r++) {
 	saveRoom({
-		name: `An Awesome Room ${r + 1}`
+		roomname: `An Awesome Room ${r + 1}`
 	});
 
 	for (let m = 0; m < 10; m++) {
