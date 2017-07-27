@@ -26,7 +26,6 @@ app.use(
 app.use(bodyParser.urlencoded({ extended: true }));
 
 io.on("connection", client => {
-  // /client.on();
   // send all current chats to rooms
   getRoomNames().then(roomNames => {
     client.emit("updateRooms", roomNames);
@@ -41,7 +40,6 @@ io.on("connection", client => {
   });
 
   client.on("newMessage", newMessage => {
-    console.log(newMessage);
     io.emit("newMessageFromServer", newMessage);
   });
 });
