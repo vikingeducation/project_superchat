@@ -7,6 +7,7 @@ const redis = require("./lib/redisWrapper.js");
 const cookieParser = require("cookie-parser");
 const server = http.createServer(app);
 const io = require("socket.io")(server);
+const cookie = require("cookie");
 app.engine("handlebars", hbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
 
@@ -27,7 +28,7 @@ app.get("/", (req, res) => {
   if (!req.cookies.user) {
     res.render("login");
   } else {
-    redis.getRooms().then(rooms => {
+    redis.getRooms(req.cookies.user).then(rooms => {
       res.render("index", {
         rooms: rooms,
         user: req.cookies.user
@@ -50,6 +51,8 @@ app.post("/logout", (req, res) => {
 });
 
 io.on("connection", client => {
+  let cookies = client.handshake.headers.cookie;
+  let user = cookie.parse(cookies).user;
   console.log("New connection");
 
   client.on("newMessage", data => {
@@ -59,7 +62,7 @@ io.on("connection", client => {
   });
 
   client.on("newRoom", data => {
-    redis.saveRoom(data).then(() => {
+    redis.saveRoom(user, data).then(() => {
       io.emit("updateRooms", data);
     });
   });
@@ -71,6 +74,12 @@ io.on("connection", client => {
         room: data
       };
       client.emit("roomLoaded", output);
+    });
+  });
+
+  client.on("leaveRoom", room => {
+    redis.leaveRoom(user, room).then(() => {
+      client.emit("leftRoom", room);
     });
   });
 });

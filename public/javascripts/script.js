@@ -1,4 +1,4 @@
-var socket = io.connect("http://localhost:3000");
+var socket = io.connect("http://localhost:3030");
 
 let formHandler = function() {
   $(".messageForm").on("submit", e => {
@@ -13,6 +13,13 @@ let formHandler = function() {
     data.author = data.author.replace("%20", " ");
     data.room = $(".messageForm").attr("id");
     socket.emit("newMessage", data);
+  });
+};
+
+let onLeaveRoom = function() {
+  $(".leaveRoom").on("click", () => {
+    let roomName = this.parent().attr("id");
+    socket.emit("leaveRoom", roomName);
   });
 };
 
@@ -48,9 +55,10 @@ $(document).ready(function() {
   });
 
   socket.on("updateRooms", data => {
+    onLeaveRoom();
     $("#rooms").prepend(
       $(`<div class='room' id="${data}">
-          <h3>${data} <span id="newMessage${data}" class="label label-danger"></span></h3>
+          <span class="leaveRoom">X</span><h3>${data} <span id="newMessage${data}" class="label label-danger"></span></h3>
         </div>`)
     );
   });
@@ -65,4 +73,10 @@ $(document).ready(function() {
     $(`#${output.room} span`).text("");
     formHandler();
   });
+
+  socket.on("leftRoom", room => {
+    $(`#${room}`).remove();
+  });
+
+  onLeaveRoom();
 });
