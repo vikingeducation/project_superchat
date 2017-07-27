@@ -3,16 +3,16 @@ const redisClient = Promise.promisifyAll(require("redis").createClient());
 
 //room: membercount
 
-function joinRoom(room) {
-  return redisClient.hincrbyAsync("chatRooms", room, 1);
-}
+// function joinRoom(room) {
+//   return redisClient.hincrbyAsync("chatRooms", room, 1);
+// }
 
-function exitRoom(room) {
-  return redisClient.hdecrbyAsync("chatRooms", room, 1);
-}
+// function exitRoom(room) {
+//   return redisClient.hdecrbyAsync("chatRooms", room, 1);
+// }
 
 function createRoom(room) {
-  let Obj = { postCount: 0 };
+  let Obj = { [room]: 0 };
   return redisClient.hmsetAsync(room, Obj);
 }
 
@@ -34,17 +34,16 @@ function newMessage(room, user, message) {
 }
 
 function getAllData() {
-  var endData = {};
-  redisClient.keysAsync("*").then(data => {
-    let newData = data.filter(el => el !== "chatRooms");
-    newData.forEach(el => {
-      redisClient.hgetallAsync(el).then(data => {
-        endData[el] = data;
-      });
-    });
-  });
-  return endData;
-}
+  return new Promise( resolve => {
+    redisClient.keysAsync('*').then(chatNames => {
+      let promArray = chatNames.map(chatName => redisClient.hgetallAsync(chatName));
+      Promise.all(promArray).then(chatRooms => {
+        resolve(chatRooms);
+      })
+      })
+    })
+  }
+
 
 module.exports = {
   getAllData,
