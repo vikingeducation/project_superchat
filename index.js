@@ -17,6 +17,8 @@ app.use(
   express.static(__dirname + "/node_modules/socket.io-client/dist/")
 );
 
+app.use("/", express.static(__dirname + "/public"));
+
 app.get("/", (req, res) => {
   if (!req.cookies.user) {
     res.render("login");
@@ -39,7 +41,7 @@ app.post("/", (req, res) => {
   let user = req.body.user;
   redis.saveUser(user);
   console.log(user);
-  res.cookie("user", user, {httpOnly: false});
+  res.cookie("user", user, { httpOnly: false });
 
   res.redirect("/");
 });
@@ -72,7 +74,7 @@ io.on("connection", client => {
     redis.loadRoomMessages(data, messages => {
       let output = {
         messages: messages,
-        roomName: data
+        room: data
       };
 
       client.emit("roomLoaded", output);
