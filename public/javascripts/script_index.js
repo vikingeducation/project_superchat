@@ -6,12 +6,12 @@ function _pageInit() {
 	// Connect to our backend.
 	const socket = io.connect('http://localhost:3000');
 
+	// Get user id and current room id.
+	let userId = readCookie('user_id');
 	let currentRoomId = $('#chatroom-panel').data('room-id');
+
 	const $messageContainer = $('#message-container');
 	const $usersContainer = $('#users-container');
-
-	// First get the user id.
-	let userId = readCookie('user_id');
 
 	$('#room-list').on('click', 'a.list-group-item', function(e) {
 		let $target = $(e.target);
@@ -98,4 +98,11 @@ function _pageInit() {
 
 		$('#messages-block').append($msgElement);
 	});
+
+	window.onbeforeunload = function(event) {
+		socket.emit('leave_room', {
+			id: currentRoomId,
+			user_id: userId
+		});
+	};
 }
