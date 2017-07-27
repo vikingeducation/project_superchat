@@ -1,16 +1,15 @@
-$(document).ready(() => { 
+$(document).ready(() => {
   let q = {
     $login: $("#login"),
     $post: $(".post"),
     $join: $(".join"),
     $exit: $(".exit"),
     $create: $("#create"),
-    $logout: $('#logout')
+    $logout: $("#logout")
   };
-  
+
   $(".chatroom-div").hide();
   $(".exit").hide();
-
 
   if ($("#header").html().split(" ").slice(1).join(" ") === "Anonymous") {
     $("#create-form").hide();
@@ -30,8 +29,7 @@ $(document).ready(() => {
 
   q.$logout.click(event => {
     q.$logout.hide();
-  })
-
+  });
 
   q.$join.click(event => {
     var room = $(event.target).html().split(" ").slice(1).join(" ");
@@ -44,7 +42,6 @@ $(document).ready(() => {
     $(`#${currentRoom}-post`).show();
     $(`#exit-${currentRoom}`).show();
   });
-
 
   q.$exit.click(event => {
     var room = $(event.target).html().split(" ").slice(1).join(" ");
@@ -102,7 +99,8 @@ $(document).ready(() => {
     $(".chatroom-div").hide();
     $(`#exit-${thisRoom}`).hide();
     $(".post").hide();
-    location.reload(true);
+    q.$join = $(".join");
+    //location.reload(true);
   });
 
   socket.on("message saved", data => {
@@ -110,10 +108,28 @@ $(document).ready(() => {
     let user = data[0];
     let message = data[1];
     $(
-      `<div class='individual-post'><p>${message}</p><p>Posted by <strong>${user}</strong></p></div>`
+      `<div class='individual-post'><p>${message}</p><p class="posted-by">Posted by <strong>${user}</strong></p></div>`
     ).appendTo($(`#${room}`));
     $(`#${room}-posts`).html(
       "Posts: " + (($(`#${room}-posts`).html().split(" ")[1] *= 1) + 1)
     );
   });
+
+  socket.on("activateSuperBot", room => {
+    let message = superMessages[Math.floor(Math.random() * 8)];
+    let user = "SuperBot!";
+    let msgData = [user, message, room];
+    socket.emit("newMessage", msgData);
+  });
+
+  var superMessages = [
+    "You are supah-fly!",
+    "Do you have a SUPER-iority complex?",
+    "Knock on wood... I'm SUPERstitious",
+    "This message is........ SUPERfluous",
+    "Do you drive a Toyota SUPERa?",
+    "This conversation is SUPER exciting... /sarcasm",
+    "SUPER SUPER SUPER SUPER SUPER",
+    "SuUuUuUuUuUuUuUuPeR"
+  ];
 });

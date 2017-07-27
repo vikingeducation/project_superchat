@@ -28,31 +28,29 @@ function getAllData() {
         redisClient.hgetallAsync(chatName)
       );
       Promise.all(promArray).then(chatRooms => {
-        resolve(removeUserIndexes(chatRooms));
+        resolve(chatRooms);
       });
     });
   });
 }
 
-function removeUserIndexes(chatRooms) {
-  //[{}, {}, {}]
-  let newRoom = {};
-  let newData = [];
-  chatRooms.forEach(el => {
-    //{}
-    Object.keys(el).forEach((ele, idx) => {
-      // [chatroom, author, author]
-      if (idx !== 0) {
-        newRoom[ele.split(":")[1]] = el[ele];
-      } else {
-        newRoom[ele] = el[ele];
-      }
-    });
-    newData.push(newRoom);
-    newRoom = {};
-  });
-  return newData;
-}
+// function removeUserIndexes(chatRooms) {
+//   let newRoom = {};
+//   let newData = [];
+//   let arr = [];
+//   chatRooms.forEach(el => {
+//     Object.keys(el).forEach((ele, idx) => {
+//       if (idx !== 0) {
+//         newRoom[ele.split(":")[1]] = el[ele];
+//       } else {
+//         newRoom[ele] = el[ele];
+//       }
+//     });
+//     newData.push(newRoom);
+//     newRoom = {};
+//   });
+//   return newData;
+// }
 
 module.exports = {
   getAllData,
