@@ -2,39 +2,19 @@ const socket = io.connect("http://localhost:3000");
 
 $("#createRoom").on("click", e => {
   e.preventDefault();
-  console.log($(".roomName").text());
-  socket.emit("newChatRoom", $(".roomName").text());
+  socket.emit("newChatRoom", $(".roomName").val());
 });
 
-
+// Will add button of new chat room
 socket.on("newChatRoomFromServer", newChatRoom => {
   console.log("working Here");
-  var list = document.getElementById("msgList");
-  var newItem = document.createElement("LI");
-
-  var textnode = document.createTextNode(
-    newChatMessage.userName + " : " + newChatMessage.message
-  );
-  newItem.appendChild(textnode);
-  list.insertBefore(newItem, list.childNodes[0]);
+  $("#ChatRoomList").append($(`<button class="${newChatRoom}">${newChatRoom}</button>`));
 });
 
-// $("#submitPost").on("click", e => {
-//   e.preventDefault();
-//   socket.emit("newChatMessage", {
-//     userName: $(".storedName").text(),
-//     message: $(".message").val()
-//   });
-// });
-// socket.on("ChatFromLogin", newChatMessageArray => {
-//   console.log("working");
-//   let k = 0;
-//   while (k < newChatMessageArray.length) {
-//     $(".messages").append($(`<h3 >${newChatMessageArray[k]}</h3>`));
-//
-//     k++;
-//   }
-// });
-
-
-//
+socket.on("updateRooms", roomNames => {
+  console.log(roomNames);
+  console.log("Wow, so many rooms");
+  roomNames.forEach((roomName) => {
+    $("#ChatRoomList").append($(`<button class="${roomName}">${roomName}</button>`));
+  })
+})
