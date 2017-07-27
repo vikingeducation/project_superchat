@@ -11,6 +11,8 @@ const {
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
+	getUsersByRoomId(-1).then(console.log);
+
 	if (!req.cookies.username) {
 		res.redirect('/login');
 	} else {
