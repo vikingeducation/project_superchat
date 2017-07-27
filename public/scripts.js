@@ -1,8 +1,8 @@
-$(chat);
+$(handle);
 // global socket for testing
-var socket = io.connect("http://localhost:3000");
+const socket = io.connect("http://localhost:3000");
 
-function chat() {
+function handle() {
   //let socket = io.connect("http:localhost/3000");
 
   // Show login form if user is not logged in
@@ -18,6 +18,13 @@ function chat() {
     event.preventDefault();
     let userName = $("#login input").val();
     socket.emit("checkUsername", userName);
+  });
+  $("#login").on("keydown", "input", event => {
+    if (event.keyCode === 13) {
+      event.preventDefault();
+      let userName = $("#login input").val();
+      socket.emit("checkUsername", userName);
+    }
   });
 
   // Handle bad username
@@ -42,7 +49,8 @@ function chat() {
     $("#login").show();
     $("#userStuff").hide();
     //document.cookie.superChatUsername = "";
-    let name = getName();
+    // let name = getName();
+    let name = "wilbur";
     socket.emit("logOut", name);
   });
 
@@ -68,14 +76,14 @@ let actions = {
   buildRoom: function(roomName) {
     // Create a room with some jQuery magics
     let article = $("<article>")
-      .addClass("col-md-4 col-lg-3")
+      .addClass("col-sm-6 col-md-4 col-lg-3")
       .attr("data-id", roomName);
     let h = $("<h2>").text(roomName);
     let ul = $("<ul>");
     let form = $("<form>");
     let section = $("<section>").addClass("form-group");
-    let label = $("<label>").attr("for", "post");
-    let text = $("<textarea>").attr("name", "post");
+    let label = $("<label>").attr("for", "post").text("Make a new post:");
+    let text = $("<textarea>").attr("name", "post").addClass("form-control");
     let button = $("<button>")
       .addClass("btn btn-submit post-button")
       .text("Post something plz")
@@ -99,7 +107,8 @@ let actions = {
     // Get post details, trigger server event
     let $target = $(event.target);
     let roomName = $target.closest("article").attr("data-id");
-    let author = getName();
+    // let author = getName();
+    let author = "wilbur";
     let $textBox = $target.siblings("section").children("textarea");
     let message = $textBox.val();
     $textBox.val("");
@@ -114,6 +123,7 @@ let actions = {
     document.cookie = "superChatUsername=" + userName;
   }
 };
+
 function getName() {
   let cookieArr = decodeURIComponent(document.cookie).split(":");
   let userNameArr = cookieArr.filter(el => {
@@ -121,21 +131,3 @@ function getName() {
   });
   return userNameArr[0].replace("superChatUsername=", "");
 }
-
-//
-// <article id="" class="col-md-4 col-lg-3">
-//   <h2>Da chat Room</h2>
-//   <ul>
-//
-//   </ul>
-// <form>
-//<input type=text>
-// </article>
-// <section class='form-group'>
-//   <label for='post'>
-//   <textarea name='post'>
-// </section>
-// <button class='btn btn-submit post-button'>
-//
-
-// Room:room-name
