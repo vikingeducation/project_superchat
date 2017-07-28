@@ -16,6 +16,7 @@ div#message-container {
 }
 
 section#messages-block {
+	max-height: 600px;
 	overflow-y: scroll;
 }
 
