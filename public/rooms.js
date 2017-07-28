@@ -32,7 +32,7 @@ let roomClient = {
   handleAdd: event => {
     event.preventDefault();
     let $input = $("#roomsListForm input");
-    socket.emit("checkRoomName", $input.val());
+    socket.emit("tryAddRoom", $input.val());
     $input.val("");
   },
   handleAddEnter: event => {
