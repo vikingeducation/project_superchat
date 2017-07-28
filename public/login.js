@@ -1,60 +1,59 @@
-$(login);
+$(() => {
+  loginClient.init();
+  loginServer.init();
+});
 
-function login() {
-  //send req to server, to check if I'm logged in
-  const id = socket.id;
-  $.get("/check_login/" + id);
-
-  // Handle login form submit
-  $("#login").on("click", "button", event => {
+// Actions intitiated by the client
+let loginClient = {
+  init: function() {
+    // Send req to server, to check if I'm logged in
+    $.get("/check_login/" + socket.id);
+    // Handle user input
+    $("#login").on("click", "button", loginClient.handleIn);
+    $("#login").on("keydown", "input", loginClient.handleInEnter);
+    $("#userStuff").on("click", "button", loginClient.handleOut);
+  },
+  handleIn: function(event) {
     event.preventDefault();
     let userName = $("#login input").val();
-    $.get(`/login/${id}/${userName}`);
-  });
-  $("#login").on("keydown", "input", event => {
+    $.get(`/login/${socket.id}/${userName}`);
+  },
+  handleInEnter: function(event) {
     if (event.keyCode === 13) {
-      event.preventDefault();
-      let userName = $("#login input").val();
-      $.get(`/login/${id}/${userName}`);
+      loginClient.handleIn(event);
     }
-  });
+  },
+  handleOut: function(event) {
+    $("#rooms").empty();
+    $("#userStuff").hide();
+    $("#roomsList").hide();
+    $("#roomsListForm").hide();
+    $("#login").show();
+    $.get("/logout");
+  }
+};
 
-  // Handle bad username
-  socket.on("invalidUserName", startup => {
+// Actions initiated by the server
+let loginServer = {
+  init: function() {
+    socket.on("invalidUserName", loginServer.handleInvalid);
+    socket.on("validUserName", loginServer.handleValid);
+  },
+  handleInvalid: function(startup) {
     if (startup) {
       $("#login").show();
     } else {
       $("#login input").val("");
       alert("Username already taken. Try Again.");
     }
-  });
-
-  // Log in handler
-  socket.on("validUserName", userName => {
+  },
+  handleValid: function(userName) {
+    $("#login input").val("");
     $("#login").hide();
     $("#roomsList").show();
     $("#roomsListForm").show();
+    $("#userStuff").show();
+    $("#userStuff h3").text(userName);
     socket.emit("registerUser", userName);
-    logInActions.logIn(userName);
-  });
-
-  // Log out hander
-  $("#userStuff").on("click", "button", event => {
-    $("#rooms").empty();
-    $("#login").show();
-    $("#userStuff").hide();
-    $("#roomsList").hide();
-    $("#roomsListForm").hide();
-    $.get("/logout");
-  });
-}
-
-logInActions = {
-  logIn: function(userName) {
-    $("#login input").val("");
-    $("#login").hide();
-    let $userStuff = $("#userStuff");
-    $userStuff.show();
-    $userStuff.find("h3").text(userName);
   }
 };
