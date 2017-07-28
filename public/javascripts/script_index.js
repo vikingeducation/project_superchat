@@ -115,9 +115,10 @@ function _pageInit() {
 
 		$('#messages-block').append($msgElement);
 
-
-			$('#chatroom-panel').animate({ scrollTop: $(#chatroom-panel).height() }, 'slow');
-
+		$('#chatroom-panel').animate(
+			{ scrollTop: $('#chatroom-panel').height() },
+			'slow'
+		);
 	});
 
 	window.onbeforeunload = function(event) {
