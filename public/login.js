@@ -39,13 +39,9 @@ let loginServer = {
     socket.on("invalidUserName", loginServer.handleInvalid);
     socket.on("validUserName", loginServer.handleValid);
   },
-  handleInvalid: function(startup) {
-    if (startup) {
-      $("#login").show();
-    } else {
-      $("#login input").val("");
-      alert("Username already taken. Try Again.");
-    }
+  handleInvalid: function() {
+    $("#login input").val("");
+    alert("Username already taken. Try Again.");
   },
   handleValid: function(userName) {
     $("#login input").val("");
