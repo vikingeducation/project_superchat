@@ -100,7 +100,6 @@ $(document).ready(() => {
     $(`#exit-${thisRoom}`).hide();
     $(".post").hide();
     q.$join = $(".join");
-    //location.reload(true);
   });
 
   socket.on("message saved", data => {
