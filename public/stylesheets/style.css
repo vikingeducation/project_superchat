@@ -13,10 +13,11 @@ div#message-container {
 	position: absolute;
 	top: 0;
 	bottom: 0;
+	max-height: 600px;
 }
 
 section#messages-block {
-	max-height: 600px;
+	max-height: 580px;
 	overflow-y: scroll;
 }
 
