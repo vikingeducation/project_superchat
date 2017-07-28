@@ -14,6 +14,10 @@ div#message-container {
 	bottom: 0;
 }
 
+section#messages-block {
+	overflow-y: scroll;
+}
+
 aside#side-nav {
 	float: right;
 }
