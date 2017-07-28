@@ -3,27 +3,6 @@ $(handle);
 const socket = io.connect("http://localhost:3000");
 
 function handle() {
-  //let socket = io.connect("http:localhost/3000");
-
-  //send req to server, to check if I'm logged in
-  const id = socket.id;
-  $.get("/check_login/" + id);
-
-  //Event Listeners here
-  // Handle login submit
-  $("#login").on("click", "button", event => {
-    event.preventDefault();
-    let userName = $("#login input").val();
-    $.get(`/login/${id}/${userName}`);
-  });
-  $("#login").on("keydown", "input", event => {
-    if (event.keyCode === 13) {
-      event.preventDefault();
-      let userName = $("#login input").val();
-      $.get(`/login/${id}/${userName}`);
-    }
-  });
-
   //leave a room
   $("#rooms").on("click", ".leave", event => {
     let roomName = $(event.target).attr("data-id");
@@ -69,35 +48,6 @@ function handle() {
     socket.emit("tryJoinRoom", roomName);
   });
 
-  // Handle bad username
-  socket.on("invalidUserName", startup => {
-    if (startup) {
-      $("#login").show();
-    } else {
-      $("#login input").val("");
-      alert("Username already taken. Try Again.");
-    }
-  });
-
-  // Log in handler
-  socket.on("validUserName", userName => {
-    $("#login").hide();
-    $("#roomsList").show();
-    $("#roomsListForm").show();
-    socket.emit("registerUser", userName);
-    actions.logIn(userName);
-  });
-
-  // Log out hander
-  $("#userStuff").on("click", "button", event => {
-    $("#rooms").empty();
-    $("#login").show();
-    $("#userStuff").hide();
-    $("#roomsList").hide();
-    $("#roomsListForm").hide();
-    $.get("/logout");
-  });
-
   // Add a new post to a room
   socket.on("addPost", messageObj => {
     actions.buildPost(messageObj);
@@ -136,13 +86,7 @@ let actions = {
     $textBox.val("");
     socket.emit("addPost", roomName, message);
   },
-  logIn: function(userName) {
-    $("#login input").val("");
-    $("#login").hide();
-    let $userStuff = $("#userStuff");
-    $userStuff.show();
-    $userStuff.find("h3").text(userName);
-  },
+
   onNewRoom: function(roomName) {
     socket.emit("checkRoomName", roomName, available => {
       $("#roomsListForm input").val("");

@@ -17,7 +17,7 @@ const templates = {
   room: function(roomName) {
     return `
     <article class="col-sm-6 col-md-4 col-lg-3" data-id="${roomName}">
-      <h2>potatoe</h2>
+      <h2>${roomName}</h2>
       <button class="btn btn-warning leave" data-id="${roomName}">Leave Room</button>
       <button class="btn btn-danger delete" data-id="${roomName}">Delete Room</button>
       <form>
