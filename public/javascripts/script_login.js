@@ -2,7 +2,7 @@ $(_pageInit);
 
 function _pageInit() {
 	// Connect to our backend.
-	const socket = io.connect('http://localhost:3000');
+	const socket = io.connect('/');
 
 	// Assign event handlers.
 	socket.on('user_created', userObj => {
