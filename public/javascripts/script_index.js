@@ -63,6 +63,10 @@ function _pageInit() {
 					context: $messageContainer
 				}).done(function(data) {
 					this.html(data);
+					$('#messages-block').animate(
+						{ scrollTop: $('#chatroom-panel').height() },
+						1
+					);
 				});
 			});
 		}
@@ -99,6 +103,7 @@ function _pageInit() {
 	});
 
 	socket.on('message_created', msgObj => {
+		if (msgObj.room_id !== currentRoomId) return;
 		let $msgElement = $('<article>', {
 			id: msgObj.id,
 			class: 'message'
@@ -113,12 +118,9 @@ function _pageInit() {
 			)
 		);
 
-		$('#messages-block').append($msgElement);
-
-		$('#chatroom-panel').animate(
-			{ scrollTop: $('#chatroom-panel').height() },
-			'slow'
-		);
+		$('#messages-block')
+			.append($msgElement)
+			.animate({ scrollTop: $('#chatroom-panel').height() }, 'fast');
 	});
 
 	window.onbeforeunload = function(event) {

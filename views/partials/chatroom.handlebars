@@ -8,9 +8,11 @@
 			{{/if}}
 		</h3>
 	</header>
-	<section id="messages-block" class="panel-body">
-		{{#each messages as |message|}}
-			{{>message message=message}}
-		{{/each}}
-	</section>
+	<div id="messages-block-wrapper">
+		<section id="messages-block" class="panel-body">
+			{{#each messages as |message|}}
+				{{>message message=message}}
+			{{/each}}
+		</section>
+	</div>
 </div>
