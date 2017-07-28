@@ -1,0 +1,62 @@
+<h1 id="header">Welcome {{name}}</h1>
+
+<div class='container'>
+  <div class='row'>
+
+
+
+    <form action="name" method="post" class="col-xs-5" id='login-form'>
+      <div class='form-group'>
+        <label>Login</label>
+        <input name="name" id="login-form" type='text' class='form-control' placeholder='User Name'>
+      </div>
+      <button id='login' class='btn btn-success' type='submit'>Submit</button>
+    </form>
+
+    <form class="col-xs-5" id='create-form'>
+      <div class='form-group'>
+        <label>Create New Room</label>
+        <input type='text' class='form-control' placeholder='Chatroom Name' id='create-text'>
+      </div>
+      <button id='create' class='btn btn-success' type='button'>Create</button>
+    </form>
+  </div>
+
+  <form action='clear' method='post'>
+    <button type='submit' class="btn btn-danger" id='logout'>
+      Logout
+    </button>
+  </form>
+
+
+  <div class="row" id="chats-container">
+    {{#each data as |room|}}
+      <div class="chatroom col-xs-10 offset-xs-1">
+        {{#each room as |post|}}
+          {{#if @first}}
+            <div class="buttons" id="{{@key}}-buttons">
+              <h1>{{@key}}</h1>
+              <button class="join btn btn-primary">Join {{@key}}</button>
+              <button id="exit-{{@key}}" class="exit btn btn-warning">Leave Room</button>
+            </div>
+            <div class="chatroom-div" id="{{@key}}">
+              <h2 id="{{@key}}-posts">Posts: {{post}}</h2>
+              <form>
+                <div class="form-group">
+                  <label for="post" class="form-group" type="text">
+                    <input type="text" class="form-group" name="post" id="{{@key}}-post">
+            </div>
+            <button class="post btn btn-success" type="button">Post</button>
+          </form>
+          {{else}}
+          <div class="individual-post">
+          <p>{{post}}</p>
+          <p class="posted-by">posted by <strong>{{@key}}</strong></p>
+        </div>
+        {{/if}}
+      {{/each}}
+  </div>
+</div>
+{{/each}}
+</div>
+</div>
