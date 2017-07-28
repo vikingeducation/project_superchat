@@ -23,7 +23,7 @@ const templates = {
       <form>
         <section class="form-group">
           <label for="post">Make a new post:</label>
-          <textarea name="post" class="form-control"></textarea>
+          <input type="text" name="post" class="form-control"></input>
         </section>
         <button class="btn btn-success" type="button">Post something plz</button></form>
       <ul></ul>

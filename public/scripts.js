@@ -108,6 +108,12 @@ function handle() {
     event.preventDefault();
     actions.newPost(event);
   });
+  $("#rooms").on("keydown", "input", event => {
+    if (event.keyCode === 13) {
+      event.preventDefault();
+      actions.newPost(event);
+    }
+  });
 }
 
 //Handlers
@@ -123,12 +129,11 @@ let actions = {
   },
   newPost: function(event) {
     // Get post details, trigger server event
-    let $target = $(event.target);
-    let roomName = $target.closest("article").attr("data-id");
-    let $textBox = $target.siblings("section").children("textarea");
+    let $room = $(event.target).closest("article");
+    let roomName = $room.attr("data-id");
+    let $textBox = $room.find("input");
     let message = $textBox.val();
     $textBox.val("");
-    console.log(roomName, message);
     socket.emit("addPost", roomName, message);
   },
   logIn: function(userName) {
