@@ -17,8 +17,11 @@ div#message-container {
 }
 
 div#chatroom-panel {
-	overflow-y: scroll;
 	height: 100%;
+}
+
+section#messages-block {
+	overflow-y: scroll;
 }
 
 aside#side-nav {
