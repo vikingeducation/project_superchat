@@ -5,7 +5,7 @@ $(() => {
 
 // Actions intitiated by the client
 let loginClient = {
-  init: function() {
+  init: () => {
     // Send req to server, to check if I'm logged in
     $.get("/check_login/" + socket.id);
     // Handle user input
@@ -13,17 +13,15 @@ let loginClient = {
     $("#login").on("keydown", "input", loginClient.handleInEnter);
     $("#userStuff").on("click", "button", loginClient.handleOut);
   },
-  handleIn: function(event) {
+  handleIn: event => {
     event.preventDefault();
     let userName = $("#login input").val();
     $.get(`/login/${socket.id}/${userName}`);
   },
-  handleInEnter: function(event) {
-    if (event.keyCode === 13) {
-      loginClient.handleIn(event);
-    }
+  handleInEnter: event => {
+    if (event.keyCode === 13) loginClient.handleIn(event);
   },
-  handleOut: function(event) {
+  handleOut: event => {
     $("#rooms").empty();
     $("#userStuff").hide();
     $("#roomsList").hide();
@@ -35,15 +33,15 @@ let loginClient = {
 
 // Actions initiated by the server
 let loginServer = {
-  init: function() {
+  init: () => {
     socket.on("invalidUserName", loginServer.handleInvalid);
     socket.on("validUserName", loginServer.handleValid);
   },
-  handleInvalid: function() {
+  handleInvalid: () => {
     $("#login input").val("");
     alert("Username already taken. Try Again.");
   },
-  handleValid: function(userName) {
+  handleValid: userName => {
     $("#login input").val("");
     $("#login").hide();
     $("#roomsList").show();

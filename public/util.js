@@ -1,3 +1,5 @@
+const socket = io.connect("http://localhost:3000");
+
 const templates = {
   roomButton: function(roomName) {
     return `
