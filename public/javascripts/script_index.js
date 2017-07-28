@@ -4,7 +4,7 @@ let _inChatRoom = false;
 
 function _pageInit() {
 	// Connect to our backend.
-	const socket = io.connect('http://localhost:3000');
+	const socket = io.connect('/');
 
 	// Get user id and current room id.
 	let userId = readCookie('user_id');
