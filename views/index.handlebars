@@ -16,15 +16,12 @@
             </tr>
           </thead>
           <tbody>
-            {{#each urls as |value key|}}
+            {{#each messages}}
             <tr>
               <td>
-                {{value}}
+                <strong>{{this.author}}: </strong>
+                {{this.body}}
               </td>
-              <td>
-                <a href='{{key}}' target='_blank'>localhost:3000/{{key}}</a>
-              </td>
-              <td id='{{key}}'>{{lookup ../counts key}}</td>
             </tr>
             {{/each}}
           </tbody>
