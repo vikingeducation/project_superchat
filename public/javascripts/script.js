@@ -1,4 +1,4 @@
-var socket = io.connect("http://localhost:3000");
+var socket = io.connect("http://localhost:3030");
 
 let formHandler = function() {
   $(".messageForm").on("submit", e => {
@@ -60,7 +60,7 @@ $(document).ready(function() {
       $(`<div class='room' id="${data}">
           <h3>
             <span class="leaveRoom">X</span>
-            ${data} 
+            ${data}
             <span id="newMessage${data}" class="label label-danger"></span>
           </h3>
         </div>`)
