@@ -1,0 +1,26 @@
+<form id="parentForm">
+	<input id="PostChat" name="PostChat" type="text">
+	<button>Post Chat</button>
+</form>
+
+<div id="ChatLog">
+	{{#each chats as |chatText|}}
+		<div>
+			<a href="/key/{{chatText.name}}">{{chatText.name}}</a>
+			<p id="{{chatText}}"class="counter">{{chatText}}</p>
+		</div>
+	{{/each}}
+</div>
+<script>
+var socket = io.connect("http://localhost:4000");
+
+$("#parentForm").on("submit",function(e){
+	e.preventDefault();
+	socket.emit("newChat",$("#urlToShorten").val());
+});
+
+$("").on("updateURL", function() {
+
+});
+
+</script>

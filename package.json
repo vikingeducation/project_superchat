@@ -1,0 +1,29 @@
+{
+  "name": "project_superchat",
+  "version": "1.0.0",
+  "description": "Dan Donato",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Alex-Willenbrink/project_superchat.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Alex-Willenbrink/project_superchat/issues"
+  },
+  "homepage": "https://github.com/Alex-Willenbrink/project_superchat#readme",
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "cookie-parser": "^1.4.3",
+    "express": "^4.15.3",
+    "express-handlebars": "^3.0.0",
+    "redis": "^2.7.1",
+    "shortid": "^2.2.8",
+    "socket.io": "^2.0.3"
+  }
+}
