@@ -1,11 +1,13 @@
 let redis = require('redis');
 let client = redis.createClient(); //creates a new client
 
-let storeMessages = (roomName,message) => {
+let storeMessages = (roomName,userName, message) => { //make userid paramater and message param, then store those in an object which is then stored in redis. 
+
+    let profile = {"roomName": roomName, "userName": userName, "message": message};
 
     return new Promise( (resolve, reject) => {
 
-        client.rpush(roomName, JSON.stringify(message), (err, reply) => {
+        client.rpush(roomName, JSON.stringify(profile), (err, reply) => {
             if (err) reject (err);
             resolve("Saved to Redis");        
         });
@@ -25,6 +27,7 @@ let getMessages = (roomName) => {
         });
     });
 };
+
 
 let deleteAll = () => {
     
