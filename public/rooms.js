@@ -15,19 +15,13 @@ let roomClient = {
     );
     $("#roomsList").on("click", ".room", roomClient.handleJoin);
   },
-  remove: (element, roomName) => {
-    $(`${element}[data-id="${roomName}"]`).remove();
-  },
   handleDel: event => {
-    let roomName = roomClient.handleLeave(event);
-    roomClient.remove("button", roomName);
-    socket.emit("deleteRoom", roomName);
+    socket.emit("deleteRoom", $(event.target).attr("data-id"));
   },
   handleLeave: event => {
     let roomName = $(event.target).attr("data-id");
-    roomClient.remove("article", roomName);
+    roomActions.leave(roomName);
     socket.emit("leaveRoom", roomName);
-    return roomName;
   },
   handleJoin: event => {
     let roomName = $(event.target).attr("data-id");
@@ -44,11 +38,24 @@ let roomClient = {
   }
 };
 
+let roomActions = {
+  remove: (element, roomName) => {
+    $(`${element}[data-id="${roomName}"]`).remove();
+  },
+  delete: roomName => {
+    roomActions.remove("button", roomName);
+  },
+  leave: roomName => {
+    roomActions.remove("article", roomName);
+  }
+};
+
 let roomServer = {
   init: () => {
     socket.on("addNewRoom", roomServer.handleAdd);
     socket.on("badNewRoom", roomServer.handleBad);
     socket.on("joinRoom", roomServer.handleJoin);
+    socket.on("delRoom", roomServer.handleDel);
   },
   handleAdd: roomName => {
     let newRoom = templates.roomButton(roomName);
@@ -58,5 +65,10 @@ let roomServer = {
     let newRoom = templates.room(roomName);
     $("#rooms").append(newRoom);
   },
-  handleBad: () => alert("That room already exists, just join it, silly.")
+  handleBad: () => alert("That room already exists, just join it, silly."),
+  handleDel: roomName => {
+    roomActions.leave(roomName);
+    roomActions.delete(roomName);
+    socket.emit("leaveRoom", roomName);
+  }
 };
