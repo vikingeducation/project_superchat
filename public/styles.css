@@ -1,0 +1,14 @@
+#userStuff,
+#roomsList,
+#roomsListForm {
+  display: none;
+}
+
+li {
+  list-style: none;
+}
+
+h4 {
+  text-align: right;
+  border-bottom: .5px solid black;
+}
