@@ -7,9 +7,13 @@ let roomClient = {
   init: () => {
     $("#rooms").on("click", ".leave", roomClient.handleLeave);
     $("#rooms").on("click", ".delete", roomClient.handleDel);
-    $("#roomsListForm").on("click", "button", roomClient.handleAdd);
-    $("#roomsListForm").on("keydown", "input", roomClient.handleAddEnter);
-    $("#roomsList").on("click", "button", roomClient.handleJoin);
+    $("#roomsListForm").on("click", "button.create", roomClient.handleAdd);
+    $("#roomsListForm").on(
+      "keydown",
+      "input.create",
+      roomClient.handleAddEnter
+    );
+    $("#roomsList").on("click", ".room", roomClient.handleJoin);
   },
   remove: (element, roomName) => {
     $(`${element}[data-id="${roomName}"]`).remove();

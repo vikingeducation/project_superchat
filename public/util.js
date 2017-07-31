@@ -3,7 +3,7 @@ const socket = io.connect("http://localhost:3000");
 const templates = {
   roomButton: function(roomName) {
     return `
-      <button class='btn btn-info' data-id="${roomName}">
+      <button class='btn btn-info room' data-id="${roomName}">
         ${roomName}
       </button>
     `;
