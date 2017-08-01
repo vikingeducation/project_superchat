@@ -39,20 +39,27 @@
             $("#submit").on("click", () => {
 
                 profile.body = $("#messageInput").val();
-
+                profile.author = getCookie('user');
+                
                 $("#messageInput").val('');
-
+                
                 socket.emit('addMsg', profile);
-            
+
             });
 
             socket.on('updateClient', (profile) => {
-                
+
                 $("#room ul").append(`<li>${profile.body} - By ${profile.author}</li>`); //do this on socket listen so updates real time across all clients
 
             });
 
         });
+
+        function getCookie(user) {
+            let match = document.cookie.match(new RegExp(user + '=([^;]+)'));
+            if (match) return match[1];
+        }
+
     </script>
 </body>
 

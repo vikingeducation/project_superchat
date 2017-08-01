@@ -3,7 +3,7 @@ let client = redis.createClient(); //creates a new client
 
 let storeMessages = (roomName,userName, message) => { //make userid paramater and message param, then store those in an object which is then stored in redis. 
 
-    let profile = {"roomName": roomName, "userName": userName, "message": message};
+    let profile = {"roomName": roomName, "author": userName, "body": message};
 
     return new Promise( (resolve, reject) => {
 

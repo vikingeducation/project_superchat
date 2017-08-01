@@ -34,6 +34,7 @@ app.use(userMiddleware);
 
 app.get('/', (req, res) => {
 
+    //check if cookie of "user" exists or not. Should check if user is already taken or not in redis
     if (Object.keys(req.user).length === 0 && req.user.constructor === Object) {
         console.log("Not logged in");
         res.redirect('/login');
@@ -42,15 +43,14 @@ app.get('/', (req, res) => {
     else {
         let messagesArr = [];
 
-        data.getMessages('test')
+        data.getMessages('test') //check if room exists or not
 
             .then(messages => {
                 messages.map(element => {
                     console.log(element);
-                    messagesArr.push(JSON.parse(element));
+                    messagesArr.push(JSON.parse(element)); //parse each element into json and hold each json in array
                 });
 
-                console.log(messagesArr);
                 res.render('index', { "messagesArr": messagesArr });
 
             })
@@ -68,16 +68,14 @@ app.get('/login', (req,res)=> {
 app.post('/login', (req,res) => {
     res.cookie("user", req.body.userLogin);
 
-    res.redirect("back");
+    res.redirect("/");
 })
 
 io.on('connection', client => {
 
     client.on('addMsg', (msgProfile) => {
-        console.log(msgProfile);
 
-        //pass the name of the user here to store message. 
-        data.storeMessages('test', msgProfile);
+        data.storeMessages('test', msgProfile.author, msgProfile.body);
 
         io.emit('updateClient', msgProfile);
 
