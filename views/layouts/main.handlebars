@@ -17,6 +17,10 @@
     <!-- Optional theme -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
         crossorigin="anonymous">
+    
+    <!--Font Awesome-->
+    <link rel="stylesheet" href="../.././font-awesome-4.7.0/css/font-awesome.min.css">
+
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
@@ -40,12 +44,13 @@
 
                 profile.body = $("#messageInput").val();
                 profile.author = getCookie('user');
-                
+
                 $("#messageInput").val('');
                 
                 socket.emit('addMsg', profile);
 
             });
+            
 
             socket.on('updateClient', (profile) => {
 

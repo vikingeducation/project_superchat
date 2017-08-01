@@ -69,7 +69,13 @@ app.post('/login', (req,res) => {
     res.cookie("user", req.body.userLogin);
 
     res.redirect("/");
-})
+});
+
+app.post('/logout', (req,res) => {
+    res.clearCookie('user');
+    res.redirect('/login');
+
+});
 
 io.on('connection', client => {
 
