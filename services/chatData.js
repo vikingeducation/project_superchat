@@ -8,13 +8,33 @@ let storeMessages = (roomName,userName, message) => { //make userid paramater an
     return new Promise( (resolve, reject) => {
 
         client.rpush(roomName, JSON.stringify(profile), (err, reply) => {
+            client.restore
             if (err) reject (err);
             resolve("Saved to Redis");        
         });
 
     });
 
-}
+};
+
+let storeRooms = (roomName) => {
+    return new Promise( (resolve, reject) => {
+        client.rpush('rooms', roomName, (err, reply) => {
+            if(err) reject (err);
+            resolve("Room created and stored in redis under key rooms")
+        });
+    });
+};
+
+
+let getRooms = () => {
+    return new Promise( (resolve, reject) => {
+        client.lrange('rooms', 0, -1, (err, reply) => {
+            if(err) reject(err);
+            resolve(reply);
+        });
+    });
+};
 
 let getMessages = (roomName) => {
 
@@ -38,4 +58,4 @@ let deleteAll = () => {
     });
 };
 
-module.exports = {storeMessages, getMessages, deleteAll}
+module.exports = {storeMessages, getMessages, storeRooms, getRooms ,deleteAll}

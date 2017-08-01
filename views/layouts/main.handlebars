@@ -40,7 +40,7 @@
             let socket = io.connect('http://localhost:3000');
             let profile = {};
 
-            $("#submit").on("click", () => {
+            $("#submit-post").on("click", () => {
 
                 profile.body = $("#messageInput").val();
                 profile.author = getCookie('user');
@@ -50,12 +50,28 @@
                 socket.emit('addMsg', profile);
 
             });
+
+            $("#submit-room").on("click", () => {
+
+                let roomName = $("#newRoom").val();
+
+                $("#newRoom").val('');
+                
+                 socket.emit('addRoom', roomName);
+
+            });
             
 
             socket.on('updateClient', (profile) => {
 
                 $("#room ul").append(`<li>${profile.body} - By ${profile.author}</li>`); //do this on socket listen so updates real time across all clients
 
+            });
+
+            socket.on('updateRoomList', (roomName) => {
+
+                $("#chat-room-list ul").append(`<li>${roomName}</li>`); //do this on socket listen so updates real time across all clients
+                
             });
 
         });

@@ -11,6 +11,14 @@
             </div>
         </div>
     </div>
+    <div id="chat-room-list">
+        <ul>
+            {{#each messagesArr.rooms}}
+                <li>{{this}}</li>
+            {{/each}}
+        </ul>
+    </div>
+
 
     <div class="chat-body">
         <div class="chat-rooms">
@@ -31,7 +39,14 @@
     <div class="chat-form">
         <div class="inputs">
             <input placeholder="Enter message here" name="messageInput" id="messageInput">
-            <button id="submit">Post</button>
+            <button id="submit-post">Post</button>
+        </div>
+    </div>
+
+    <div class="room-form">
+        <div class="inputs">
+            <input placeholder="Create New Room" name="newRoom" id="newRoom">
+            <button id="submit-room">Creat New Room</button>
         </div>
     </div>
 

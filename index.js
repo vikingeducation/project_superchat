@@ -47,7 +47,6 @@ app.get('/', (req, res) => {
 
             .then(messages => {
                 messages.map(element => {
-                    console.log(element);
                     messagesArr.push(JSON.parse(element)); //parse each element into json and hold each json in array
                 });
 
@@ -87,6 +86,14 @@ io.on('connection', client => {
 
     });
 
+    client.on('addRoom', (roomName) => {
+        data.storeRooms(roomName);
+        console.log(roomName);
+        io.emit('updateRoomList', roomName);
+    });
+
 });
+
+
 
 server.listen(3000);
