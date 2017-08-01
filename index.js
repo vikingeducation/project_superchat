@@ -4,10 +4,14 @@ const server = require('http').createServer(app);
 const io = require('socket.io')(server);
 
 const expressHandlebars = require('express-handlebars');
+const hbsHelpers = require('./helpers/handlebars-helpers');
 const bodyParser = require('body-parser');
 const { storeMessage, getMessages } = require('./message-store');
 
-app.engine('handlebars', expressHandlebars({ defaultLayout: 'main' }));
+app.engine(
+  'handlebars',
+  expressHandlebars({ defaultLayout: 'main', helpers: hbsHelpers })
+);
 app.set('view engine', 'handlebars');
 
 app.use(
@@ -18,7 +22,7 @@ app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.urlencoded({ extended: true }));
 
 const roomName = 'BASIC';
-const userName = 'Tyler';
+const userName = 'Anonymous';
 
 app.get('/', (req, res) => {
   getMessages(roomName).then(values => {
@@ -36,6 +40,11 @@ app.get('/', (req, res) => {
 app.post('/', (req, res) => {
   let messageBody = req.body.message;
   storeMessage(messageBody, userName, roomName);
+  io.sockets.emit('new message', {
+    body: messageBody,
+    author: userName,
+    room: roomName
+  });
   res.redirect('back');
 });
 

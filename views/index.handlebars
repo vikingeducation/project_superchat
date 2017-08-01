@@ -15,15 +15,8 @@
               <th>Only Chatroom</th>
             </tr>
           </thead>
-          <tbody>
-            {{#each messages}}
-            <tr>
-              <td>
-                <strong>{{this.author}}: </strong>
-                {{this.body}}
-              </td>
-            </tr>
-            {{/each}}
+          <tbody id="chat-body">
+            {{{chatTable messages}}}
           </tbody>
         </table>
       </div>
@@ -48,9 +41,12 @@
 <script>
   var socket = io.connect('http://localhost:3000');
 
-  socket.on('increment count', function(url, count) {
-    var urlID = '#'.concat(url);
-    console.log(urlID);
-    $(urlID).text(count);
+  socket.on('new message', function(message) {
+    var $newMessage = $('<tr><td><strong>' +
+            message.author +
+            ': </strong>' +
+            message.body +
+            '</td></tr>')
+    $('#chat-body').prepend($newMessage);
   });
 </script>
