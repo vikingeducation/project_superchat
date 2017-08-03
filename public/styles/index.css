@@ -37,3 +37,18 @@ ul {
 li {
     margin: 20px 20px 20px 0;
 }
+
+.radio-group{
+    position: relative;
+}
+
+.radio{
+    display:inline-block;
+    cursor:pointer;
+    margin: 2px 0; 
+}
+
+.radio.selected{
+    background-color:lightblue;
+    border: 2px solid lightblue;
+}

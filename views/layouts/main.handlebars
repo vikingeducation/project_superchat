@@ -17,10 +17,6 @@
     <!-- Optional theme -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
         crossorigin="anonymous">
-    
-    <!--Font Awesome-->
-    <link rel="stylesheet" href="../.././font-awesome-4.7.0/css/font-awesome.min.css">
-
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
@@ -35,6 +31,8 @@
     {{{body}}}
 
     <script>
+
+
         $(document).ready(function () {
 
             let socket = io.connect('http://localhost:3000');
@@ -46,7 +44,7 @@
                 profile.author = getCookie('user');
 
                 $("#messageInput").val('');
-                
+
                 socket.emit('addMsg', profile);
 
             });
@@ -56,11 +54,11 @@
                 let roomName = $("#newRoom").val();
 
                 $("#newRoom").val('');
-                
-                 socket.emit('addRoom', roomName);
+
+                socket.emit('addRoom', roomName);
 
             });
-            
+
 
             socket.on('updateClient', (profile) => {
 
@@ -70,8 +68,15 @@
 
             socket.on('updateRoomList', (roomName) => {
 
-                $("#chat-room-list ul").append(`<li>${roomName}</li>`); //do this on socket listen so updates real time across all clients
-                
+                $(".radio-group").append(`<div class="radio" data-value="${roomName}">${roomName}</div>`); //do this on socket listen so updates real time across all clients
+
+            });
+
+        $('.radio-group').on('click', '.radio', function () {
+                $(this).parent().find('.radio').removeClass('selected');
+                $(this).addClass('selected');
+                var val = $(this).attr('data-value');
+                console.log(val);
             });
 
         });
@@ -80,7 +85,6 @@
             let match = document.cookie.match(new RegExp(user + '=([^;]+)'));
             if (match) return match[1];
         }
-
     </script>
 </body>
 

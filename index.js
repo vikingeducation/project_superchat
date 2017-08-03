@@ -42,15 +42,22 @@ app.get('/', (req, res) => {
 
     else {
         let messagesArr = [];
+        let rooms = [];
+        
+        data.getRooms()
 
-        data.getMessages('test') //check if room exists or not
+            .then(roomNames => {
+                rooms = roomNames;
+                
+                return data.getMessages('test');
+            })
 
             .then(messages => {
                 messages.map(element => {
                     messagesArr.push(JSON.parse(element)); //parse each element into json and hold each json in array
                 });
 
-                res.render('index', { "messagesArr": messagesArr });
+                res.render('index', { "messagesArr": messagesArr, "rooms": rooms });
 
             })
 
@@ -60,17 +67,17 @@ app.get('/', (req, res) => {
     }
 });
 
-app.get('/login', (req,res)=> {
+app.get('/login', (req, res) => {
     res.render("login");
 });
 
-app.post('/login', (req,res) => {
+app.post('/login', (req, res) => {
     res.cookie("user", req.body.userLogin);
 
     res.redirect("/");
 });
 
-app.post('/logout', (req,res) => {
+app.post('/logout', (req, res) => {
     res.clearCookie('user');
     res.redirect('/login');
 

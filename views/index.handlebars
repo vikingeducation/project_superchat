@@ -11,15 +11,16 @@
             </div>
         </div>
     </div>
+    
     <div id="chat-room-list">
-        <ul>
-            {{#each messagesArr.rooms}}
-                <li>{{this}}</li>
+        <div class="radio-group">
+            {{#each rooms}}
+                <div class="radio" data-value="{{this}}">{{this}}</div>
             {{/each}}
-        </ul>
+        </div>
     </div>
 
-
+    <!--On click from the above div, show the bottom piece of html with all paramaters put in via JS-->
     <div class="chat-body">
         <div class="chat-rooms">
             {{!-- {{#each chatRoom}} --}}
