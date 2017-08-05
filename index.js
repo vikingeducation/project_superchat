@@ -7,7 +7,12 @@ const expressHandlebars = require('express-handlebars');
 const hbsHelpers = require('./helpers/handlebars-helpers');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-const { storeMessage, getMessages } = require('./message-store');
+const {
+  storeMessage,
+  getMessages,
+  addRoom,
+  getRoomNames
+} = require('./message-store');
 
 app.engine(
   'handlebars',
@@ -27,11 +32,30 @@ const roomName = 'BASIC';
 
 app.get('/', (req, res) => {
   if (req.cookies.username) {
+    res.redirect('/rooms');
+  } else {
+    res.redirect('/login');
+  }
+});
+
+app.get('/rooms', (req, res) => {
+  getRoomNames()
+    .then(rooms => {
+      res.render('rooms', { rooms: rooms, username: req.cookies.username });
+    })
+    .catch(err => console.log(err));
+});
+
+app.get('/rooms/:room', (req, res) => {
+  let roomName = req.params.room;
+  getRoomNames().then(rooms => {
     getMessages(roomName).then(values => {
       Promise.all(values)
         .then(messages => {
           console.log(messages);
           res.render('index', {
+            rooms: rooms,
+            roomName: roomName,
             messages: messages,
             username: req.cookies.username
           });
@@ -40,9 +64,26 @@ app.get('/', (req, res) => {
           console.log(err);
         });
     });
-  } else {
-    res.redirect('/login');
-  }
+  });
+});
+
+app.post('/rooms', (req, res) => {
+  let newRoomName = req.body.roomName;
+  addRoom(newRoomName);
+  res.redirect('back');
+});
+
+app.post('/rooms/:room', (req, res) => {
+  let messageBody = req.body.message;
+  let username = req.cookies.username;
+  let roomName = req.params.room;
+  storeMessage(messageBody, username, roomName);
+  io.sockets.emit('new message', {
+    body: messageBody,
+    author: username,
+    room: roomName
+  });
+  res.redirect('back');
 });
 
 app.get('/login', (req, res) => {
@@ -52,24 +93,12 @@ app.get('/login', (req, res) => {
 app.post('/login', (req, res) => {
   let username = req.body.username;
   res.cookie('username', username);
-  res.redirect('/');
+  res.redirect('/rooms');
 });
 
 app.get('/logout', (req, res) => {
   res.clearCookie('username');
   res.redirect('/');
-});
-
-app.post('/', (req, res) => {
-  let messageBody = req.body.message;
-  let username = req.cookies.username;
-  storeMessage(messageBody, username, roomName);
-  io.sockets.emit('new message', {
-    body: messageBody,
-    author: username,
-    room: roomName
-  });
-  res.redirect('back');
 });
 
 server.listen(3000, () => {

@@ -1,7 +1,5 @@
 const redis = require('redis');
 const redisClient = redis.createClient();
-//
-// var messageID = 1;
 
 const storeMessage = (messageBody, authorName, roomName) => {
   let messageID = Date.now();
@@ -27,7 +25,6 @@ const storeMessage = (messageBody, authorName, roomName) => {
     roomName
   );
   redisClient.lpush(roomListName, messageHashName);
-  // messageId += 1;
 };
 
 const getMessageIDs = roomName => {
@@ -77,7 +74,25 @@ const getMessages = roomName => {
   });
 };
 
+const addRoom = roomName => {
+  redisClient.sadd('rooms', roomName);
+};
+
+const getRoomNames = () => {
+  return new Promise((resolve, reject) => {
+    redisClient.smembers('rooms', (err, roomNames) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(roomNames);
+      }
+    });
+  });
+};
+
 module.exports = {
   storeMessage,
-  getMessages
+  getMessages,
+  addRoom,
+  getRoomNames
 };
