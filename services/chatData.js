@@ -41,7 +41,6 @@ let getMessages = (roomName) => {
     return new Promise((resolve, reject) => {
 
         client.lrange(roomName, 0, -1, function (err, reply) {
-
             if (err) reject(err);
             resolve(reply);
         });

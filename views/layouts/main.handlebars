@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="stylesheet" href="/styles/index.css">
-
+    <script src="libraries/handlebars-v4.0.10.js"></script>
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
         crossorigin="anonymous">
@@ -23,6 +23,7 @@
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
         crossorigin="anonymous"></script>
+
     <script src="/socket.io/socket.io.js"></script>
 </head>
 
@@ -30,62 +31,24 @@
 
     {{{body}}}
 
-    <script>
 
+    <script id="chat-template" type="text/x-handlebars-template">
 
-        $(document).ready(function () {
+            <div class="chat-rooms">
+                <div id="room" class="room">
+                    <h3 class="message-header">\{{room}}</h3>
+                    <ul id="message-content">
+                        \{{#each messageArr}}
+                        <li>\{{body}} - By \{{author}}</li>
+                        \{{/each}}
+                    </ul>
+                </div>
 
-            let socket = io.connect('http://localhost:3000');
-            let profile = {};
+            </div>
 
-            $("#submit-post").on("click", () => {
-
-                profile.body = $("#messageInput").val();
-                profile.author = getCookie('user');
-
-                $("#messageInput").val('');
-
-                socket.emit('addMsg', profile);
-
-            });
-
-            $("#submit-room").on("click", () => {
-
-                let roomName = $("#newRoom").val();
-
-                $("#newRoom").val('');
-
-                socket.emit('addRoom', roomName);
-
-            });
-
-
-            socket.on('updateClient', (profile) => {
-
-                $("#room ul").append(`<li>${profile.body} - By ${profile.author}</li>`); //do this on socket listen so updates real time across all clients
-
-            });
-
-            socket.on('updateRoomList', (roomName) => {
-
-                $(".radio-group").append(`<div class="radio" data-value="${roomName}">${roomName}</div>`); //do this on socket listen so updates real time across all clients
-
-            });
-
-        $('.radio-group').on('click', '.radio', function () {
-                $(this).parent().find('.radio').removeClass('selected');
-                $(this).addClass('selected');
-                var val = $(this).attr('data-value');
-                console.log(val);
-            });
-
-        });
-
-        function getCookie(user) {
-            let match = document.cookie.match(new RegExp(user + '=([^;]+)'));
-            if (match) return match[1];
-        }
     </script>
+
+    <script src="source/client.js"></script>
 </body>
 
 </html>

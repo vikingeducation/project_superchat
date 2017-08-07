@@ -21,20 +21,7 @@
     </div>
 
     <!--On click from the above div, show the bottom piece of html with all paramaters put in via JS-->
-    <div class="chat-body">
-        <div class="chat-rooms">
-            {{!-- {{#each chatRoom}} --}}
-            <div id="room" class="room">
-                <h3 class="message-header">test</h3>
-                <ul id="message-content">
-                    {{#each messagesArr}}
-                    <li>{{this.body}} - By {{this.author}}</li>
-                    {{/each}}
-                </ul>
-            </div>
-
-            {{!-- {{/each}} --}}
-        </div>
+    <div id="chat-body">
     </div>
 
     <div class="chat-form">

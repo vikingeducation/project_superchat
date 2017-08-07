@@ -48,16 +48,9 @@ app.get('/', (req, res) => {
 
             .then(roomNames => {
                 rooms = roomNames;
-                
-                return data.getMessages('test');
-            })
+           
 
-            .then(messages => {
-                messages.map(element => {
-                    messagesArr.push(JSON.parse(element)); //parse each element into json and hold each json in array
-                });
-
-                res.render('index', { "messagesArr": messagesArr, "rooms": rooms });
+                res.render('index', {"rooms": rooms });
 
             })
 
@@ -87,7 +80,7 @@ io.on('connection', client => {
 
     client.on('addMsg', (msgProfile) => {
 
-        data.storeMessages('test', msgProfile.author, msgProfile.body);
+        data.storeMessages(msgProfile.roomName, msgProfile.author, msgProfile.body);
 
         io.emit('updateClient', msgProfile);
 
@@ -99,8 +92,26 @@ io.on('connection', client => {
         io.emit('updateRoomList', roomName);
     });
 
+    client.on('changeRoom', val => {
+        let messagesArr = [];
+        data.getMessages(val)
+
+            .then(messages => {
+                
+                messages.map(element => {
+                    messagesArr.push(JSON.parse(element)); //parse each element into json and hold each json in array
+                });
+
+                client.emit('roomChanged', messagesArr);
+            })
+            
+            .catch(reject => {
+                console.log(reject);
+            });
+    });
+
 });
 
 
 
-server.listen(3000);
+server.listen(4000);
