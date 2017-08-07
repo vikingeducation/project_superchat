@@ -28,6 +28,7 @@ const socket = io.connect('http://localhost:4000');
 
     socket.on('updateClient', (profile) => {
 
+        $(".no-content").remove();
         $("#room ul").append(`<li>${profile.body} - By ${profile.author}</li>`); //do this on socket listen so updates real time across all clients
 
     });
@@ -39,22 +40,18 @@ const socket = io.connect('http://localhost:4000');
     });
 
     socket.on('roomChanged', messageArr => {
-        let arr = ["a", "a" , "a", "a", "a"];
 
-        if (messageArr.length > 0) {
+            let roomName = $(".selected").attr('data-value');
 
             let source = $("#chat-template").html();
             let templateScript = Handlebars.compile(source);
-            let context = { "messageArr": messageArr, "room": messageArr[0].roomName};
-            
-
+            let context = { "messageArr": messageArr, "room": roomName};
             let html = templateScript(context);
-
             $("#chat-body").html(html);
-        }
-        else {
-            $("#chat-body").html('<p>Chat Room is empty</p>');
-        }
+        
+            if (messageArr.length == 0) {
+                $(".message-header").after(`<h4 class = "no-content">Chat room is empty</h4>`);
+            }
     });
 
     $('.radio-group').on('click', '.radio', function () {
