@@ -5,8 +5,9 @@
                 <h1>SUPER CHAT</h1>
             </div>
             <div>
+                <h4 class="userName">{{userName}}</h4>
                 <form action="/logout" method="post">
-                    <button name="logout" value="logout">Logout</button>
+                    <button class = "btn btn-danger"name="logout" value="logout">Logout</button>
                 </form>
             </div>
         </div>
@@ -14,7 +15,7 @@
     <div class="body-content">
         <div class="chat-list-and-rooms">
             <div id="room-list" class="room-list">
-                <h3 class="rooms-header">Chat Rooms</h3>
+                <h3 class="header">Chat Rooms</h3>
                 <div class="radio-group">
                     {{#each rooms}}
                     <div class="radio" data-value="{{this}}">{{this}}</div>
@@ -27,7 +28,7 @@
             </div>
         </div>
         <div class="chat-form">
-            <h3>New Post</h3>
+            <h3 class="header">New Post</h3>
             <div class="inputs">
                 <div><textarea cols="35" rows="5" placeholder="Enter message here" name="messageInput" id="messageInput"></textarea></div>
                 <div><button class="btn btn-success" id="submit-post">Post</button></div>
@@ -35,7 +36,7 @@
         </div>
 
         <div class="room-form">
-            <h3>Create New Room</h3>
+            <h3 class="header">Create New Room</h3>
             <div class="inputs">
                 <div><input placeholder="Create New Room" name="newRoom" id="newRoom"></div>
                 <div><button class="btn btn-success" id="submit-room">Creat New Room</button></div>

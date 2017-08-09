@@ -50,7 +50,7 @@ app.get('/', (req, res) => {
                 rooms = roomNames;
            
 
-                res.render('index', {"rooms": rooms });
+                res.render('index', {"rooms": rooms, "userName": req.user});
 
             })
 

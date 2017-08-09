@@ -4,6 +4,10 @@
     align-items: flex-start;
 }
 
+.content > div {
+    display: inline-block;
+}
+
 .body-content {
     display: flex;
     flex-direction: row;
@@ -27,6 +31,9 @@
     margin: 20px;
 }
 .content{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     padding: 20px;
 }
 
@@ -43,13 +50,7 @@
     color: white
 }
 
-.chat-form h3{
-    display: inline;
-    background-color: darkslategrey;
-    color: white
-}
-
-.room-form h3{
+.header{
     display: inline;
     background-color: darkslategrey;
     color: white
@@ -87,12 +88,6 @@ li {
     color: darkcyan;
     font-size: 20px;
     
-}
-
-.rooms-header{
-    display: inline;
-    background-color: darkslategray;
-    color: white;
 }
 
 .chat-list-and-rooms {
@@ -152,6 +147,20 @@ textarea{
     margin: 0px;
 }
 
+.login{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 50px 0px 0px 0px;
+}
+
+.login form {
+    margin-top: 20px;
+}
+
+.login form .btn{
+    margin-top: 5px;
+}
 .body {
     color: gray;
 }
