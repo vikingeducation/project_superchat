@@ -11,32 +11,35 @@
             </div>
         </div>
     </div>
-    
-    <div id="chat-room-list">
-        <h3 class="rooms-header">Chat Rooms</h3>
-        <div class="radio-group">
-            {{#each rooms}}
-                <div class="radio" data-value="{{this}}">{{this}}</div>
-            {{/each}}
+    <div class="body-content">
+        <div class="chat-list-and-rooms">
+            <div id="room-list" class="room-list">
+                <h3 class="rooms-header">Chat Rooms</h3>
+                <div class="radio-group">
+                    {{#each rooms}}
+                    <div class="radio" data-value="{{this}}">{{this}}</div>
+                    {{/each}}
+                </div>
+            </div>
+
+            <!--On click from the above div, show the bottom piece of html with all paramaters put in via JS-->
+            <div id="chat-body" class="chat-body">
+            </div>
+        </div>
+        <div class="chat-form">
+            <h3>New Post</h3>
+            <div class="inputs">
+                <div><textarea cols="35" rows="5" placeholder="Enter message here" name="messageInput" id="messageInput"></textarea></div>
+                <div><button class="btn btn-success" id="submit-post">Post</button></div>
+            </div>
+        </div>
+
+        <div class="room-form">
+            <h3>Create New Room</h3>
+            <div class="inputs">
+                <div><input placeholder="Create New Room" name="newRoom" id="newRoom"></div>
+                <div><button class="btn btn-success" id="submit-room">Creat New Room</button></div>
+            </div>
         </div>
     </div>
-
-    <!--On click from the above div, show the bottom piece of html with all paramaters put in via JS-->
-    <div id="chat-body">
-    </div>
-
-    <div class="chat-form">
-        <div class="inputs">
-            <input placeholder="Enter message here" name="messageInput" id="messageInput">
-            <button id="submit-post">Post</button>
-        </div>
-    </div>
-
-    <div class="room-form">
-        <div class="inputs">
-            <input placeholder="Create New Room" name="newRoom" id="newRoom">
-            <button id="submit-room">Creat New Room</button>
-        </div>
-    </div>
-
 </div>

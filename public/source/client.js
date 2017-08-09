@@ -41,6 +41,7 @@ const socket = io.connect('http://localhost:4000');
 
     socket.on('roomChanged', messageArr => {
 
+            $(".chat-form").show("fast");
             let roomName = $(".selected").attr('data-value');
 
             let source = $("#chat-template").html();

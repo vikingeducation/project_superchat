@@ -39,7 +39,10 @@
                     <h3 class="message-header">\{{room}}</h3>
                     <ul id="message-content">
                         \{{#each messageArr}}
-                        <li>\{{body}} - By \{{author}}</li>
+                        <li>
+                            <div class="author"><h4>\{{author}}</h4></div>
+                            <div class="body">\{{body}}</div>
+                        </li>
                         \{{/each}}
                     </ul>
                 </div>
