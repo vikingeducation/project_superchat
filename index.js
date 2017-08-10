@@ -30,10 +30,15 @@ app.set('view engine', 'handlebars');
 //setup style css
 app.use(express.static(__dirname + '/public'));
 
+
 app.use(userMiddleware);
 
-app.get('/', (req, res) => {
 
+
+
+
+app.get('/', (req, res) => {
+    
     //check if cookie of "user" exists or not. Should check if user is already taken or not in redis
     if (Object.keys(req.user).length === 0 && req.user.constructor === Object) {
         console.log("Not logged in");
