@@ -29,7 +29,12 @@ const socket = io.connect('http://localhost:4000');
     socket.on('updateClient', (profile) => {
 
         $(".no-content").remove();
-        $("#room ul").append(`<li>${profile.body} - By ${profile.author}</li>`); //do this on socket listen so updates real time across all clients
+        $("#room ul").append(`<li>
+                        <div class="author">
+                            <h4>${profile.author}</h4>
+                        </div>
+                        <div class="body">${profile.body}</div>
+                    </li>`); //do this on socket listen so updates real time across all clients
 
     });
 
@@ -51,8 +56,10 @@ const socket = io.connect('http://localhost:4000');
             $("#chat-body").html(html);
         
             if (messageArr.length == 0) {
-                $(".message-header").after(`<h4 class = "no-content">Chat room is empty</h4>`);
+                $(".message-room-header").after(`<h4 class = "no-content">Chat room is empty</h4>`);
             }
+                $("#chat-body").show("fast");
+            
     });
 
     $('.radio-group').on('click', '.radio', function () {
@@ -62,6 +69,12 @@ const socket = io.connect('http://localhost:4000');
         let val = $(this).attr('data-value');
 
         socket.emit('changeRoom', val);
+    });
+
+    $('#chat-body').on('click', '#close', function() {
+         $(".selected").removeClass('selected');
+         $(".chat-form").hide("fast");
+          $("#chat-body").hide("fast");
     });
 
 });

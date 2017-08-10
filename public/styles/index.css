@@ -45,6 +45,22 @@
 }
 
 .message-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.fa-window-close{
+    color: rgb(217,83,79);
+    font-size: 20px !important;
+}
+
+.fa-window-close:hover{
+    font-size: 23px !important;
+    cursor: pointer;
+}
+
+.message-room-header{
     display: inline;
     background-color: darkslategrey;
     color: white
