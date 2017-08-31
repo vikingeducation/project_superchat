@@ -35,6 +35,19 @@ var redisClientObject = {
     })
   },
 
+  getRoomsMessageLength: function() {
+    return new Promise ((resolve, reject) => {
+      redisClient.LRANGE("rooms", 0, -1, function(err,res) {
+        if (err) {
+          reject(err);
+        }
+        else {
+          resolve(res);
+        }
+      });
+    })
+  },
+
   setRoomMessage: function(msg, roomName) {
     redisClient.LPUSH( ("roomMessages" + roomName) , msg);
   },

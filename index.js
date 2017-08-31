@@ -62,16 +62,30 @@ app.get("/logout", (req,res) => {
 app.get("/:user/rooms", (req, res) => {
   const user = req.params.user;
   res.cookie('userName', user);
-  Promise.all([
-    chatRooms.getRoomMessages("Cats"),
-    chatRooms.getRoomAuthors("Cats")
-  ]).then ( (values)=> {
-    let roomMessages = values[0]
-    let roomAuthors = values[1]
-    res.render("chatRoom", {roomMessages, roomAuthors, user});
+  Promise.resolve(
+    chatRooms.getRooms()
+  ).then ( (values)=> {
+    let roomNames = values
+    res.render("rooms", {roomNames, user});
   })
 
 });
+
+app.get("/:user/rooms/:roomName", (req, res) => {
+  const user = req.params.user;
+  const roomName = req.params.roomName
+  Promise.all([
+    chatRooms.getRoomMessages(roomName),
+    chatRooms.getRoomAuthors(roomName)
+  ]).then ( (values)=> {
+    let roomMessages = values[0]
+    let roomAuthors = values[1]
+    res.render("chatRoom", {roomMessages, roomAuthors, roomName, user});
+  })
+
+});
+
+
 
 app.post("/newUser", (req,res)=>{
   const user = req.body.UserName;
@@ -84,11 +98,27 @@ app.post("/newUser", (req,res)=>{
   }
 })
 
-app.post("/rooms/newMessage", (req,res) => {
-  // chatRooms.setRoomMessage(req.body.textNewMessage, "Cats");
-  // chatRooms.setRoomAuthor("Me", "Cats");
+app.post("/:user/rooms/newRoom", (req,res) => {
+  // const user = req.params.user;
+  // const newRoom = req.body.textNewRoom;
+  // Promise.resolve(
+  //   chatRooms.setRoom(newRoom)
+  // ).then( ()=> {
+  //   res.redirect("back");
+  // })
+  res.redirect("back");
+});
+
+app.post("/:user/rooms/:roomName/newMessage", (req,res) => {
+  // const roomName = req.params.roomName;
+  // const user = req.params.user;
+  // const message = req.body.textNewMessage;
+  // chatRooms.setRoomMessage(message, roomName);
+  // chatRooms.setRoomAuthor(user, roomName);
   res.redirect("back");
 })
+
+
 
 io.on('connection', function(socket){
     console.log('a user connected');
@@ -99,6 +129,10 @@ io.on('connection', function(socket){
       chatRooms.setRoomMessage(data.newEnteredMessage, "Cats");
       chatRooms.setRoomAuthor(data.newEnteredUser, "Cats");
       io.emit('newMessage', {data})
+    })
+    socket.on('newRoomSubmit', function(data) {
+      chatRooms.setRoom(data.newEnteredRoom);
+      io.emit('newRoom', {data})
     })
   })
 

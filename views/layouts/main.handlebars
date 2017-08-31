@@ -34,6 +34,15 @@ $(document).ready(function() {
    socket.on('newMessage', function(data){
      $('#chatRoom').after(`<h3>${data.data.newEnteredUser}</h3><p>${data.data.newEnteredMessage}</p><hr>`)
    })
+
+   $('#add-room-button').click( function () {
+     const newEnteredRoom = $('#textInput').val();
+     const newEnteredUser = $('.navbar-user').attr('id');
+     socket.emit('newRoomSubmit', {newEnteredRoom, newEnteredUser})
+   })
+   socket.on('newRoom', function(data){
+     $('#chatRoom').after(`<h3><a href=/${data.data.newEnteredUser}/rooms/${data.data.newEnteredRoom}>${data.data.newEnteredRoom}</a></h3><hr>`)
+   })
 })
 
 </script>
