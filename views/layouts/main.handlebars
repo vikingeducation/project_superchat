@@ -18,4 +18,21 @@
 
   {{{body}}}
 </body>
+
+<script>
+$(document).ready(function() {
+   var socket = io.connect('http://localhost:3000');
+
+   $('#submit-button').click( function () {
+     const newEnteredMessage = $('#textInput').val();
+     const newEnteredUser = "Me"
+     socket.emit('newMessageSubmit', {newEnteredMessage, newEnteredUser})
+   })
+   socket.on('newMessage', function(data){
+     $('#chatRoom').after(`<h3>${data.data.newEnteredUser}</h3><p>${data.data.newEnteredMessage}</p><hr>`)
+   })
+})
+
+</script>
+
 </html>
