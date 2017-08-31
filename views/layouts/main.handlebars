@@ -13,7 +13,10 @@
 </head>
 <body>
   <nav class="navbar navbar-dark bg-dark">
-    <h1 style="font-size:40px;" class="navbar-brand">Super Chat</h2>
+    <h1 style="font-size:40px;" class="navbar-brand">Super Chat</h1>
+    {{#if user}}
+    <h4 class="navbar-user" id="{{user}}">{{user}}<br><a href="/logout">LogOut</a></h4>
+    {{/if}}
   </nav>
 
   {{{body}}}
@@ -25,7 +28,7 @@ $(document).ready(function() {
 
    $('#submit-button').click( function () {
      const newEnteredMessage = $('#textInput').val();
-     const newEnteredUser = "Me"
+     const newEnteredUser = $('.navbar-user').attr('id');
      socket.emit('newMessageSubmit', {newEnteredMessage, newEnteredUser})
    })
    socket.on('newMessage', function(data){

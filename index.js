@@ -4,6 +4,8 @@ const bodyParser = require('body-parser');
 const socketIo = require('socket.io');
 const redis = require('redis');
 const http = require('http');
+const cookieParser = require("cookie-parser");
+var cookieSession = require('cookie-session');
 
 const app = express();
 const server = http.createServer(app);
@@ -22,6 +24,18 @@ app.use(bodyParser.urlencoded({
   extended: true
 }));
 
+// Set up cookies
+
+app.use(cookieParser());
+// ----------------------------------------
+// Sessions/Cookies
+// ----------------------------------------
+
+app.use(cookieSession({
+  name: 'session',
+  keys: ['asdf1234567890qwer']
+}));
+
 // Set up handlebars
 const exphbs = require("express-handlebars");
 app.engine("handlebars", exphbs({
@@ -30,19 +44,47 @@ app.engine("handlebars", exphbs({
 }));
 app.set("view engine", "handlebars");
 
-app.get("/", (req, res) => {
+app.get("/", (req,res) => {
+  const userCook = req.cookies['userName'];
+  if (userCook === '' || userCook === undefined) {
+    res.render("login");
+  }
+  else {
+    res.redirect(`/${userCook}/rooms`)
+  }
+})
+
+app.get("/logout", (req,res) => {
+  res.cookie('userName', "");
+  res.redirect("/");
+})
+
+app.get("/:user/rooms", (req, res) => {
+  const user = req.params.user;
+  res.cookie('userName', user);
   Promise.all([
     chatRooms.getRoomMessages("Cats"),
     chatRooms.getRoomAuthors("Cats")
   ]).then ( (values)=> {
     let roomMessages = values[0]
     let roomAuthors = values[1]
-    res.render("index", {roomMessages, roomAuthors});
+    res.render("chatRoom", {roomMessages, roomAuthors, user});
   })
 
 });
 
-app.post("/newMessage", (req,res) => {
+app.post("/newUser", (req,res)=>{
+  const user = req.body.UserName;
+  if (user === "") {
+    res.redirect('back');
+  }
+  else {
+    chatRooms.setUser(user);
+    res.redirect(`/${user}/rooms`);
+  }
+})
+
+app.post("/rooms/newMessage", (req,res) => {
   // chatRooms.setRoomMessage(req.body.textNewMessage, "Cats");
   // chatRooms.setRoomAuthor("Me", "Cats");
   res.redirect("back");

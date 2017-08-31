@@ -6,6 +6,10 @@
   padding: 1%;
 }
 
+.navbar-user {
+  color:#F4F4F4;
+}
+
 textarea {
   height:50%;
   width: 100%;
@@ -21,4 +25,14 @@ textarea {
 #submit-button {
   margin-bottom: 10px;
   margin-top: 10px;
+}
+
+.login-box {
+  margin-left:auto;
+  margin-right: auto;
+  margin-top: 10%;
+}
+
+.login-box input {
+  margin: 25px;
 }
