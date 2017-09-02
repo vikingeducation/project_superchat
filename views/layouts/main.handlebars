@@ -24,7 +24,7 @@
 
 <script>
 $(document).ready(function() {
-   var socket = io.connect('http://localhost:3000');
+   var socket = io.connect('https://chuckschatrooms.herokuapp.com/');
 
    $('#submit-button').click( function () {
      const newEnteredMessage = $('#textInput').val();
