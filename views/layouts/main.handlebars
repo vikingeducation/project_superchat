@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="/stylesheets/style.css">
+  <title>Super Chat</title>
+
+  <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+  <nav class="navbar navbar-dark bg-dark">
+    <h1 style="font-size:40px;" class="navbar-brand">Super Chat</h1>
+    {{#if user}}
+    <h4 class="navbar-user" id="{{user}}">{{user}}<br><a href="/logout">LogOut</a></h4>
+    {{/if}}
+  </nav>
+
+  {{{body}}}
+</body>
+
+<script>
+$(document).ready(function() {
+   var socket = io.connect('https://chuckschatrooms.herokuapp.com/');
+
+   $('#submit-button').click( function () {
+     const newEnteredMessage = $('#textInput').val();
+     const newEnteredUser = $('.navbar-user').attr('id');
+     socket.emit('newMessageSubmit', {newEnteredMessage, newEnteredUser})
+   })
+   socket.on('newMessage', function(data){
+     $('#chatRoom').after(`<h3>${data.data.newEnteredUser}</h3><p>${data.data.newEnteredMessage}</p><hr>`)
+   })
+
+   $('#add-room-button').click( function () {
+     const newEnteredRoom = $('#textInput').val();
+     const newEnteredUser = $('.navbar-user').attr('id');
+     socket.emit('newRoomSubmit', {newEnteredRoom, newEnteredUser})
+   })
+   socket.on('newRoom', function(data){
+     $('#chatRoom').after(`<h3><a href=/${data.data.newEnteredUser}/rooms/${data.data.newEnteredRoom}>${data.data.newEnteredRoom}</a></h3><hr>`)
+   })
+})
+
+</script>
+
+</html>

@@ -1,0 +1,20 @@
+<div class="container-fluid ">
+  <div class="row">
+    <div class="col-sm-3 mt-1 mx-1 outter-container" >
+      <h2 id="chatRoom" class="roomTitle">CHAT ROOMS</h2>
+      {{#each roomNames as |roomName|}}
+      <h3><a href="/{{../user}}/rooms/{{roomName}}">{{roomName}}</a></h3>
+      <!--<p></p> -->
+      <hr>
+      {{/each}}
+    </div>
+    <div class="col-sm-3 mt-1 mx-1 outter-container" id="chatRoomInput">
+      <h2 class="roomTitle">New Room</h2>
+      <form action='/{{user}}/rooms/newRoom' method="post" class="text-center">
+        <textarea id="textInput" name="textNewRoom" rows="2"></textarea>
+        <button class="btn btn-default btn-success" id="add-room-button" type="submit">Submit</button>
+      </form>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,25 @@
+<div class="container-fluid ">
+  <div class="row">
+    <div class="col-sm-3 mt-1 mx-1 outter-container" >
+      <h2 id="chatRoom" class="roomTitle">{{roomName}}</h2>
+      {{#each roomMessages as |message|}}
+      <h3>{{lookup ../roomAuthors @index}}</h3>
+      <p>{{message}}</p>
+      <hr>
+      {{/each}}
+    </div>
+    <div class="col-sm-3 mt-1 mx-1 outter-container" id="chatRoomInput">
+      <h2 class="roomTitle">New Post</h2>
+      <form action="/{{user}}/rooms/{{roomName}}/newMessage" method="post" class="text-center">
+        <textarea id="textInput" name="textNewMessage" rows="5"></textarea>
+        <button class="btn btn-default btn-success" id="submit-button" type="submit">Submit</button>
+      </form>
+    </div>
+    <div class="col-sm-3 mt-1 mx-1 outter-container">
+      <h2 class="roomTitle">Back to Rooms</h2>
+      <div class="text-center">
+        <a class="btn btn-danger" href="/{{user}}/rooms">Back</a>
+      </div>
+    </div>
+  </div>
+</div>
