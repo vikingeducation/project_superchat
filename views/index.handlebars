@@ -1,0 +1,85 @@
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+
+    <div class="navbar-header">
+
+      <h2 id="heading" class="navbar-text">SUPER CHAT</h2>
+    </div>
+
+      <p class="navbar-text navbar-right">
+        {{username}}
+        <a href="/logout" class="navbar-link">Logout</a>
+      </p>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+  <div class="row">
+
+    <div id="room-list" class="col-sm-4">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Chat Rooms</th>
+          </tr>
+        </thead>
+        <tbody id="rooms-body">
+          <tr>
+            <td>
+              <a href='/rooms'>Create New Room</a>
+            </td>
+          </tr>
+          {{#each rooms}}
+            <tr>
+              <td>
+                <a href='/rooms/{{this}}'>{{this}}</a>
+              </td>
+            </tr>
+            {{/each}}
+        </tbody>
+      </table>
+    </div>
+
+      <div id="active-room" class="col-sm-4">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>{{roomName}}</th>
+            </tr>
+          </thead>
+          <tbody id="{{roomName}}">
+            {{{chatTable messages}}}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="col-sm-4">
+        <form action="/rooms/{{roomName}}" method="post">
+          <div class="form-group">
+            <label for="message">New Message</label>
+            <textarea class="form-control" placeholder="Message" id="message" name="message"></textarea>
+          </div>
+
+            <button type="submit" class="btn btn-default">Send</button>
+        </form>
+      </div>
+
+    </div>
+  </div>
+
+
+</div>
+
+<script>
+  var socket = io.connect('http://localhost:3000');
+
+  socket.on('new message', function(message) {
+      var $newMessage = $('<tr><td><strong>' +
+              message.author +
+              ': </strong>' +
+              message.body +
+              '</td></tr>');
+      $('#'+message.room).prepend($newMessage);
+    });
+</script>
