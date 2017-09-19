@@ -1,0 +1,50 @@
+    <div class="nav navbar-default">
+      <div class="container">
+        <div class="row">
+          <h1 class="navbar-left">Welcome {{user}}!</h1>
+
+          <form method=post action='/logout' class="navbar-form navbar-right">
+            <button class="btn btn-primary">log out</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="container add-margin">
+      <div class=row>
+        <div class='col-md-3 panel panel-default'>
+          <div class="panel-body">
+            <div id="rooms">
+              {{#each rooms as |room|}}
+                <div class='room' id="{{room}}">
+                  <h3>
+                    <span class="leaveRoom">X</span>
+                    {{room}} 
+                    <span id="newMessage{{room}}" class="label label-danger"></span>
+                  </h3>
+                </div>
+              {{/each}}
+
+              <form id='create-room'>
+                <div class="form-group">
+                  <input id='create-room-form' type=text class="form-control"/>
+                </div>
+                <button class="btn btn-default">Create Room</button>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-offset-1 col-md-8">
+          <div id='messageContainer'>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+<script src="/handlebars/handlebars.runtime.js"></script>
+<script src="./javascripts/message_form_compiled.js"></script>
+<script src='./javascripts/script.js'></script>

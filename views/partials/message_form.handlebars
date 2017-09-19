@@ -1,0 +1,21 @@
+<div class="form form-group">
+  <form class="messageForm" id="{{room}}">
+    <div class="form-group">
+      <input type="text" name="message" class="form-control"/>
+    </div>
+    <button class="btn btn-default">Send Message</button>
+  </form>
+</div>
+
+<div id="messages{{room}}" class="container scrolling">
+  {{#each messages as |message|}}
+    <div class="message row">
+      <div class="col-xs-12">
+        <p>
+        <span class="author">{{message.author}}: </span>
+          {{message.body}}
+        </p>
+      </div>
+    </div>
+  {{/each}}
+</div>
