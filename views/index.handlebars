@@ -1,0 +1,70 @@
+<script src="https://use.fontawesome.com/45e03a14ce.js"></script>
+
+<div class="main_section">
+  <div class="container">
+    <div id="header-bar">
+      <h1 id="header-text">SuperChat</h1>
+      <div id="user_options_header">
+        <span id="username_header">{{username}}</span>
+        <a href="/signout" id="sign_out">Sign Out</a>
+      </div>
+    </div>
+    <div class="chat_container">
+
+    <!--chat_sidebar-->
+      <div class="col-sm-3 chat_sidebar">
+        <div class="row">
+          <div id="custom-search-input">
+            <div class="input-group col-md-12">
+              <input type="text" id="newRoom" class="search-query form-control"/>
+              <button class="btn btn-danger" type="button" id="addRoom">New Room</button>
+            </div>
+          </div>
+          <div class="member_list">
+            <ul class="list-unstyled" id="rooms">
+              {{#each roomNames as |roomName|}}
+                <li class="left clearfix">
+                  <div class="chat-body clearfix roomName">
+                    <div class="header_sec">
+                      <strong class="primary-font roomText" id="{{roomName}}">{{roomName}}</strong>
+                    </div>
+                  </div>
+                </li>
+              {{/each}}
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-9 message_section">
+        <div class="row">
+
+          <!--new_message_head-->
+          <div class="new_message_head">
+            <div id="room_name_prompt">You are in the room: <span id="currentRoom">Cats</span></div>
+            <div class="pull-left" id="user_prompt"> Logged in as: <span id="username" >{{username}}</span></div>
+          </div>
+          
+          <!--chat_area-->
+          <div class="chat_area">
+            <ul class="list-unstyled messages">
+              {{#each messages as |message|}}
+                <li class="left clearfix">
+                  <span class="chat-img1 pull-left"><h6>{{message.username}}</h6></span>
+                  <div class="chat-body1 clearfix"><p>{{message.body}}</p></div>
+                </li>
+              {{/each}}
+            </ul>
+          </div>
+          {{!-- message_input --}}
+          <div class="message_write">
+            <textarea class="form-control" placeholder="type a message" id="newPost"></textarea>
+            <div class="clearfix"></div>
+            <div class="chat_bottom"><a href="#" class="pull-right btn btn-success" id="sendPost">Send</a></div>
+          </div>
+        </div>
+      </div> 
+    </div>
+  </div>
+</div>
+
+
