@@ -68,7 +68,22 @@ app.get("/rooms/:username", (req, res) => {
 app.get("/rooms/:username/chat/:room", (req, res) => {
 	var username = req.cookies["username"];
 	var room = req.params.room;
-	res.render("index", { username, room });
+	Promise.all([
+		superchat.readList(`${room}Users`),
+		superchat.readList(`${room}Messages`)
+	])
+		.then(chatObj => {
+			let users = chatObj[0];
+			let messages = chatObj[1];
+			console.log("users", users);
+			console.log("messages", messages);
+			res.render("index", { username, room, users, messages });
+		})
+		.catch(err => {
+			if (err) {
+				console.error(err);
+			}
+		});
 });
 
 //POSTS
@@ -98,11 +113,15 @@ io.on("connection", socket => {
 		console.log("user disconnected");
 	});
 
-	socket.on("chat message", function(msg) {
-		io.emit("chat message", msg);
-		console.log("message " + msg);
+	//messages
+	socket.on("chat message", function(chat) {
+		superchat.saveChatUsr(chat.usr, chat.room);
+		superchat.saveChatMsg(chat.msg, chat.room);
+		io.emit("chat message", chat);
+		console.log(`message: ${chat.usr}: ${chat.msg} in room ${chat.room}`);
 	});
 
+	//rooms
 	socket.on("new room", function(room) {
 		superchat.addNewRoom(room);
 		io.emit("new room", room);

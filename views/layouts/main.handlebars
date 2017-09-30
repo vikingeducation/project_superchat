@@ -25,17 +25,24 @@ var socket = io();
 
 $(document).ready( () => {
 
+  //messages SOCKETS
   $('.form').submit(function(){
-    socket.emit('chat message', $('#m').val());
+    var msg = $('#m').val();
+    var usr = $('.title').attr('id');
+    var room = $('#room').html()
+    socket.emit('chat message', { msg, usr, room } );
     $('#m').val('');
     return false;
   });
 
-  socket.on('chat message', function(msg){
-    var appendee = `{{username}}: ${msg}`;
+  socket.on('chat message', function(chat){
+    console.log('room ', chat.room)
+    var appendee = `${chat.usr}: ${chat.msg}`;
     $('#messages').append($('<li>').text(appendee));
   })
 
+
+  //room SOCKETS
   $('.roomform').submit(function() {
     socket.emit('new room', $('#roominput').val());
     $('#roominput').val();

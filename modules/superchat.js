@@ -11,6 +11,14 @@ superchat.addNewRoom = function(room) {
 	redisClient.rpush("rooms", room);
 };
 
+superchat.saveChatUsr = function(usr, room) {
+	redisClient.rpush(`${room}Users`, usr);
+};
+
+superchat.saveChatMsg = function(msg, room) {
+	redisClient.rpush(`${room}Messages`, msg);
+};
+
 superchat.readList = function(listname) {
 	return new Promise((resolve, reject) => {
 		redisClient.lrange(listname, 0, -1, (err, reply) => {

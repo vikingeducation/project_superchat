@@ -1,8 +1,7 @@
 <div class="container-fluid box">
   <div class="row">
-    <h2>SUEPERCHAT // welcome "{{username}}"</h2>
-    <h1>{{room}} room</h1>
-
+    <h2 class="title" id="{{username}}">SUEPERCHAT // welcome "{{username}}"</h2>
+    <h1 id="room">{{room}}</h1>
   </div>
 </div>
 
@@ -10,13 +9,12 @@
   <button type="submit" name="logout">Log out</button>
 </form>
 
-<ul id="users">
+
+<ul id="messages">
   {{#each users as |user|}}
-    <li>{{user}}</li>
-    <li>dummy user</li>
+    <li>{{user}}: {{lookup ../messages @index}}</li>
   {{/each}}
 </ul>
-<ul id="messages"></ul>
 <form class="form" action="">
   <input class="inp" id="m" autocomplete="off" /><button>Send</button>
 </form>
