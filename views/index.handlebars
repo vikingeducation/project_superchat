@@ -1,11 +1,41 @@
-<h1>Hello world</h1>
+<div class="container">
+  <div class="row">
+    <h2>SUEPERCHAT {{username}}</h2>
+    <form class="logout" action="/logout" method="post">
+      <button type="submit" name="logout">Log out</button>
+    </form>
+  </div>
+</div>
 
+<ul id="users">
+  {{#each users as |user|}}
+    <li>{{user}}</li>
+    <li>dummy user</li>
+  {{/each}}
+</ul>
 <ul id="messages"></ul>
-<form action="">
-  <input id="m" autocomplete="off" /><button>Send</button>
+<form class="form" action="">
+  <input class="inp" id="m" autocomplete="off" /><button>Send</button>
 </form>
 
 
 <script>
-  var socket = io();
+
+var socket = io();
+
+$(document).ready( () => {
+
+  $('.form').submit(function(){
+    socket.emit('chat message', $('#m').val());
+    $('#m').val('');
+    return false;
+  });
+
+  socket.on('chat message', function(msg){
+    var appendee = `{{username}}: ${msg}`
+    $('#messages').append($('<li>').text(appendee))
+  })
+
+});
+
 </script>

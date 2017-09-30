@@ -35,11 +35,43 @@ app.engine(
 app.set("view engine", "handlebars");
 
 app.get("/", (req, res) => {
-	res.render("index");
+	var username = req.cookies["username"];
+	if (username == "" || username == undefined) {
+		res.render("login");
+	} else {
+		res.redirect(`/chat/${username}`);
+	}
+});
+
+app.post("/", (req, res) => {
+	var username = req.body.username;
+	if (username == "") {
+		res.redirect("/");
+	} else {
+		res.cookie("username", username);
+		res.redirect(`/chat/${username}`);
+	}
+});
+
+app.post("/logout", (req, res) => {
+	res.clearCookie("username");
+	res.redirect("/");
+});
+
+app.get("/chat/:username", (req, res) => {
+	var username = req.cookies["username"];
+	res.render("index", { username });
 });
 
 io.on("connection", socket => {
 	console.log("a user connected");
+	socket.on("disconnect", () => {
+		console.log("user disconnected");
+	});
+	socket.on("chat message", function(msg) {
+		io.emit("chat message", msg);
+		console.log("message " + msg);
+	});
 });
 
 server.listen(3000, () => {
