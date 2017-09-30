@@ -19,6 +19,37 @@
   {{{body}}}
 </body>
 
+<script>
+
+var socket = io();
+
+$(document).ready( () => {
+
+  $('.form').submit(function(){
+    socket.emit('chat message', $('#m').val());
+    $('#m').val('');
+    return false;
+  });
+
+  socket.on('chat message', function(msg){
+    var appendee = `{{username}}: ${msg}`;
+    $('#messages').append($('<li>').text(appendee));
+  })
+
+  $('.roomform').submit(function() {
+    socket.emit('new room', $('#roominput').val());
+    $('#roominput').val();
+    return false;
+  })
+
+  socket.on('new room', function(room){
+    var appendee = `<a href="/rooms/` + '{{username}}' + `/chat/${room}">${room}</a>`;
+    $('#rooms').append($('<li>').html(appendee))
+  })
+
+});
+
+</script>
 
 
 </html>

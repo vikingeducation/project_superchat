@@ -1,11 +1,14 @@
-<div class="container">
+<div class="container-fluid box">
   <div class="row">
-    <h2>SUEPERCHAT {{username}}</h2>
-    <form class="logout" action="/logout" method="post">
-      <button type="submit" name="logout">Log out</button>
-    </form>
+    <h2>SUEPERCHAT // welcome "{{username}}"</h2>
+    <h1>{{room}} room</h1>
+
   </div>
 </div>
+
+<form class="logout" action="/logout" method="post">
+  <button type="submit" name="logout">Log out</button>
+</form>
 
 <ul id="users">
   {{#each users as |user|}}
@@ -17,25 +20,3 @@
 <form class="form" action="">
   <input class="inp" id="m" autocomplete="off" /><button>Send</button>
 </form>
-
-
-<script>
-
-var socket = io();
-
-$(document).ready( () => {
-
-  $('.form').submit(function(){
-    socket.emit('chat message', $('#m').val());
-    $('#m').val('');
-    return false;
-  });
-
-  socket.on('chat message', function(msg){
-    var appendee = `{{username}}: ${msg}`
-    $('#messages').append($('<li>').text(appendee))
-  })
-
-});
-
-</script>

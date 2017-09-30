@@ -3,6 +3,9 @@ const app = express();
 var server = require("http").createServer(app);
 var io = require("socket.io")(server);
 
+//superchat
+const superchat = require("./modules/superchat");
+
 //for body parsing
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -34,43 +37,76 @@ app.engine(
 );
 app.set("view engine", "handlebars");
 
+//GETS
+
+//get login or redirect
 app.get("/", (req, res) => {
 	var username = req.cookies["username"];
 	if (username == "" || username == undefined) {
 		res.render("login");
 	} else {
-		res.redirect(`/chat/${username}`);
+		res.redirect(`/rooms/${username}`);
 	}
 });
 
+//getroompage
+app.get("/rooms/:username", (req, res) => {
+	var username = req.cookies["username"];
+	superchat
+		.readList("rooms")
+		.then(rooms => {
+			res.render("rooms", { username, rooms });
+		})
+		.catch(err => {
+			if (err) {
+				console.error(err);
+			}
+		});
+});
+
+//get chatroom
+app.get("/rooms/:username/chat/:room", (req, res) => {
+	var username = req.cookies["username"];
+	var room = req.params.room;
+	res.render("index", { username, room });
+});
+
+//POSTS
+
+//post coookie for username
 app.post("/", (req, res) => {
 	var username = req.body.username;
 	if (username == "") {
 		res.redirect("/");
 	} else {
 		res.cookie("username", username);
-		res.redirect(`/chat/${username}`);
+		res.redirect(`/rooms/${username}`);
 	}
 });
 
+//delete username cookie
 app.post("/logout", (req, res) => {
 	res.clearCookie("username");
 	res.redirect("/");
 });
 
-app.get("/chat/:username", (req, res) => {
-	var username = req.cookies["username"];
-	res.render("index", { username });
-});
+//SOCKETS
 
 io.on("connection", socket => {
 	console.log("a user connected");
 	socket.on("disconnect", () => {
 		console.log("user disconnected");
 	});
+
 	socket.on("chat message", function(msg) {
 		io.emit("chat message", msg);
 		console.log("message " + msg);
+	});
+
+	socket.on("new room", function(room) {
+		superchat.addNewRoom(room);
+		io.emit("new room", room);
+		console.log("room ", room);
 	});
 });
 

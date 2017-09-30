@@ -5,6 +5,8 @@
 }
 body {
 	font: 13px Helvetica, Arial;
+	background-color: grey;
+	color: white;
 }
 .form {
 	background: #000;
@@ -12,6 +14,7 @@ body {
 	position: fixed;
 	bottom: 0;
 	width: 100%;
+	color: black;
 }
 #m {
 	border: 0;
@@ -35,4 +38,33 @@ form button {
 }
 #messages li:nth-child(odd) {
 	background: #eee;
+	color: black;
+}
+
+.logout {
+	position: fixed;
+	top: 0;
+	right: 0;
+	width: 100px;
+}
+
+.logout button {
+	width: 100%;
+}
+
+.box {
+	background-color: lightgrey;
+}
+
+.box div {
+	padding: 10px;
+}
+
+li {
+	list-style: none;
+}
+
+a {
+	font-size: 35px;
+	padding 20px;
 }

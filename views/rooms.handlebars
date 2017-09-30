@@ -1,0 +1,23 @@
+<div class="container-fluid box">
+  <div class="row">
+    <h2>SUEPERCHAT // welcome "{{username}}"</h2>
+    <form class="roomform" action="/addRoom" method="post">
+      <label for="addroom">ADD A NEW ROOM</label><br>
+      <input type="text" name="addroom" value="" id="roominput" placeholder="add a new room">
+      <button type="submit" name="addroom">ADD</button>
+    </form>
+  </div>
+</div>
+
+<form class="logout" action="/logout" method="post">
+  <button type="submit" name="logout">Log out</button>
+</form>
+
+<div class="container">
+  <h2>OR JOIN THESE ROOMS:</h2>
+  <ul id="rooms">
+    {{#each rooms as |room|}}
+      <li><a href="/rooms/{{../username}}/chat/{{room}}">{{room}}</a></li>
+    {{/each}}
+  </ul>
+</div>
