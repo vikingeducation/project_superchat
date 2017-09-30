@@ -75,8 +75,6 @@ app.get("/rooms/:username/chat/:room", (req, res) => {
 		.then(chatObj => {
 			let users = chatObj[0];
 			let messages = chatObj[1];
-			console.log("users", users);
-			console.log("messages", messages);
 			res.render("index", { username, room, users, messages });
 		})
 		.catch(err => {
@@ -108,24 +106,18 @@ app.post("/logout", (req, res) => {
 //SOCKETS
 
 io.on("connection", socket => {
-	console.log("a user connected");
-	socket.on("disconnect", () => {
-		console.log("user disconnected");
-	});
-
 	//messages
 	socket.on("chat message", function(chat) {
 		superchat.saveChatUsr(chat.usr, chat.room);
 		superchat.saveChatMsg(chat.msg, chat.room);
 		io.emit("chat message", chat);
-		console.log(`message: ${chat.usr}: ${chat.msg} in room ${chat.room}`);
+		//console.log(`message: ${chat.usr}: ${chat.msg} in room ${chat.room}`);
 	});
 
 	//rooms
 	socket.on("new room", function(room) {
 		superchat.addNewRoom(room);
 		io.emit("new room", room);
-		console.log("room ", room);
 	});
 });
 
