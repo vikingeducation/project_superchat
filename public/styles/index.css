@@ -1,0 +1,182 @@
+.all-content{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.content > div {
+    display: inline-block;
+}
+
+.body-content {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+.chat-header {
+    background-color: darkslategrey;
+    width: 100%;
+    color: white
+    
+}
+.chat-body{
+    margin-left: 20px;
+}
+
+.chat-form {
+    margin: 20px;
+}
+
+.room-form{
+    margin: 20px;
+}
+.content{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+}
+
+.room {
+    border: 0.5px solid lightgray;
+    border-radius: 1px;
+
+    margin: 20px;
+}
+
+.message-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.fa-window-close{
+    color: rgb(217,83,79);
+    font-size: 20px !important;
+}
+
+.fa-window-close:hover{
+    font-size: 23px !important;
+    cursor: pointer;
+}
+
+.message-room-header{
+    display: inline;
+    background-color: darkslategrey;
+    color: white
+}
+
+.header{
+    display: inline;
+    background-color: darkslategrey;
+    color: white
+}
+
+ul {
+    list-style-type: none;
+}
+li {
+    margin: 20px 50px 20px 10px;
+    border-bottom: 1px solid rgb(232, 232, 232); 
+    max-width: 150px;
+    
+}
+
+.radio-group{
+    position: relative;
+    border: 1px solid lightgray;
+    border-bottom: none;
+    width: 250px;
+    
+}
+
+.radio{
+    display: inline-block;
+    cursor: pointer;
+    padding: 10px;
+    width: 200px;
+    margin-left: 20px;
+    border-bottom: 1px solid rgb(232, 232, 232); 
+    font-weight: bold;
+}
+
+.radio.selected{
+    color: darkcyan;
+    font-size: 20px;
+    
+}
+
+.chat-list-and-rooms {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.room-list{
+    margin: 20px 0px 0px;
+}
+
+.inputs{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 50px;
+}
+
+.chat-form .inputs{
+    margin-top: 20px;
+}
+
+
+.chat-form{
+    display: none;
+    border: 1px solid lightgray;
+    height: 200px;
+    width: 300px;
+    overflow: hidden;
+}
+
+textarea{
+    resize: none;
+}
+
+.room-form .inputs{
+    margin-top: 20px;
+}
+
+
+.room-form .inputs input{
+    margin-bottom: 10px;
+}
+.room-form{
+    border: 1px solid lightgray;
+    height: 130px;
+    width: 250px;
+        
+}
+
+.btn {
+    border-radius: 0px !important;
+}
+
+.author h4{
+    font-weight: bold;
+    margin: 0px;
+}
+
+.login{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 50px 0px 0px 0px;
+}
+
+.login form {
+    margin-top: 20px;
+}
+
+.login form .btn{
+    margin-top: 5px;
+}
+.body {
+    color: gray;
+}

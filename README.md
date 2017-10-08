@@ -1,2 +1,2 @@
-# project_superchat
-Build a realtime multi-room chat application. Make it super.
+
+Node/Express chat application. Using Socket.IO as a real-time event based communication between clients and server. The chat containts option for multiple chat rooms as well ability to create more chat rooms.  
