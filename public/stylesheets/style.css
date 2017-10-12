@@ -11,7 +11,7 @@ a {
   font-size: 24px;
 }
 
-.chunk {
+.box {
   border: 1px solid #e0e0e0;
   padding-right: 15px;
   padding-left: 15px;
@@ -20,13 +20,17 @@ a {
   margin-bottom: 30px;
 }
 
-.chunk h1, .chunk h2, .chunk h3, .chunk h4 {
+.box h1, .box h2, .box h3, .box h4 {
   margin-top: 10px;
 }
 
 #messages-title {
   padding-bottom: 20px;
   border-bottom: 1px solid #cccccc;
+}
+
+#no-message-alert {
+  margin: 40px 0;
 }
 
 #messages-scroller {

@@ -1,68 +1,16 @@
-<nav class="navbar navbar-default">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <a class="navbar-brand">Super Chat</a>
-    </div>
-  </div>
-</nav>
-<div class="chunk col-sm-6 col-sm-offset-3" >
+<div class="box col-sm-6 col-sm-offset-3" >
   <h3 id="messages-title">Messages</h3>
   <div id="messages-scroller">
-    <section class="message" >
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-      tempor incididunt ut labore et dolore magna aliqua.</p>
-      <small>Created on 10/10/2017 9:18pm</small>
-    </section>
-    <hr>
-
-    <section class="message">
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-      tempor incididunt ut labore et dolore magna aliqua.</p>
-      <small>Created on 10/10/2017 9:18pm</small>
-    </section>
-    <hr>
-
-    <section class="message">
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-      tempor incididunt ut labore et dolore magna aliqua.</p>
-      <small>Created on 10/10/2017 9:18pm</small>
-    </section>
-    <hr>
-
-    <section class="message">
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-      tempor incididunt ut labore et dolore magna aliqua.</p>
-      <small>Created on 10/10/2017 9:18pm</small>
-    </section>
-    <hr>
-
-    <section class="message">
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-      tempor incididunt ut labore et dolore magna aliqua.</p>
-      <small>Created on 10/10/2017 9:18pm</small>
-    </section>
-    <hr>
-
-    <section class="message">
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-      tempor incididunt ut labore et dolore magna aliqua.</p>
-      <small>Created on 10/10/2017 9:18pm</small>
-    </section>
-    <hr>
-
-    <section class="message">
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-      tempor incididunt ut labore et dolore magna aliqua.</p>
-      <small>Created on 10/10/2017 9:18pm</small>
-    </section>
-    <hr>
-
-    <section class="message">
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-      tempor incididunt ut labore et dolore magna aliqua.</p>
-      <small>Created on 10/10/2017 9:18pm</small>
-    </section>
+    {{#if messages}}
+      {{#each messages as |message|}}
+        {{addHr ../messages message}}
+        {{> message}}
+      {{/each}}
+    {{else}}
+      <h4 id="no-message-alert">There are no messages yet. You can add one below.</h4>
+    {{/if}}
   </div>
+
   <div>
     <hr>
     <form id="new-message-form" class="form-inline clearfix" method="POST">

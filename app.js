@@ -23,6 +23,7 @@ const hbs = exphbs.create({
 
 app.engine('hbs', hbs.engine);
 app.set('view engine', 'hbs');
+app.set('Handlebars', hbs);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
