@@ -4,30 +4,32 @@ const redis = require('redis');
 const redisClient = redis.createClient();
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
+router.get('/', (req, res, next) => {
   if (!req.cookies.currentUser) {
     res.redirect('/login');
   } else {
     const username = req.cookies.currentUser;
 
-    redisClient.keys('messages:general:*', (err, keys) => {
-      var messages = [];
+    getRooms().then(rooms => {
+      redisClient.keys('messages:general:*', (err, keys) => {
+        var messages = [];
 
-      if (keys.length === 0) {
-        res.render('index', { username });
-      } else {
-        keys.forEach((key) => {
-          redisClient.hgetall(key, (err, message) => {
+        if (keys.length === 0) {
+          res.render('index', { username, rooms });
+        } else {
+          keys.forEach((key) => {
+            redisClient.hgetall(key, (err, message) => {
 
-            messages.push(message);
+              messages.push(message);
 
-            if (messages.length === keys.length) {
-              const sorted = messages.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
-              res.render('index', { messages: sorted, username });
-            }
+              if (messages.length === keys.length) {
+                const sorted = messages.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+                res.render('index', { messages: sorted, username, rooms });
+              }
+            });
           });
-        });
-      }
+        }
+      });
     });
   }
 });
@@ -56,5 +58,25 @@ router.post('/logout', (req, res) => {
   res.clearCookie("currentUser");
   res.redirect('/login');
 });
+
+const getRooms = () => {
+  return new Promise((resolve, reject) => {
+    redisClient.keys('room:*', (err, roomKeys) => {
+      var rooms = [];
+
+      roomKeys.forEach(roomKey => {
+        redisClient.smembers(roomKey, (err, members) => {
+          var name = roomKey.slice(5);
+
+          rooms.push({ name: name, memberAmount: members.length });
+
+          if (rooms.length === roomKeys.length) {
+            resolve(rooms);
+          }
+        });
+      });
+    });
+  });
+};
 
 module.exports = router;

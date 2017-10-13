@@ -1,4 +1,22 @@
-<div class="box col-sm-6 col-sm-offset-3" >
+{{> new_chat_modal}}
+<div class="box col-sm-3" id="chat-room-box" >
+  <h3 id="chat-main-title">Chat Rooms</h3>
+  <div id="chat-scroller">
+    <section class="chat-room clickable" id="new-chatroom">
+      <p>
+        <span class="glyphicon glyphicon-plus"></span>
+        <b>New Chat Room</b>
+      </p>
+      <small>Create a new chat room</small>
+    </section>
+    <div id="chat-list"></div>
+    {{#each rooms}}
+      {{> room}}
+    {{/each}}
+  </div>
+</div>
+
+<div class="box col-sm-6 col-sm-offset-1" >
   <h3 id="messages-title">Messages</h3>
   <div id="messages-scroller">
     {{#if messages}}

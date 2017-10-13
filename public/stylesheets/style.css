@@ -16,10 +16,12 @@ a {
   margin-bottom: 0;
 }
 
-.navbar-text {
-  position: absolute;
-  right: 10px;
-  width: 180px;
+.navbar-header {
+  width: 100%;
+}
+
+#logout-form small {
+  margin-left: 10px;
 }
 
 .box {
@@ -35,8 +37,8 @@ a {
   margin-top: 10px;
 }
 
-#messages-title {
-  padding-bottom: 20px;
+#messages-title, #chat-main-title {
+  padding-bottom: 10px;
   border-bottom: 1px solid #cccccc;
 }
 
@@ -44,33 +46,45 @@ a {
   margin: 40px 0;
 }
 
-#messages-scroller {
+#messages-scroller, #chat-scroller {
   overflow:scroll;
   overflow-x:hidden;
   max-height:300px;
 }
 
-.message {
+.message, .chat-room {
   padding: 10px;
 }
 
+#chat-room-box {
+  padding-left: 0;
+}
+
+#chat-main-title {
+  margin-left: 15px;
+}
+
+.chat-room {
+  padding-left: 15px;
+}
+
 /* Scrollbar styles */
-#messages-scroller::-webkit-scrollbar {
+#messages-scroller::-webkit-scrollbar, #chat-scroller::-webkit-scrollbar {
 width: 12px;
 height: 12px;
 }
 
-#messages-scroller::-webkit-scrollbar-track {
+#messages-scroller::-webkit-scrollbar-track, #chat-scroller::-webkit-scrollbar-track {
 background: #f5f5f5;
 border-radius: 10px;
 }
 
-#messages-scroller::-webkit-scrollbar-thumb {
+#messages-scroller::-webkit-scrollbar-thumb, #chat-scroller::-webkit-scrollbar-thumb {
 border-radius: 10px;
 background: #ccc;
 }
 
-#messages-scroller::-webkit-scrollbar-thumb:hover {
+#messages-scroller::-webkit-scrollbar-thumb:hover, #chat-scroller::-webkit-scrollbar-thumb:hover {
 background: #999;
 }
 
@@ -89,4 +103,16 @@ textarea {
 
 #login-form {
   padding: 20px;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+section.clickable:hover {
+  background-color: #f8f8f8;
+}
+
+.room-divider {
+  margin: 0;
 }

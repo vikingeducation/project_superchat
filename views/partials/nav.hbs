@@ -1,9 +1,9 @@
 <nav class="navbar navbar-default">
   <div class="container-fluid">
     <div class="navbar-header">
-      <a class="navbar-brand">Super Chat</a>
+     <b><a class="navbar-brand pull-left">Super Chat</a></b>
       {{#if username}}
-        <span class="navbar-text">
+        <span class="navbar-text pull-right">
           <h4 id="welcome-header">Welcome, {{username}}
             <form action="/logout" method="POST" class="pull-right" id="logout-form">
               <small><a id="logout-link" href="/logout">Logout</a></small>
