@@ -26,6 +26,8 @@ const io = require('socket.io')(server);
 const socket = require('../lib/socket_service');
 socket.setup(io);
 
+module.exports = io;
+
 /**
  * Listen on provided port, on all network interfaces.
  */

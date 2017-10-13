@@ -1,7 +1,7 @@
 <hr class="room-divider">
-<section class="chat-room clickable">
-  <p>
-    <b>{{this.name}}</b>
+<section class="chat-room room-select clickable {{this.active}}" id="room-{{this.slug}}">
+  <p class="chat-room-element">
+    <b class="chat-room-element">{{this.name}}</b>
   </p>
-  <small>{{this.memberAmount}} Members</small>
+  <small class="chat-room-element" id="member-count-{{this.slug}}">{{this.memberAmount}} Members</small>
 </section>

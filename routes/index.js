@@ -1,5 +1,5 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 const redis = require('redis');
 const redisClient = redis.createClient();
 
@@ -8,27 +8,37 @@ router.get('/', (req, res, next) => {
   if (!req.cookies.currentUser) {
     res.redirect('/login');
   } else {
+    var chatRoom = req.cookies.chatRoom;
+    if (!chatRoom) {
+      chatRoom = 'General';
+    }
+    chatRoom = chatRoom.split(' ').join('-');
+
     const username = req.cookies.currentUser;
 
-    getRooms().then(rooms => {
-      redisClient.keys('messages:general:*', (err, keys) => {
+    getRooms(chatRoom).then(rooms => {
+      redisClient.keys(`messages:${chatRoom}:*`, (err, keys) => {
         var messages = [];
 
-        if (keys.length === 0) {
-          res.render('index', { username, rooms });
-        } else {
-          keys.forEach((key) => {
-            redisClient.hgetall(key, (err, message) => {
+        checkUserMember(chatRoom, username).then(isMember => {
 
-              messages.push(message);
+          if (keys.length === 0) {
+            res.render('index', { username, rooms, chatRoomName: chatRoom.split('-').join(' '), chatRoom, isMember });
+          } else {
+            keys.forEach((key) => {
+              redisClient.hgetall(key, (err, message) => {
 
-              if (messages.length === keys.length) {
-                const sorted = messages.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
-                res.render('index', { messages: sorted, username, rooms });
-              }
+                messages.push(message);
+
+                if (messages.length === keys.length) {
+                  const sorted = messages.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+                  chatRoomName = chatRoom.split('-').join(' ');
+                  res.render('index', { messages: sorted, username, rooms, chatRoomName, chatRoom, isMember });
+                }
+              });
             });
-          });
-        }
+          }
+        });
       });
     });
   }
@@ -43,11 +53,21 @@ router.get('/login', (req, res) => {
 });
 
 router.post('/login', (req, res) => {
+  const io = require('../bin/www');
+
   var username = req.body.username.trim();
 
   redisClient.sismember('users', username, (err, existing) => {
     if (!existing) {
       redisClient.sadd('users', username);
+      redisClient.sadd('room:General', username);
+
+      io.on('connection', client => {
+        redisClient.smembers('room:General', (err, members) => {
+          var memberCount = members.length;
+          io.emit('change-member-count', 'General', memberCount);
+        });
+      });
     }
     res.cookie('currentUser', username);
     res.redirect('/');
@@ -59,22 +79,45 @@ router.post('/logout', (req, res) => {
   res.redirect('/login');
 });
 
-const getRooms = () => {
+const getRooms = (chatRoom) => {
   return new Promise((resolve, reject) => {
-    redisClient.keys('room:*', (err, roomKeys) => {
-      var rooms = [];
+    redisClient.smembers('users', (err, list) => {
 
-      roomKeys.forEach(roomKey => {
-        redisClient.smembers(roomKey, (err, members) => {
-          var name = roomKey.slice(5);
+      var totalUsers = list.length;
 
-          rooms.push({ name: name, memberAmount: members.length });
+      redisClient.keys('room:*', (err, roomKeys) => {
+        var rooms = [];
 
-          if (rooms.length === roomKeys.length) {
-            resolve(rooms);
-          }
+        if (!roomKeys.length) {
+          resolve(rooms);
+        }
+
+        roomKeys.forEach(roomKey => {
+          redisClient.smembers(roomKey, (err, members) => {
+
+            var slug = roomKey.slice(5);
+            var name = slug.split('-').join(' ');
+
+            if (slug == chatRoom) {
+              rooms.push({ name: name, memberAmount: members.length, active: 'active', slug: slug });
+            } else {
+              rooms.push({ name: name, memberAmount: members.length, slug: slug });
+            }
+
+            if (rooms.length === roomKeys.length) {
+              resolve(rooms);
+            }
+          });
         });
       });
+    });
+  });
+};
+
+const checkUserMember = (room, user) => {
+  return new Promise((resolve, reject) => {
+    redisClient.sismember(`room:${ room }`, user, (err, isMember) => {
+      resolve(isMember);
     });
   });
 };

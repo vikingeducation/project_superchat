@@ -9,7 +9,6 @@ const exphbs = require('express-handlebars');
 
 
 const index = require('./routes/index');
-const users = require('./routes/users');
 
 const app = express();
 
@@ -34,7 +33,6 @@ app.use(logger('short'));
 app.use(morganToolkit());
 
 app.use('/', index);
-app.use('/users', users);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
