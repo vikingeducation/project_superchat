@@ -27,6 +27,7 @@ app.set('Handlebars', hbs);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/socket.io',express.static(path.join(__dirname, 'node_modules/socket.io-client/dist/')));
 app.use(logger('short'));

@@ -19,7 +19,9 @@ $(document).ready(() => {
     // clear message
     $('#message').val('');
 
-    socket.emit('new-message', messageInfo);
+    var username = getCookie('currentUser');
+
+    socket.emit('new-message', messageInfo, username);
   });
 
   socket.on('render-message', (partial) => {
@@ -38,4 +40,10 @@ const scrollToBottom = () => {
     scrollTop: $('#messages-scroller')
     .prop("scrollHeight")},
   1000);
+};
+
+const getCookie = (name) => {
+  var value = "; " + document.cookie;
+  var parts = value.split("; " + name + "=");
+  if (parts.length == 2) return parts.pop().split(";").shift();
 };

@@ -2,6 +2,15 @@
   <div class="container-fluid">
     <div class="navbar-header">
       <a class="navbar-brand">Super Chat</a>
+      {{#if username}}
+        <span class="navbar-text">
+          <h4 id="welcome-header">Welcome, {{username}}
+            <form action="/logout" method="POST" class="pull-right" id="logout-form">
+              <small><a id="logout-link" href="/logout">Logout</a></small>
+            </form>
+          </h4>
+        </span>
+      {{/if}}
     </div>
   </div>
 </nav>
