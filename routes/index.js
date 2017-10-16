@@ -5,6 +5,10 @@ const redisClient = redis.createClient();
 
 /* GET home page. */
 router.get('/', (req, res, next) => {
+  redisClient.keys('*', (err, keys) => {
+    console.log(keys);
+  });
+
   if (!req.cookies.currentUser) {
     res.redirect('/login');
   } else {
