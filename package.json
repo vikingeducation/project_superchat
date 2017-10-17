@@ -1,0 +1,27 @@
+{
+  "name": "project_superchat",
+  "version": "1.0.0",
+  "description": "Build a realtime multi-room chat application. Make it super.",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/maddiereddy/project_superchat.git"
+  },
+  "author": "Maddie Rajavasireddy",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/maddiereddy/project_superchat/issues"
+  },
+  "homepage": "https://github.com/maddiereddy/project_superchat#readme",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "express-handlebars": "^3.0.0",
+    "redis": "^2.8.0",
+    "socket.io": "^2.0.3",
+    "socket.io-client": "^2.0.3"
+  }
+}
