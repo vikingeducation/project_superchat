@@ -21,19 +21,19 @@
   <h3 id="messages-title">{{chatRoomName}}
     {{#if isMember}}
       <a href="#" class="pull-right leave-link">
-        <small id="leave-{{chatRoom}}_{{username}}">Leave Chat</small>
+        <small id="leave-{{activeRoom}}_{{username}}">Leave Chat</small>
       </a>
     {{/if}}
   </h3>
   {{#if isMember}}
-    <div id="messages-scroller-{{chatRoom}}" class="messages-scroller">
+    <div id="messages-scroller-{{activeRoom}}" class="messages-scroller">
       {{#if messages}}
         {{#each messages as |message|}}
           {{addHr ../messages message}}
           {{> message}}
         {{/each}}
       {{else}}
-        <h4 id="no-message-alert-{{chatRoom}}" class="no-message-alert">There are no messages yet. You can add one below.</h4>
+        <h4 id="no-message-alert-{{activeRoom}}" class="no-message-alert">There are no messages yet. You can add one below.</h4>
       {{/if}}
     </div>
 
@@ -49,7 +49,7 @@
     </div>
   {{else}}
     <p id="member-alert">You need to be a member to chat.
-      <a href="#" id="join-{{chatRoom}}_{{username}}" class="join-link">Join</a>
+      <a href="#" id="join-{{activeRoom}}_{{username}}" class="join-link">Join</a>
     </p>
   {{/if}}
 </div>
