@@ -29,8 +29,6 @@ router.get('/login', (req, res) => {
 router.post('/login', (req, res) => {
   var username = req.body.username.trim();
 
-  debugger;
-
   login.addUser(username).then(() => {
     res.cookie('currentUser', username);
     res.redirect('/');
