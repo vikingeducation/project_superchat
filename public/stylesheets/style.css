@@ -1,0 +1,97 @@
+.navbar-container {
+	color: tomato;
+	background-color: lightgray;
+	width: 100%;
+	height: 100px;
+	line-height: 100px;
+	border-radius: 5px;
+	border: solid 2px limegreen;
+	font-family: Roboto, RobotoDraft, Arial, sans-serif;
+	font-size: 60px;
+	margin: auto;
+	text-align: center;
+}
+
+.container {
+	width: 100%;
+	margin-top: 30px;
+}
+
+.chats-container {
+	width: 45%;
+	float: left;
+	border: solid 2px limegreen;
+	background-color: lightgray;
+}
+
+.chats-container h3 {
+	margin: 10px;
+	padding-left: 10px;
+	color: black;
+	height: 40px;
+	line-height: 40px;
+	border-radius: 5px;
+	border: solid 2px tomato;
+	background-color: white;
+}	
+
+.chats-list {
+	background-color: lightgray;
+}
+
+#chat-messages {
+	min-height: 40px;
+	margin: 20px;
+	padding: 20px;
+	background-color: white;
+}
+
+#chat-messages h5 {
+	color: limegreen;
+	font-weight: bolder;
+}
+
+#chat-messages p {
+	color: tomato;
+}
+
+hr {
+	border-width: 2px;
+}
+
+.chat-footer {
+	height: 30px;
+}
+
+.new-post-container {
+	width: 45%;
+	border: solid 2px limegreen;
+	background-color: lightgray;
+	float: right;
+}
+
+.new-post-container h3 {
+	margin: 10px;
+	color: black;
+	width: 150px;
+	height: 40px;
+	line-height: 40px;
+	text-align: center;
+	border-radius: 5px;
+	border: solid 2px tomato;
+	background-color: white;
+}	
+
+#message-body {
+	margin: 30px auto;
+	width: 90%;
+	padding: 10px;
+	display: block;
+}
+
+.btn {
+	margin: 20px auto;
+	padding: 10px;
+	display: block;
+	width: 100px;
+}

@@ -18,23 +18,46 @@
 </head>
 
 <body>
-  <div class="navbar navbar-default">
+  <nav class="navbar navbar-fixed-top">
     <div class="navbar-container">
-      <h1>SUPER CHAT</h1>
+      <div class="navbar-header">
+        <p>SUPER CHAT</p>
+      </div>
     </div>
-  </div>
+  </nav>
 
   <div class="container">
   {{{body}}}
   </div>
 
   <script>
-    var socket = io.connect('http://localhost:4700')
+    const socket = io.connect('http://localhost:4700')
+    const $chatMessages = $('#chat-messages');
+    const $chatRoom = $('#chatroom');
 
-    // socket.on('updateCount', function(data) {
-    //   console.log(`count: ${data.count}`)
-    //   $(`#${data.shortURL}-count`).html(data.count)
-    // })
+    socket.on('new message', messages => {
+      $chatMessages.html('')
+      if (messages.length === 0) {
+        $chatMessages.append(`<h5></h5>`)
+        $chatMessages.append('<p>Hello World, waiting to chat with you!</p>')
+        $chatMessages.append('<hr>')
+      } else {
+        appendMessages(messages)
+      }
+    })
+
+    const appendMessages = messages => {
+      messages.forEach(message => {
+        message = JSON.parse(message)
+
+        $chatRoom.html(`${message.chatroom} Chatroom`)
+        $chatMessages.append(`<h5>${message.user}</h5>`)
+        $chatMessages.append(`<p>${message.text}</p>`)
+        $chatMessages.append(`<sub>${new Date(message.date)}<sub>`)
+        $chatMessages.append('<hr>')
+      })
+    }
+
   </script>
 
 </body>

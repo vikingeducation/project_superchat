@@ -1,1 +1,17 @@
-<h1>{{title}}</h1>
+<div class="chats-container">
+  <h3 id="chatroom">Chatroom </h3>
+  <div class="chats-list">
+    <div id="chat-messages">
+      
+    </div>
+    <div class="chat-footer">
+    </div>
+  </div>
+</div>
+<div class="new-post-container">
+  <form action="/update" method="POST">
+      <h3>New Post</h3>
+      <textarea id="message-body" rows="10" cols="50" placeholder="Start a post" name="newPost" required></textarea>
+      <button type="submit" class="btn btn-success">Send</button>
+    </form>
+</div>
