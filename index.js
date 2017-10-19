@@ -28,7 +28,8 @@ app.post('/update', (req, res) =>{
   Promise.all([p1, p2]).then(values => {
     let messages = values[1];
     io.sockets.emit('new message', messages);
-    res.redirect('back');
+    //res.redirect('back');
+    res.end();
   });
 });
 
@@ -38,8 +39,6 @@ io.on('connection', client => {
   p1.then(messages => {
     client.emit('new message', messages);
   });
-
-  client.on('send message', () =>{});
 });
 
 server.listen(4700, () => {

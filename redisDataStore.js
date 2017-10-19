@@ -1,7 +1,7 @@
 const redis = require('redis');
 const redisClient = redis.createClient();
 
-redisClient.del('main');
+// redisClient.del('Main');
 
 const newPost = (message) => {
   let post = {
