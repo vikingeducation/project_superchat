@@ -3,9 +3,9 @@ const redisClient = redis.createClient();
 
 // redisClient.del('Main');
 
-const newPost = (message) => {
+const newPost = (message, username) => {
   let post = {
-    user: 'Maddie',
+    user: username,
     text: message,
     date: Date.now(),
     chatroom: 'Main'

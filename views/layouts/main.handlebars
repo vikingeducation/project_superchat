@@ -24,9 +24,13 @@
 <body>
   <nav class="navbar navbar-fixed-top">
     <div class="navbar-container">
-      <div class="navbar-header">
         <p>Super Chat</p>
-      </div>
+        {{#if username}}
+        <div class="logout">
+          <h5>User: <span class="username">{{ username }}</span></h5>
+          <h5><a href="/logout">Sign Out</a></h5>
+        </div>
+        {{/if}}
     </div>
   </nav>
 
