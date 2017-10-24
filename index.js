@@ -5,7 +5,7 @@ const cookieParser = require('cookie-parser');
 const app = express();
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
-const { newPost, getAllPosts, newRoom, getAllRooms } = require('./redisDataStore');
+const { newPost, getAllPosts, newRoom, getAllRooms, getNumRoomUsers } = require('./redisDataStore');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -61,10 +61,31 @@ app.get('/newroom', (req, res) => {
   if (!username) {
     res.render('user');
   } else {
-    getAllRooms().then(rooms => {
+    let p1 = getAllRooms();
+    p1.then(rooms => {
       io.sockets.emit('update rooms', rooms);
       res.render('chatroom', {rooms, Chatroom});
     });
+
+    // Tried to get number of members of each room and send it to chatroom page
+    
+    // let roomObj = [];
+    // p1.then(rooms => {
+    //   rooms.forEach(room => {
+    //     let p2 = getNumRoomUsers(room);
+    //     p2.then(num => {
+    //       roomObj.push({'name': room, 'num': num});
+    //     })  
+    //   })
+      
+    // }).then(() => {
+
+    //     console.log(roomObj);
+    //     res.render('chatroom', {roomObj, Chatroom});
+    // })
+
+
+    
   }
 });
 

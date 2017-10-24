@@ -54,16 +54,41 @@ const getAllRooms = () => {
       if (err) {
         reject(err);
       } else {
-        resolve(rooms);
+        resolve(rooms.sort());
       }
     });
   });
 };
+
+const getNumRoomUsers = (chatroom) => {
+  let users = [];
+  return new Promise((resolve, reject) => {
+    redisClient.lrange(chatroom, 0, -1, (err, posts) => {
+      if (err) {
+        reject(err);
+      } else {
+        posts.forEach(post => {
+          let values = post.split(',');
+          let user = values[0].split(':');
+          console.log("post: " +  user[1]);
+          if (users.length === 0) {
+            users.push(user[1])
+          } else {
+            if (!users.includes(user[1])) users.push(user[1]);
+          }
+        })
+       console.log(chatroom, users.length)
+       resolve(users.length);
+      }
+    })
+  })
+}
 
 
 module.exports = {
   newPost,
   getAllPosts,
   newRoom, 
-  getAllRooms
+  getAllRooms,
+  getNumRoomUsers
 };
