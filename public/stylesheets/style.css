@@ -47,6 +47,10 @@
 	font-weight: bolder;
 }
 
+.login-form input {
+	margin-left: 10px;
+}
+
 .username {
 	border-radius: 5px;
 	width: 200px;
@@ -54,14 +58,23 @@
 }
 
 
-
+/* index page */
 .container {
 	width: 100%;
 	margin-top: 30px;
 }
 
+.add-chatroom {
+	float: right;
+	margin-bottom: 20px;
+}
+
+.add-chatroom a {
+	color: tomato;
+}
+
 .chats-container {
-	width: 45%;
+	width: 50%;
 	float: left;
 	border: solid 2px limegreen;
 	background-color: lightgray;
@@ -112,7 +125,7 @@ hr {
 }
 
 .new-post-container {
-	width: 50%;
+	width: 45%;
 	border: solid 2px limegreen;
 	background-color: lightgray;
 	float: right;
@@ -145,3 +158,89 @@ hr {
 	display: block;
 	width: 100px;
 }
+
+
+/* add/switch chatroom page */
+
+.back-container {
+	float: left;	
+	width: 100%;
+	margin-bottom: 20px;
+}
+
+.back-container a{
+	color: tomato;
+}
+
+.chatrooms-container {
+	width: 50%;
+	float: left;
+	border: solid 2px limegreen;
+	background-color: lightgray;
+}
+
+.chatrooms-container h3 {
+	margin: 10px;
+	padding-left: 10px;
+	color: black;
+	height: 40px;
+	line-height: 40px;
+	border-radius: 5px;
+	border: solid 2px tomato;
+	background-color: white;
+	font-family: 'Architects Daughter', cursive;
+}	
+
+.chatrooms-list {
+	background-color: lightgray;
+}
+
+#room-list {
+	min-height: 40px;
+	margin: 20px;
+	padding: 20px;
+	background-color: white;
+}
+
+#room-list h3 {
+	color: limegreen;
+	font-weight: bolder;
+	font-family: 'Architects Daughter', cursive;
+	font-size: 20px
+}
+
+.newroom-container {
+	width: 45%;
+	border: solid 2px limegreen;
+	background-color: lightgray;
+	float: right;
+}
+
+.newroom-container h3 {
+	margin: 10px;
+	color: black;
+	padding-left: 10px;
+	height: 40px;
+	line-height: 40px;
+	border-radius: 5px;
+	border: solid 2px tomato;
+	background-color: white;
+	font-family: 'Architects Daughter', cursive;
+}	
+
+.newroom {
+	margin-left: 10px;
+}
+
+.newroom-form input {
+	margin-left: 10px;
+}
+
+.btn {
+	margin: 20px auto;
+	padding: 10px;
+	display: block;
+	width: 100px;
+}
+
+

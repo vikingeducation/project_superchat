@@ -5,7 +5,7 @@ const cookieParser = require('cookie-parser');
 const app = express();
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
-const { newPost, getAllPosts } = require('./redisDataStore');
+const { newPost, getAllPosts, newRoom, getAllRooms } = require('./redisDataStore');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -18,12 +18,26 @@ app.set('view engine', 'handlebars');
 app.use("/socket.io", express.static(__dirname + "node_modules/socket.io-client/dist/"));
 app.use(express.static(__dirname + '/public'));
 
+let Chatroom = '';  // global 
+
 app.get('/', (req, res) => {
   let username = req.cookies.username;
+  let chatroom = 'Main';
+  if (req.cookies.chatroom) {
+    chatroom = req.cookies.chatroom;
+  }
+
+  // console.log("chatroom: " + chatroom);
+  res.cookie("chatroom", chatroom);
+
+  Chatroom = chatroom;
   if (!username) {
     res.render('user');
   } else {
-    res.render('index', {username});
+    getAllPosts(chatroom).then(messages => {
+      io.sockets.emit('new message', messages)
+      res.render('index', { username, chatroom });
+    });
   }
 });
 
@@ -42,12 +56,40 @@ app.get('/logout', (req, res) => {
   res.redirect('/');
 });
 
-app.post('/update', (req, res) =>{
+app.get('/newroom', (req, res) => {
+  let username = req.cookies.username;
+  if (!username) {
+    res.render('user');
+  } else {
+    getAllRooms().then(rooms => {
+      io.sockets.emit('update rooms', rooms);
+      res.render('chatroom', {rooms, Chatroom});
+    });
+  }
+});
+
+app.post('/addroom', (req, res) => {
+  let room = req.body.newroom;
+  let p1 = newRoom(room);
+  let p2 = getAllRooms();
+
+  Promise.all([p1, p2]).then(values => {
+    let rooms = values[1];
+    io.sockets.emit('update rooms', rooms);
+    res.render('chatroom', {rooms, Chatroom});
+  });
+});
+
+
+app.post('/chatroom/:room/update', (req, res) => {
   let username = req.cookies.username;
   let message = req.body.newPost;
-  let p1 = newPost(message, username);
-  let p2 = getAllPosts('Main');
+  let chatroom = req.params.room;
 
+  let p1 = newPost(message, username, chatroom);
+  let p2 = getAllPosts(chatroom); 
+
+  // console.log("In update, chatroom: " + chatroom);
   Promise.all([p1, p2]).then(values => {
     let messages = values[1];
     io.sockets.emit('new message', messages);
@@ -55,10 +97,27 @@ app.post('/update', (req, res) =>{
   });
 });
 
-io.on('connection', client => {
-  let p1 = getAllPosts('Main');
+app.get('/chatroom/:room', (req, res) => {
+  let username = req.cookies.username;
+  if (!username) res.render('user');
 
-  p1.then(messages => {
+  let chatroom = req.params.room;
+  res.cookie("chatroom", chatroom);
+  Chatroom = chatroom;
+
+  // console.log("In chatroom/:room, chatroom: " + Chatroom);
+
+  getAllPosts(chatroom).then(messages => {
+    io.sockets.emit('new message', messages);
+    res.render('index', { username, chatroom });
+  });
+});
+
+io.on('connection', client => {
+  // console.log('In connection: ' + Chatroom);
+  if (!Chatroom) Chatroom = "Main";
+
+  getAllPosts(Chatroom).then(messages => {
     client.emit('new message', messages);
   });
 });

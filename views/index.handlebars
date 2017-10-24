@@ -1,5 +1,8 @@
+<div class="add-chatroom">
+  <h5><a href="/newroom">Add/Switch Chatroom</a></h5>
+</div>
 <div class="chats-container">
-  <h3 id="chatroom">Chatroom </h3>
+  <h3 id="chatroom">{{chatroom}} Chatroom </h3>
   <div class="chats-list">
     <div id="chat-messages">
       
@@ -9,15 +12,16 @@
   </div>
 </div>
 <div class="new-post-container">
-  <form action="/update" id='new-message' method="POST">
+  <form action="/chatroom/{{chatroom}}/update" id='new-message' method="POST">
       <h3>New Post</h3>
       <textarea id="message-body" rows="10" cols="50" placeholder="Start a post" name="newPost" required></textarea>
       <button type="submit" class="btn btn-success">Send</button>
     </form>
 </div>
+
 <script>
   $('#new-message').on('submit', function (event) {
     event.preventDefault();
-    jQuery.post('/update', $('#new-message').serialize());
+    jQuery.post('/chatroom/{{chatroom}}/update', $('#new-message').serialize());
   })
 </script>

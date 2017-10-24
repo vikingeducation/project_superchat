@@ -40,15 +40,19 @@
 
   <script>
     const socket = io.connect('http://localhost:4700')
-    const $chatMessages = $('#chat-messages');
-    const $chatRoom = $('#chatroom');
+
+    const $chatMessages = $('#chat-messages')
+    const $chatRoom = $('#chatroom')
+
+    const $roomList = $('#room-list')
+    const $roomTitle = $('#room-title')
 
     socket.on('new message', messages => {
       $chatMessages.html('')
       if (messages.length === 0) {
         $chatMessages.append(`<h5></h5>`)
-        $chatMessages.append('<p>Hello World, waiting to chat with you!</p>')
-        $chatMessages.append('<hr>')
+        $chatMessages.append(`<p>Hello World, waiting to chat with you!</p>`)
+        $chatMessages.append(`<hr>`)
       } else {
         appendMessages(messages)
         $('#message-body').val('')
@@ -59,11 +63,33 @@
       messages.forEach(message => {
         message = JSON.parse(message)
 
-        $chatRoom.html(`${message.chatroom} Chatroom`)
+        
         $chatMessages.append(`<h5>${message.user}</h5>`)
         $chatMessages.append(`<p>${message.text}</p>`)
         $chatMessages.append(`<sub>${moment(new Date(message.date)).format('MMMM Do YYYY, h:mm:ss a')}<sub>`)
-        $chatMessages.append('<hr>')
+        $chatMessages.append(`<hr>`)
+      })
+    }
+
+    socket.on('update rooms', rooms => {
+
+      $roomList.html('')
+      if (rooms.length === 0) {
+        $roomList.append(`<h5>Create a New Room</h5>`)
+        $roomList.append(`<p>Start a new  chatroom!</p>`)
+        $roomList.append(`<hr>`)
+      } else {
+        appendRooms(rooms)
+      }
+    })  
+
+    const appendRooms = rooms => {
+      rooms.forEach(room => {
+        room = JSON.parse(room)
+
+        $roomTitle.html(`Chat Rooms`)
+        $roomList.append(`<h3>${room}</h3>`)
+        $roomList.append(`<hr>`)
       })
     }
 
