@@ -70,15 +70,15 @@ const getNumRoomUsers = (chatroom) => {
         posts.forEach(post => {
           let values = post.split(',');
           let user = values[0].split(':');
-          console.log("post: " +  user[1]);
+          //console.log("post: " +  user[1]);
           if (users.length === 0) {
             users.push(user[1])
           } else {
             if (!users.includes(user[1])) users.push(user[1]);
           }
         })
-       console.log(chatroom, users.length)
-       resolve(users.length);
+       // console.log(chatroom, users.length)
+       resolve([chatroom, users.length]);
       }
     })
   })

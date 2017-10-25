@@ -61,31 +61,22 @@ app.get('/newroom', (req, res) => {
   if (!username) {
     res.render('user');
   } else {
-    let p1 = getAllRooms();
-    p1.then(rooms => {
-      io.sockets.emit('update rooms', rooms);
-      res.render('chatroom', {rooms, Chatroom});
-    });
 
     // Tried to get number of members of each room and send it to chatroom page
+    // Learnt to use Promise.all with .map instead of 
+    // forEach (does not return anything, so doesn't work in .all)
     
-    // let roomObj = [];
-    // p1.then(rooms => {
-    //   rooms.forEach(room => {
-    //     let p2 = getNumRoomUsers(room);
-    //     p2.then(num => {
-    //       roomObj.push({'name': room, 'num': num});
-    //     })  
-    //   })
-      
-    // }).then(() => {
+    // Also learnt: roomCounts.map(([name, num]) => ({ name, num })) looks better than
+    // roomCounts.map((roomObj) => ({ name: roomObj[0], num: roomObj[1] }))
 
-    //     console.log(roomObj);
-    //     res.render('chatroom', {roomObj, Chatroom});
-    // })
-
-
-    
+    getAllRooms().then(chatrooms => {
+      Promise
+        .all(chatrooms.map((room) => getNumRoomUsers(room)))
+        .then((roomCounts) => {
+          const rooms = roomCounts.map(([name, num]) => ({ name, num }));
+          res.render('chatroom', { rooms, Chatroom });
+        });       
+    });
   }
 });
 
@@ -94,11 +85,19 @@ app.post('/addroom', (req, res) => {
   let p1 = newRoom(room);
   let p2 = getAllRooms();
 
-  Promise.all([p1, p2]).then(values => {
+  Promise.all([newRoom(room), p2]).then(values => {
     let rooms = values[1];
     io.sockets.emit('update rooms', rooms);
-    res.render('chatroom', {rooms, Chatroom});
   });
+
+  p2.then(chatrooms => {
+      Promise
+        .all(chatrooms.map((room) => getNumRoomUsers(room)))
+        .then((roomCounts) => {
+          const rooms = roomCounts.map(([name, num]) => ({ name, num }));
+          res.render('chatroom', { rooms, Chatroom });
+        });     
+    });
 });
 
 
