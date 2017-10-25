@@ -27,7 +27,6 @@ app.get('/', (req, res) => {
     chatroom = req.cookies.chatroom;
   }
 
-  // console.log("chatroom: " + chatroom);
   res.cookie("chatroom", chatroom);
 
   Chatroom = chatroom;
@@ -109,7 +108,6 @@ app.post('/chatroom/:room/update', (req, res) => {
   let p1 = newPost(message, username, chatroom);
   let p2 = getAllPosts(chatroom); 
 
-  // console.log("In update, chatroom: " + chatroom);
   Promise.all([p1, p2]).then(values => {
     let messages = values[1];
     io.sockets.emit('new message', messages);
@@ -125,8 +123,6 @@ app.get('/chatroom/:room', (req, res) => {
   res.cookie("chatroom", chatroom);
   Chatroom = chatroom;
 
-  // console.log("In chatroom/:room, chatroom: " + Chatroom);
-
   getAllPosts(chatroom).then(messages => {
     io.sockets.emit('new message', messages);
     res.render('index', { username, chatroom });
@@ -134,7 +130,6 @@ app.get('/chatroom/:room', (req, res) => {
 });
 
 io.on('connection', client => {
-  // console.log('In connection: ' + Chatroom);
   if (!Chatroom) Chatroom = "Main";
 
   getAllPosts(Chatroom).then(messages => {

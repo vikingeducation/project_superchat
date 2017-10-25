@@ -13,3 +13,5 @@ User can logout anytime
 
 Libraries used: Express, express-handlebars, body-parser, cookie-parser, socket.io, redis
 
+Start app using `npm start`   
+Redis needs to be started up. Usually in redis-4-*-*/src directory. Start it up with command `redis-server`. Clear out db with `redis-cli flushdb` command.
