@@ -1,0 +1,29 @@
+<div class="back-container">
+  <a href="/chatroom/{{Chatroom}}"><--Back to Chat</a>
+</div>
+<div class="chatrooms-container">
+  <h3 id="room-title">Chatrooms</h3>
+  <div class="chatrooms-list">
+    {{#each rooms}}
+      <div id="room-list">
+        <h5><a href="/chatroom/{{this.name}}">{{this.name}}</a></h5>  
+        <p>{{this.num}} members</p>
+        <hr>
+      </div>
+    {{/each}}
+    <div class="chat-footer">
+    </div>
+  </div>
+</div>
+<div class="newroom-container">
+  <div class="newroom-title">
+    <h3>Add Room</h3>
+  </div>
+
+  <div class="newroom-form">
+    <form action="/addroom" method="POST">
+      <input class="newroom" type="text" placeholder="Room Name" id="newroom" name="newroom">
+      <button type="submit" class="btn btn-success">Submit</button>
+    </form>
+  </div>
+</div>
