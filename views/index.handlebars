@@ -1,0 +1,34 @@
+<div class='row'>
+  <div class='col-sm-3'>
+    <div class='panel panel-default'>
+      <div class='panel-heading'>
+        <h3 class='panel-title'>CATS</h3>
+      </div>
+      <div class='panel-body messageFeed'>
+        {{#if messages}}
+        {{#each messages as |message|}}
+        <h4>{{message.author}}</h4>
+        <p>{{message.body}}</p>
+        <hr>
+        {{/each}}
+        {{/if}}
+      </div>
+    </div>
+  </div>
+
+  <div class='col-sm-3'>
+    <div class='panel panel-default'>
+      <div class='panel-heading'>
+        <h3 class='panel-title'>NEW POST</h3>
+      </div>
+      <div class='panel-body'>
+        <form action='/' method='post'>
+          <div class='form-group'>
+            <textarea id='newMessage' name='messageBody' class='form-control' rows='3'></textarea>
+          </div>
+          <button type='submit' class='btn btn-success center-block'>Send</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
