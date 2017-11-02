@@ -3,7 +3,8 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const cookieSession = require('cookie-session');
 const expressHandlebars = require('express-handlebars');
-const { addMessage, getAllMessages } = require('./models/message');
+const { addMessage, getMessagesForRoom } = require('./models/message');
+const { addRoom, getAllRooms } = require('./models/room');
 const config = require('./config');
 
 const app = express();
@@ -31,8 +32,9 @@ app.set('view engine', 'handlebars');
 
 app.get('/', (req, res) => {
   const { name } = req.cookies;
-  getAllMessages((messages) => {
-    res.render('index', { name, messages });
+  const p = getAllRooms();
+  p.then((rooms) => {
+    res.render('index', { name, rooms });
   });
 });
 
@@ -47,12 +49,39 @@ app.post('/user', (req, res) => {
   res.redirect('back');
 });
 
-app.post('/message', (req, res) => {
+app.post('/room', (req, res) => {
+  const { room } = req.body;
+  const p = addRoom(room);
+  p.then(() => {
+    io.emit('new room', room.toLowerCase());
+    res.redirect('back');
+  });
+});
+
+app.get('/rooms/:room', (req, res) => {
+  const { name } = req.cookies;
+  const { room } = req.params;
+  const p1 = getAllRooms();
+  const p2 = getMessagesForRoom(room);
+  Promise.all([p1, p2]).then((values) => {
+    const rooms = values[0];
+    const messages = values[1].map(JSON.parse);
+    res.render('index', {
+      name,
+      rooms,
+      room,
+      messages,
+    });
+  });
+});
+
+app.post('/rooms/:room/message', (req, res) => {
   const { author, messageBody } = req.body;
-  const room = 'cats';
-  addMessage(room, author, messageBody);
+  const { room } = req.params;
+  addMessage(author, room, messageBody);
   const message = {
     author,
+    room,
     body: messageBody,
   };
   io.emit('new message', message);

@@ -11,3 +11,15 @@ h1 {
 .name {
   color: white;
 }
+
+#new-room {
+  color: #74b467;
+}
+
+.room-name {
+  color: #333333;
+}
+
+.panel-title {
+  display: inline-block;
+}

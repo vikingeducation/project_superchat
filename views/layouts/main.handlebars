@@ -35,8 +35,14 @@
     <script>
       var socket = io.connect('http://localhost:3000');
 
+      socket.on('new room', function(room) {
+        $('.roomFeed').append(`
+          <h4><a href='/rooms/${room}'>${room}</a></h4>
+          <hr>`);
+      });
+
       socket.on('new message', function(message) {
-        const { author, body } = message;
+        const { author, room, body } = message;
         $('.messageFeed').append(`
           <h4>${author}</h4>
           <p>${body}</p>

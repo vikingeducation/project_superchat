@@ -3,13 +3,16 @@
   <div class='col-sm-3'>
     <div class='panel panel-default'>
       <div class='panel-heading'>
-        <h3 class='panel-title'>CATS</h3>
+        <h3 class='panel-title'>CHAT ROOMS</h3>
       </div>
-      <div class='panel-body messageFeed'>
-        {{#if messages}}
-        {{#each messages as |message|}}
-        <h4>{{message.author}}</h4>
-        <p>{{message.body}}</p>
+      <div class='panel-body roomFeed'>
+        <h4><a id='new-room' href='/'>Create New Room</a></h4>
+        <p>Start a new chat room!</p>
+        <hr>
+        {{#if rooms}}
+        {{#each rooms as |room|}}
+        <h4><a class='room-name' href='/rooms/{{room}}'>{{room}}</a></h4>
+        <!-- <p>{{room.members}} members</p> -->
         <hr>
         {{/each}}
         {{/if}}
@@ -17,22 +20,62 @@
     </div>
   </div>
 
-  <div class='col-sm-3'>
-    <div class='panel panel-default'>
-      <div class='panel-heading'>
-        <h3 class='panel-title'>NEW POST</h3>
-      </div>
-      <div class='panel-body'>
-        <form action='/message' method='post'>
-          <div class='form-group'>
-            <input type='hidden' name='author' value='{{name}}'>
-            <textarea id='newMessage' name='messageBody' class='form-control' rows='3'></textarea>
-          </div>
-          <button type='submit' class='btn btn-success center-block'>Send</button>
-        </form>
+    {{#if room}}
+    <div class='col-sm-3'>
+      <div class='panel panel-default'>
+        <div class='panel-heading'>
+          <h3 class='panel-title'>{{room}}</h3>
+          <a href='/' type='button' class='close pull-right' aria-label='Close'><span aria-hidden='true'>&times;</span></a>
+        </div>
+        <div class='panel-body messageFeed'>
+          {{#if messages}}
+          {{#each messages as |message|}}
+          <h4>{{message.author}}</h4>
+          <p>{{message.body}}</p>
+          <hr>
+          {{/each}}
+          {{/if}}
+        </div>
       </div>
     </div>
-  </div>
+
+    <div class='col-sm-3'>
+      <div class='panel panel-default'>
+        <div class='panel-heading'>
+          <h3 class='panel-title'>NEW POST</h3>
+        </div>
+        <div class='panel-body'>
+          <form action='/rooms/{{room}}/message' method='post'>
+            <div class='form-group'>
+              <input type='hidden' name='author' value='{{name}}'>
+              <textarea id='newMessage' name='messageBody' class='form-control' rows='3'></textarea>
+            </div>
+            <button type='submit' class='btn btn-success center-block'>Send</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    {{else}}
+    <div class='col-sm-3'>
+      <div class='panel panel-default'>
+        <div class='panel-heading'>
+          <h3 class='panel-title'>NEW ROOM</h3>
+        </div>
+        <div class='panel-body'>
+          <form action='/room' method='post'>
+            <div class='form-group'>
+              <label for='room'>Room name</label>
+              <input type='text' id='room' name='room' class='form-control'>
+            </div>
+            <button type='submit' class='btn btn-success center-block'>Save</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    {{/if}}
+
   {{else}}
   <div class='col-sm-3 col-sm-offset-4'>
     <div class='panel panel-default'>
