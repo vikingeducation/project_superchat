@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Superchat</title>
+
+    <script src='https://code.jquery.com/jquery-3.2.1.js'></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="/style.css">
+  </head>
+
+  <body>
+    <div class="navbar navbar-inverse">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <h1>SUPER CHAT</h1>
+        </div>
+        {{#if name}}
+        <p class="navbar-text navbar-right">
+          <span class='name'>{{name}}</span><br>
+          <a href='/signout'>Sign Out</a>
+        </p>
+        {{/if}}
+      </div>
+    </div>
+
+    <div class="container-fluid">
+      {{{body}}}
+    </div>
+
+    <script>
+      var socket = io.connect('http://localhost:3000');
+
+      socket.on('new room', function(room) {
+        $('.roomFeed').append(`
+          <h4><a class='room-name' href='/rooms/${room}'>${room}</a></h4>
+          <hr>`);
+      });
+
+      socket.on('new message', function(message) {
+        const { author, room, body } = message;
+        $('.messageFeed').append(`
+          <h4>${author}</h4>
+          <p>${body}</p>
+          <hr>`);
+      });
+    </script>
+  </body>
+</html>
