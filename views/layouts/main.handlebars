@@ -37,7 +37,7 @@
 
       socket.on('new room', function(room) {
         $('.roomFeed').append(`
-          <h4><a href='/rooms/${room}'>${room}</a></h4>
+          <h4><a class='room-name' href='/rooms/${room}'>${room}</a></h4>
           <hr>`);
       });
 
