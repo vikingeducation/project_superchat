@@ -1,11 +1,11 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-const cookieSession = require('cookie-session');
+// const cookieSession = require('cookie-session');
 const expressHandlebars = require('express-handlebars');
 const { addMessage, getMessagesForRoom } = require('./models/message');
 const { addRoom, getAllRooms } = require('./models/room');
-const config = require('./config');
+// const config = require('./config');
 
 const app = express();
 const server = require('http').createServer(app);
@@ -18,10 +18,10 @@ app.use(express.static(`${__dirname}/public`));
 app.use('/socket.io', express.static(`${__dirname}node_modules/socket.io-client/dist/`));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(cookieSession({
-  name: 'session',
-  keys: config.keys,
-}));
+// app.use(cookieSession({
+//   name: 'session',
+//   keys: config.keys,
+// }));
 
 const hbs = expressHandlebars.create({
   defaultLayout: 'main',
