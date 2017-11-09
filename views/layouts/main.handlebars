@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Super Chat</title>
+    <link rel='stylesheet' href='/styles/reset.css'>
+    <link rel='stylesheet' href='/styles/style.css'>
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+  </head>
+  <body>
+
+    {{{body}}}
+
+  </body>
+  <script>
+    $('document').ready(function() {
+      var socket = io.connect('http://localhost:3000');
+
+      socket.on('new message', function(data) {
+        $('.messages').append('<div class="message"><h4>' + data.username + '</h4><p>' + data.message + '</p><hr></div>');
+      });
+    });
+  </script>
+</html>

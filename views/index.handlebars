@@ -1,0 +1,28 @@
+<header>
+  <h1>SUPER CHAT</h1>
+</header>
+
+
+<section class='chat-wrapper'>
+  <div class='chatroom'>
+    <h3>CATS</h3>
+
+    <div class='messages'>
+      {{#each allMessages as |message|}}
+      <div class='message'>
+        <h4>{{message.username}}</h4>
+        <p>{{message.message}}</p>
+        <hr>
+      </div>
+      {{/each}}
+    </div>
+  </div>
+
+  <div class='form'>
+    <h3>NEW POST</h3>
+    <form action='/posts/new' method='post'>
+      <textarea name='message'></textarea><br />
+      <button type='submit'>Submit</button>
+    </form>
+  </div>
+</section>
