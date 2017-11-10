@@ -1,11 +1,11 @@
 const redisClient = require('redis').createClient();
 const shortid = require('shortid');
 
-const setMessage = (message) => {
+const setMessage = (message, username) => {
   return new Promise((resolve, reject) => {
     let id = shortid.generate();
     let data = {
-      username: 'unknown',
+      username: username,
       message: message,
       room: 'cats'
     };

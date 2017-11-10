@@ -9,6 +9,16 @@
     <script src="/socket.io/socket.io.js"></script>
   </head>
   <body>
+    <header>
+      <h1>SUPER CHAT</h1>
+
+      {{#if username}}
+      <div class='user'>
+        <span class='greeting'>Welcome, <span id='username'>{{username}}</span>!</span>
+        <span><a id='logout-btn' href='/logout'>Logout</a></span>
+      </div>
+      {{/if}}
+    </header>
 
     {{{body}}}
 
