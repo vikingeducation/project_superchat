@@ -1,0 +1,117 @@
+html {
+  font-size: 16px;
+  font-family: sans-serif;
+}
+
+h1 {
+  font-size: 2rem;
+}
+
+h3 {
+  background-color: #000;
+  color: #fff;
+  font-size: 1.3rem;
+  box-sizing: border-box;
+  padding: 5px 10px;
+  display: inline-block;
+}
+
+h4 {
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
+button {
+  color: #fff;
+  background-color: green;
+  margin-bottom: 30px;
+  border-style: none;
+}
+
+button:focus {
+  outline: none;
+}
+
+button:hover {
+  opacity: 0.5;
+  cursor: pointer;
+}
+
+a {
+  color: #000;
+  text-decoration: none;
+}
+
+header {
+  background-color: #000;
+  color: #fff;
+  box-sizing: border-box;
+  padding: 20px 30px;
+  margin-bottom: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.user .greeting {
+  margin-right: 15px;
+}
+
+#username {
+  color: #06a206;
+}
+
+#logout-btn {
+  color: rgb(245, 77, 77);
+}
+
+.chat-wrapper {
+  width: 100%;
+  height: 100vh;
+}
+
+.chat-section, .form, .messages {
+  width: 33%;
+  float: left;
+  border: 1px solid #000;
+  box-sizing: border-box;
+}
+
+.message, .room {
+  box-sizing: border-box;
+  padding: 5px 10px;
+}
+
+form {
+  text-align: center;
+}
+
+.form h3 {
+  margin-bottom: 15px;
+}
+
+form textarea {
+  width: 80%;
+  height: 200px;
+  margin-bottom: 15px;
+}
+
+.login {
+  width: 40%;
+  height: 30vh;
+  border: 1px solid #000;
+  margin: auto;
+  margin-top: 15vh;
+}
+
+.login h3 {
+  margin-bottom: 30px;
+}
+
+form h4 {
+  margin-bottom: 5px;
+}
+
+.hide {
+  display: none;
+}

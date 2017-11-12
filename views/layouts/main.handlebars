@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Super Chat</title>
+    <link rel='stylesheet' href='/styles/reset.css'>
+    <link rel='stylesheet' href='/styles/style.css'>
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+  </head>
+  <body>
+    <header>
+      <h1>SUPER CHAT</h1>
+
+      {{#if username}}
+      <div class='user'>
+        <span class='greeting'>Welcome, <span id='username'>{{username}}</span>!</span>
+        <span><a id='logout-btn' href='/logout'>Logout</a></span>
+      </div>
+      {{/if}}
+    </header>
+
+    {{{body}}}
+
+  </body>
+  <script>
+    $('document').ready(function() {
+      var socket = io.connect('http://localhost:3000');
+
+      $('#messageForm').on('submit', function(e) {
+        e.preventDefault();
+        var username = $('#username').text();
+        var message = $('#messageForm textarea').val();
+        var room = $('#roomName').text();
+        var data = {
+          username: username,
+          message: message,
+          room: room
+        };
+
+        socket.emit('message form data', data);
+      });
+
+
+      $('#roomForm').on('submit', function(e) {
+        e.preventDefault();
+
+        var room = $('#roomForm textarea').val();
+
+        socket.emit('room form data', room);
+      });
+
+
+      $('.rooms').on('click', 'h4', function() {
+        var selectedRoom = $(this).text();
+
+        $('#roomName').html(selectedRoom);
+        socket.emit('change room', selectedRoom);
+
+        if (selectedRoom !== 'Create a new room') {
+          $('#hidden').val(selectedRoom);
+          $('#createRoomForm').addClass('hide');
+          $('#roomMessagesSection').removeClass('hide');
+          $('#createMessageForm').removeClass('hide');
+        } else {
+          $('#createRoomForm').removeClass('hide');
+          $('#roomMessagesSection').addClass('hide');
+          $('#createMessageForm').addClass('hide');
+        }
+      });
+
+
+      socket.on('change room messages', function(messages) {
+        $('#roomName').nextAll('div').remove();
+
+        if (messages) {
+          for (var i = 0; i <= messages.length - 1; i++) {
+            var obj = messages[i];
+
+            $('.messages').append('<div class="message"><h4>' + obj.username + '</h4><p>' + obj.message + '</p><hr></div>')
+          }
+        }
+      });
+
+
+      socket.on('new room', function(room) {
+        $('.rooms').append('<div class="room"><h4>' + room + '</h4><hr></div>');
+
+        $('#roomForm textarea').val('');
+      });
+
+
+      socket.on('new message', function(data) {
+        let { username, message, room } = data;
+        let currentRoom = $('#roomName').text();
+
+        if (currentRoom === room) {
+          $('.messages').append('<div class="message"><h4>' + username + '</h4><p>' + message + '</p><hr></div>');
+        }
+
+        $('#messageForm textarea').val('');
+      });
+
+    });
+  </script>
+</html>
