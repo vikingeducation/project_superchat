@@ -13,7 +13,32 @@
 	<script src="/js/socket.io.js"></script>
 	<script src="/js/jquery.js"></script>
 	<script>
-		var socket = io.connect('http://localhost:3000');
+		$(() => {
+			let socket = io();
+
+			//allow 'enter' key === hitting submit button
+			$("form").keypress( event => {
+				const ENTER_KEY = 13;
+				if (event.which === ENTER_KEY) {
+			    event.preventDefault();		
+					socket.emit("new message", $("#m").val());
+					$("#m").val("");
+					return false;
+				}
+			});
+
+			$("form").submit(() => {
+				socket.emit("new message", $("#m").val());
+				$("#m").val("");
+				return false;
+			});
+
+			socket.on("new message", (msg, name) => {
+				$("#messagesGoHere").prepend($('<hr>'));
+				$("#messagesGoHere").prepend($('<h6 class="card-subtitle mb-2 text-muted"></h6>').text(msg));
+				$("#messagesGoHere").prepend($('<h5 class="card-title"></h5>').text(name));
+			});
+		});
 	</script>
 
 </body>

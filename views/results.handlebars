@@ -38,20 +38,12 @@
 			<div class="col-md-4">
 
 				<div class="card mb-3">
-					<div class="h4 card-header text-white bg-primary">Cars
+					<div class="h4 card-header text-white bg-primary">General
 					</div>
-					<div class="card-body">
-						<h5 class="card-title">Matthew</h5>
-						<h6 class="card-subtitle mb-2 text-muted">hey thanks guys!</h6> 
-						<hr>
-						<h5 class="card-title">Mark</h5>
-						<h6 class="card-subtitle mb-2 text-muted">That's a good choice. I've also used Paul's Auto Service. They also do super quick smog checks!</h6> 
-						<hr>
-						<h5 class="card-title">John</h5>
-						<h6 class="card-subtitle mb-2 text-muted">Check out Luke's Automotive on Chestnut and Anchorage. Highly recommended!</h6> 
-						<hr>
-						<h5 class="card-title">Matthew</h5>
-						<h6 class="card-subtitle mb-2 text-muted">Anyone know of a good place to take in my 2003 Honda Accord? I live in St. Paul, MN. Thanks!</h6> 
+					<div class="card-body" id="messagesGoHere">
+
+						<!-- messages go here -->
+
 					</div>
 				</div>
 
@@ -63,11 +55,11 @@
 					<div class="h4 card-header text-white bg-primary">New Message
 					</div>					
 					<div class="card-body">
-					<form action="/newMessage" method="post">
+					<form id="myForm" action="/newMessage" method="post">
 						<div class="form-group">
-							<textarea class="form-control" id="message" rows="3"></textarea>
+							<textarea class="form-control" id="m" autocomplete="off" rows="3"></textarea>
 						</div>
-						<button type="submit" class="btn btn-success">Send</button>
+						<button type="submit" id="sendButton" class="btn btn-success">Send</button>
 					</form>
 					</div>
 				</div>

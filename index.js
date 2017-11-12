@@ -18,6 +18,12 @@ app.set("view engine", "handlebars");
 //setup middleware
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(__dirname + "/public"));
+// this code may not be useful
+// see here for app.use() usage: https://expressjs.com/en/api.html#path-examples
+app.use(
+	"/socket.io",
+	express.static(__dirname + "node_modules/socket.io-client/dist/")
+);
 
 //register routes
 app.get("/", (req, res) => {
@@ -48,6 +54,11 @@ io.on("connection", socket => {
 	console.log("a user connected");
 	socket.on("disconnect", () => {
 		console.log("--> user disconnected");
+	});
+	socket.on("new message", msg => {
+		//insert into redis
+		let name = "anon";
+		io.emit("new message", msg, name);
 	});
 });
 
