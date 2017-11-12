@@ -1,23 +1,41 @@
 <section class='chat-wrapper'>
-  <div class='chatroom'>
-    <h3>CATS</h3>
+  <div class='chat-section'>
+    <h3>CHATROOMS</h3>
 
-    <div class='messages'>
-      {{#each allMessages as |message|}}
-      <div class='message'>
-        <h4>{{message.username}}</h4>
-        <p>{{message.message}}</p>
+    <div class='rooms'>
+      <div class='room'>
+        <h4>Create a new room</h4>
+        <hr>
+      </div>
+      {{#each rooms as |room|}}
+      <div class='room'>
+        <h4>{{room}}</h4>
         <hr>
       </div>
       {{/each}}
     </div>
   </div>
 
-  <div class='form'>
-    <h3>NEW POST</h3>
-    <form action='/posts/new' method='post'>
-      <textarea name='message'></textarea><br />
+  <div id='createRoomForm' class='form'>
+    <h3>ADD NEW ROOM</h3>
+    <form id='roomForm'>
+      <textarea name='room'></textarea><br />
       <button type='submit'>Submit</button>
     </form>
   </div>
+
+
+  <div id='roomMessagesSection' class='messages hide'>
+    <h3 id='roomName'></h3>
+  </div>
+
+  <div id='createMessageForm' class='form hide'>
+    <h3>NEW POST</h3>
+    <form id='messageForm'>
+      <textarea name='message'></textarea><br />
+      <input id='hidden' type='hidden' name='room' value='' >
+      <button type='submit'>Submit</button>
+    </form>
+  </div>
+
 </section>

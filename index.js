@@ -5,10 +5,10 @@ const io = require('socket.io')(server);
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const exphbs = require('express-handlebars');
-const { getMessages, setMessage } = require('./helpers/redis-store.js');
+const { getRoomMessages, getRooms, createNewRoom, setRoomMessage } = require('./helpers/redis-store.js');
 
 
-app.use('/socket.io',express.static(__dirname + 'node_modules/socket.io-client/dist/'))
+app.use('/socket.io',express.static(__dirname + 'node_modules/socket.io-client/dist/'));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
 
@@ -27,31 +27,41 @@ app.use((req, res, next) => {
 
 io.on('connection', client => {
   console.log('New connection');
-});
 
+  client.on('change room', room => {
+    getRoomMessages(room).then(allRoomMessages => {
+      client.emit('change room messages', allRoomMessages);
+    });
+  });
+
+  client.on('message form data', message => {
+    const username = message.username;
+    const newMessage = message.message;
+    const currentRoom = message.room;
+
+    setRoomMessage(newMessage, username, currentRoom).then((data) => {
+      io.emit('new message', data);
+    });
+  });
+
+  client.on('room form data', room => {
+    createNewRoom(room).then(room => {
+      io.emit('new room', room);
+    });
+  });
+});
 
 
 app.get('/', (req, res) => {
   let username = req.cookies.username;
 
   if (username) {
-    getMessages().then(allMessages => {
-      res.render('index', {allMessages, username});
+    getRooms().then(rooms => {
+      res.render('index', {username, rooms});
     });
   } else {
     res.redirect('/login');
   }
-});
-
-app.post('/posts/new', (req, res) => {
-  let io = req.io;
-  let username = req.cookies.username;
-  let newMessage = req.body.message;
-
-  setMessage(newMessage, username).then((data) => {
-    io.emit('new message', data);
-    res.redirect('back');
-  });
 });
 
 app.get('/login', (req, res) => {
@@ -68,6 +78,9 @@ app.get('/logout', (req, res) => {
   res.clearCookie('username');
   res.redirect('/');
 });
+
+
+
 
 
 server.listen(3000, () => {

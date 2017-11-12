@@ -38,6 +38,7 @@ button:hover {
 }
 
 a {
+  color: #000;
   text-decoration: none;
 }
 
@@ -69,14 +70,14 @@ header {
   height: 100vh;
 }
 
-.chatroom, .form {
-  width: 50%;
+.chat-section, .form, .messages {
+  width: 33%;
   float: left;
   border: 1px solid #000;
   box-sizing: border-box;
 }
 
-.message {
+.message, .room {
   box-sizing: border-box;
   padding: 5px 10px;
 }
@@ -109,4 +110,8 @@ form textarea {
 
 form h4 {
   margin-bottom: 5px;
+}
+
+.hide {
+  display: none;
 }
