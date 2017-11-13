@@ -5,6 +5,11 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 		<link rel="stylesheet" href="/css/bootstrap.css">
+		<style>
+			#chatArea{
+			}
+
+		</style>
 	</head>
 <body>
 
@@ -12,34 +17,6 @@
 
 	<script src="/js/socket.io.js"></script>
 	<script src="/js/jquery.js"></script>
-	<script>
-		$(() => {
-			let socket = io();
-
-			//allow 'enter' key === hitting submit button
-			$("form").keypress( event => {
-				const ENTER_KEY = 13;
-				if (event.which === ENTER_KEY) {
-			    event.preventDefault();		
-					socket.emit("new message", $("#m").val());
-					$("#m").val("");
-					return false;
-				}
-			});
-
-			$("form").submit(() => {
-				socket.emit("new message", $("#m").val());
-				$("#m").val("");
-				return false;
-			});
-
-			socket.on("new message", (msg, name) => {
-				$("#messagesGoHere").prepend($('<hr>'));
-				$("#messagesGoHere").prepend($('<h6 class="card-subtitle mb-2 text-muted"></h6>').text(msg));
-				$("#messagesGoHere").prepend($('<h5 class="card-title"></h5>').text(name));
-			});
-		});
-	</script>
-
+	<script src="/js/superchat.js"></script>
 </body>
 </html>
