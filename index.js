@@ -8,6 +8,7 @@ const io = require("socket.io")(server);
 const handlebars = require("express-handlebars");
 const bodyParser = require("body-parser");
 const redis = require("./lib/redis-lib");
+const 
 
 const PORT = process.env.PORT || 3000;
 
@@ -55,10 +56,22 @@ io.on("connection", socket => {
 	socket.on("disconnect", () => {
 		console.log("--> user disconnected");
 	});
-	socket.on("new message", msg => {
+
+	socket.on("new login", (data, callback) => {
+		callback(true);
+		socket.username = data;
+		console.log("socket.username = " + socket.username);
+		// redis.addItem("usernames", username);
+		// .then(data => {
+		// 	io.emit('get logins', socket.username);
+		// })
+	});
+
+	socket.on("new message", data => {
 		//insert into redis
-		let name = "anon";
-		io.emit("new message", msg, name);
+		let msg = data;
+		let username = "anon";
+		io.emit("new message", msg, username);
 	});
 });
 

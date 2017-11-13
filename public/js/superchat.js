@@ -1,10 +1,14 @@
 "use strict";
 $(() => {
 	const socket = io();
+	const loginArea = $("#loginArea");
 	const loginForm = $("#loginForm");
 	const loginField = $("#loginField");
+
+	const chatArea = $("#chatArea");
 	const chatForm = $("#chatForm");
 	const chatField = $("#chatField");
+
 	const chatTrail = $("#chatTrail");
 
 	//allow 'enter' key === hitting submit button
@@ -12,7 +16,12 @@ $(() => {
 		const ENTER_KEY = 13;
 		if (event.which === ENTER_KEY) {
 			event.preventDefault();
-			socket.emit("new login", loginField.val());
+			socket.emit("new login", loginField.val(), data => {
+				if (data) {
+					loginArea.hide();
+					chatArea.css("display", "flex");
+				}
+			});
 			loginField.val("");
 			return false;
 		}
@@ -36,11 +45,11 @@ $(() => {
 	});
 
 	//create message
-	socket.on("new message", (msg, name) => {
+	socket.on("new message", (msg, username) => {
 		chatTrail.prepend($("<hr>"));
 		chatTrail.prepend(
 			$('<h6 class="card-subtitle mb-2 text-muted"></h6>').text(msg)
 		);
-		chatTrail.prepend($('<h5 class="card-title"></h5>').text(name));
+		chatTrail.prepend($('<h5 class="card-title"></h5>').text(username));
 	});
 });
