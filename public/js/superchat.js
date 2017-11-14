@@ -9,6 +9,7 @@ $(() => {
 	const chatForm = $("#chatForm");
 	const chatField = $("#chatField");
 
+	const loginSignout = $("#loginSignout");
 	const chatTrail = $("#chatTrail");
 
 	//allow 'enter' key === hitting submit button
@@ -51,5 +52,11 @@ $(() => {
 			$('<h6 class="card-subtitle mb-2 text-muted"></h6>').text(msg)
 		);
 		chatTrail.prepend($('<h5 class="card-title"></h5>').text(username));
+	});
+
+	//write username to upper right
+	socket.on("new login", username => {
+		let myText = `Not ${username}? Sign Out`;
+		loginSignout.html(myText);
 	});
 });

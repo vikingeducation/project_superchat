@@ -8,7 +8,7 @@ const io = require("socket.io")(server);
 const handlebars = require("express-handlebars");
 const bodyParser = require("body-parser");
 const redis = require("./lib/redis-lib");
-const 
+const cookieSession = require("cookie-session");
 
 const PORT = process.env.PORT || 3000;
 
@@ -17,6 +17,16 @@ app.engine("handlebars", handlebars({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
 
 //setup middleware
+//attach to req.session
+//to destroy session: req.session = null
+app.use(
+	cookieSession({
+		name: "chatSession",
+		keys: ["TYUHJert#$%xc$%^&567"],
+		// Cookie Options
+		maxAge: 24 * 60 * 60 * 1000 // 24 hours
+	})
+);
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(__dirname + "/public"));
 // this code may not be useful
@@ -59,18 +69,15 @@ io.on("connection", socket => {
 
 	socket.on("new login", (data, callback) => {
 		callback(true);
+		//create session here??
 		socket.username = data;
-		console.log("socket.username = " + socket.username);
-		// redis.addItem("usernames", username);
-		// .then(data => {
-		// 	io.emit('get logins', socket.username);
-		// })
+		io.emit("new login", socket.username);
 	});
 
 	socket.on("new message", data => {
-		//insert into redis
 		let msg = data;
-		let username = "anon";
+		let username = socket.username;
+		// let username = "anon";
 		io.emit("new message", msg, username);
 	});
 });
