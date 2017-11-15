@@ -11,6 +11,8 @@ $(() => {
 
 	const loginSignout = $("#loginSignout");
 	const chatTrail = $("#chatTrail");
+	const whoseOnline = $("#whoseOnline");
+	const onlineCount = $("#onlineCount");
 
 	//allow 'enter' key === hitting submit button
 	loginForm.keypress(event => {
@@ -56,7 +58,26 @@ $(() => {
 
 	//write username to upper right
 	socket.on("new login", username => {
-		let myText = `Not ${username}? Sign Out`;
-		loginSignout.html(myText);
+		let html = `Not ${username}? Sign Out`;
+		loginSignout.html(html);
+	});
+
+	socket.on("get count", data => {
+		let html =
+			"Online  <span class='badge badge-pill badge-success'>" +
+			data +
+			"</span>";
+		onlineCount.html(html);
+	});
+
+	socket.on("get logins", data => {
+		let html = "";
+		for (let i = 0; i < data.length; i++) {
+			html +=
+				"<a href='#' class='list-group-item list-group-item-action flex-column align-items-start'> <div class='d-flex w-100 justify-content-between'> <h5 class='mb-1'>" +
+				data[i] +
+				"</h5> </div> </a>";
+		}
+		whoseOnline.html(html);
 	});
 });
