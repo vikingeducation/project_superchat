@@ -25,6 +25,8 @@ $(() => {
 					chatArea.css("display", "flex");
 				}
 			});
+			let html = "Not " + loginField.val() + "? Sign Out";
+			loginSignout.html(html);
 			loginField.val("");
 			return false;
 		}
@@ -54,12 +56,6 @@ $(() => {
 			$('<h6 class="card-subtitle mb-2 text-muted"></h6>').text(msg)
 		);
 		chatTrail.prepend($('<h5 class="card-title"></h5>').text(username));
-	});
-
-	//write username to upper right
-	socket.on("new login", username => {
-		let html = `Not ${username}? Sign Out`;
-		loginSignout.html(html);
 	});
 
 	socket.on("get count", data => {
