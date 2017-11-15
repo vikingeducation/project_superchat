@@ -61,30 +61,31 @@ io.on("connection", socket => {
 	console.log("a user connected");
 	socket.on("disconnect", () => {
 		console.log("DISCONNECTION: socket.username = " + socket.username);
-		// if (!socket.username) {
-		// return;
-		// }
-		redis
-			.removeSortedItem("whoseOnline", socket.username)
-			.then(data => {
-				console.log("in promise removeSortedItem, num removed = " + data);
-				console.log(
-					"in promise removeSortedItem, socket.username = " + socket.username
-				);
-				return redis.getCount("whoseOnline");
-			})
-			.then(data => {
-				let count = data;
-				io.emit("get count", count);
-				return redis.getSortedItems("whoseOnline");
-			})
-			.then(data => {
-				let whoseOnline = data;
-				io.emit("get logins", whoseOnline);
-			})
-			.catch(err => {
-				console.log(err);
-			});
+
+		//handle scenario when user refresh at login screen
+		if (socket.username !== undefined) {
+			redis
+				.removeSortedItem("whoseOnline", socket.username)
+				.then(data => {
+					console.log("in promise removeSortedItem, num removed = " + data);
+					console.log(
+						"in promise removeSortedItem, socket.username = " + socket.username
+					);
+					return redis.getCount("whoseOnline");
+				})
+				.then(data => {
+					let count = data;
+					io.emit("get count", count);
+					return redis.getSortedItems("whoseOnline");
+				})
+				.then(data => {
+					let whoseOnline = data;
+					io.emit("get logins", whoseOnline);
+				})
+				.catch(err => {
+					console.log(err);
+				});
+		}
 
 		//take username out of redis
 		//update usernames
