@@ -18,9 +18,8 @@ $(() => {
 
 	let _socketLogin = event => {
 		event.preventDefault();
-		socket.emit("new login", loginField.val(), data => {
-			let username = data;
-			if (username) {
+		socket.emit("new login", loginField.val(), flag => {
+			if (flag) {
 				loginArea.hide();
 				chatArea.css("display", "flex");
 			}
@@ -75,10 +74,10 @@ $(() => {
 	});
 
 	//write message item
-	socket.on("new message", (msg, username) => {
+	socket.on("new message", (message, username) => {
 		chatTrail.prepend($("<hr>"));
 		chatTrail.prepend(
-			$('<h6 class="card-subtitle mb-2 text-muted"></h6>').text(msg)
+			$('<h6 class="card-subtitle mb-2 text-muted"></h6>').text(message)
 		);
 		chatTrail.prepend($('<h5 class="card-title"></h5>').text(username));
 	});

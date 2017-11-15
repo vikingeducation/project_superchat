@@ -57,57 +57,56 @@ app.get("/", (req, res) => {
 
 io.on("connection", socket => {
 	console.log("In socket ........................");
-	console.log("CONNECTION: socket.username = " + socket.username);
-	let whoseOnline = [];
-	let onlineCount = 0;
-	console.log("a user connected");
+	console.log("CONNECTION: username = " + socket.username);
 	socket.on("disconnect", () => {
-		console.log("DISCONNECTION: socket.username = " + socket.username);
+		console.log("--> DISCONNECTION: username = " + socket.username);
 
 		//handle scenario when user refresh at login screen and no one is logged on. (specifically this handles deprecated redis call for zrem with undefined key)
 		if (socket.username !== undefined) {
 			redis
 				.removeSortedItem("whoseOnline", socket.username)
 				.then(data => {
-					console.log("in promise removeSortedItem, num removed = " + data);
 					console.log(
-						"in promise removeSortedItem, socket.username = " + socket.username
+						"result of promise removeSortedItem, num username removed = " + data
 					);
-					return redis.getCount("whoseOnline");
+					console.log(
+						"in promise removeSortedItem, username = " + socket.username
+					);
+					return Promise.all([
+						redis.getCount("whoseOnline"),
+						redis.getSortedItems("whoseOnline")
+					]);
 				})
 				.then(data => {
-					let count = data;
-					io.emit("get count", count);
-					return redis.getSortedItems("whoseOnline");
-				})
-				.then(data => {
-					let whoseOnline = data;
+					let onlineCount = data[0];
+					let whoseOnline = data[1];
+					io.emit("get count", onlineCount);
 					io.emit("get logins", whoseOnline);
 				})
 				.catch(err => {
 					console.log(err);
 				});
 		}
-		console.log("--> user disconnected");
 	});
 
 	socket.on("new login", (data, callback) => {
 		callback(true);
 		socket.username = data;
-
-		console.log("NEW LOGIN: socket.username = " + socket.username);
+		console.log("NEW LOGIN: username = " + socket.username);
 		redis
 			.addSortedItem("whoseOnline", socket.username)
 			.then(data => {
-				console.log("result of promise addSortedItem = " + data);
-				return redis.getCount("whoseOnline");
+				console.log(
+					"result of promise addSortedItem, num username added = " + data
+				);
+				return Promise.all([
+					redis.getCount("whoseOnline"),
+					redis.getSortedItems("whoseOnline")
+				]);
 			})
 			.then(data => {
-				onlineCount = data;
-				return redis.getSortedItems("whoseOnline");
-			})
-			.then(data => {
-				whoseOnline = data;
+				let onlineCount = data[0];
+				let whoseOnline = data[1];
 				console.log("whoseOnline[] = ", whoseOnline);
 				io.emit("new login", socket.username);
 				io.emit("get logins", whoseOnline);
@@ -119,10 +118,9 @@ io.on("connection", socket => {
 	});
 
 	socket.on("new message", data => {
-		let msg = data;
-		let username = socket.username;
-		console.log("NEW MESSAGE: socket.username = " + socket.username);
-		io.emit("new message", msg, username);
+		let message = data;
+		console.log("NEW MESSAGE: from username = " + socket.username);
+		io.emit("new message", message, socket.username);
 	});
 });
 
