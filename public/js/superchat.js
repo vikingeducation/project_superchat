@@ -13,6 +13,11 @@ $(() => {
 	const chatTrail = $("#chatTrail");
 	const whoseOnline = $("#whoseOnline");
 	const onlineCount = $("#onlineCount");
+	const eraserButton = $("#eraserButton");
+
+	eraserButton.on("click", () => {
+		chatTrail.html("");
+	});
 
 	//allow 'enter' key === hitting submit button
 	loginForm.keypress(event => {

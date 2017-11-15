@@ -7,8 +7,8 @@ const io = require("socket.io")(server);
 
 const handlebars = require("express-handlebars");
 const bodyParser = require("body-parser");
-const redis = require("./lib/redis-lib");
 const expressSession = require("express-session");
+const redis = require("./lib/redis-lib");
 
 const PORT = process.env.PORT || 3000;
 
@@ -31,8 +31,8 @@ app.use(
 //to destroy session: req.session = null
 app.use(
 	expressSession({
-		name: "dcsession",
-		secret: "secret sauce",
+		name: "chat-session",
+		secret: "secret sauce", // normally this is secret
 		saveUninitialized: true,
 		resave: true,
 		cookie: { maxAge: 24 * 60 * 60 * 1000 } // 24 hours
@@ -43,14 +43,11 @@ app.use(
 app.get("/", (req, res) => {
 	console.log("In route........................");
 	// if (req.session) {
-	// 	console.log("SESSION");
-	// 	console.log(req.session);
-	// 	console.log("SESSION ID");
-	// 	console.log(req.sessionID);
-	// 	console.log("COOKIE");
-	// 	console.log(req.session.cookie);
+	// 	console.log("session = " + req.session);
+	// 	console.log("session id = " + req.sessionID);
+	// 	console.log("session's cookie = " + req.session.cookie);
 	// } else {
-	// 	console.log("NO SESSION");
+	// 	console.log("no session");
 	// }
 	res.render("results", {});
 });
@@ -74,7 +71,6 @@ io.on("connection", socket => {
 				console.log(
 					"in promise removeSortedItem, socket.username = " + socket.username
 				);
-				console.log("in promise removeSortedItem, whoseOnline= " + whoseOnline);
 				return redis.getCount("whoseOnline");
 			})
 			.then(data => {
