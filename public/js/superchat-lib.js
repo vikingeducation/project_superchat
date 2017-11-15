@@ -1,4 +1,5 @@
 "use strict";
+
 $(() => {
 	const socket = io();
 	const loginArea = $("#loginArea");
@@ -13,64 +14,67 @@ $(() => {
 	const chatTrail = $("#chatTrail");
 	const whoseOnline = $("#whoseOnline");
 	const onlineCount = $("#onlineCount");
-	const eraserButton = $("#eraserButton");
+	const eraserIcon = $("#eraserIcon");
 
-	eraserButton.on("click", () => {
-		chatTrail.html("");
-	});
-
-	//2 options to submit: 1) press enter
-	//allow 'enter' key === hitting submit button
-	loginForm.keypress(event => {
-		const ENTER_KEY = 13;
-		if (event.which === ENTER_KEY) {
-			event.preventDefault();
-			socket.emit("new login", loginField.val(), data => {
-				if (data) {
-					loginArea.hide();
-					chatArea.css("display", "flex");
-				}
-			});
-			let html = "Not " + loginField.val() + "? Sign Out";
-			loginSignout.html(html);
-			loginField.val("");
-			return false;
-		}
-	});
-
-	//2 options to submit: 2) click submit button
-	loginForm.submit(event => {
+	let _socketLogin = event => {
 		event.preventDefault();
 		socket.emit("new login", loginField.val(), data => {
-			if (data) {
+			let username = data;
+			if (username) {
 				loginArea.hide();
 				chatArea.css("display", "flex");
 			}
 		});
-		let html = "Not " + loginField.val() + "? Sign Out";
+		let html = "Not <strong>" + loginField.val() + "</strong>? Sign Out";
 		loginSignout.html(html);
 		loginField.val("");
 		return false;
-	});
+	};
 
-	//allow 'enter' key === hitting submit button
-	chatForm.keypress(event => {
+	//Handle login form submit 1 of 2: pressing enter key
+	loginForm.keypress(event => {
 		const ENTER_KEY = 13;
 		if (event.which === ENTER_KEY) {
-			event.preventDefault();
-			socket.emit("new message", chatField.val());
-			chatField.val("");
-			return false;
+			_socketLogin(event);
 		}
 	});
 
-	chatForm.submit(() => {
+	//Handle login form submit 2 of 2: clicking submit button
+	loginForm.submit(event => {
+		_socketLogin(event);
+	});
+
+	let _socketMessage = event => {
+		event.preventDefault();
 		socket.emit("new message", chatField.val());
 		chatField.val("");
 		return false;
+	};
+
+	//Handle chat form submit 1 of 2: pressing enter key
+	chatForm.keypress(event => {
+		const ENTER_KEY = 13;
+		if (event.which === ENTER_KEY) {
+			_socketMessage(event);
+		}
 	});
 
-	//create message
+	//Handle chat form submit 2 of 2: clicking submit button
+	chatForm.submit(event => {
+		_socketMessage(event);
+	});
+
+	//clear chat trail when logout
+	loginSignout.on("click", () => {
+		chatTrail.html("");
+	});
+
+	//clear chat trail when user clicks eraser icon
+	eraserIcon.on("click", () => {
+		chatTrail.html("");
+	});
+
+	//write message item
 	socket.on("new message", (msg, username) => {
 		chatTrail.prepend($("<hr>"));
 		chatTrail.prepend(
@@ -79,20 +83,25 @@ $(() => {
 		chatTrail.prepend($('<h5 class="card-title"></h5>').text(username));
 	});
 
+	//update online COUNT
 	socket.on("get count", data => {
-		let html =
+		let count = data;
+		let html = "";
+		html =
 			"Online  <span class='badge badge-pill badge-success'>" +
-			data +
+			count +
 			"</span>";
 		onlineCount.html(html);
 	});
 
+	//update online ROSTER
 	socket.on("get logins", data => {
+		let roster = data;
 		let html = "";
 		for (let i = 0; i < data.length; i++) {
 			html +=
 				"<a href='#' class='list-group-item list-group-item-action flex-column align-items-start'> <div class='d-flex w-100 justify-content-between'> <h5 class='mb-1'>" +
-				data[i] +
+				roster[i] +
 				"</h5> </div> </a>";
 		}
 		whoseOnline.html(html);

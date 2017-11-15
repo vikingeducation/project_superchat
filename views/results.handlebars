@@ -3,7 +3,7 @@
 			<span class="navbar-brand mt-2 mb-2 pl-2"><i class="fa fa-comments fa-2x" aria-hidden="true"></i>  Super Quick Chat</span>
 			<a class="nav-link" href="/"><span id="loginSignout" class="navbar-text">
 				
-				<!-- exact username logged in here -->
+				<!-- exact username logged in goes here -->
 
 			</span></a>
 		</nav>
@@ -20,7 +20,7 @@
 							<div class="form-group">
 								<input id="loginField" type="text" class="form-control" placeholder="Username" autocomplete="off">
 							</div>
-							<button id="loginButton" type="submit" class="btn btn-warning btn-block">Continue</button>
+							<button type="submit" class="btn btn-warning btn-block">Continue</button>
 						</form>
 					</div> <!-- card-body --> 
 				</div> <!-- card -->
@@ -54,11 +54,11 @@
 			<div class="col-md-4">
 
 				<div class="card mb-3">
-					<div class="h4 card-header text-white bg-primary">Chalk Board  <a class="btn btn-primary" href="#"><i id="eraserButton" class="fa fa-eraser fa-lg" aria-hidden="true"></i></a>
+					<div class="h4 card-header text-white bg-primary">Chalk Board  <a class="btn btn-primary" href="#"><i id="eraserIcon" class="fa fa-eraser fa-lg" aria-hidden="true"></i></a>
 					</div>
 					<div class="card-body" id="chatTrail">
 
-						<!-- messages go here -->
+						<!-- messages (aka chat trail) goes here -->
 
 					</div>
 				</div>
@@ -71,7 +71,7 @@
 					<div class="h4 card-header text-white bg-primary">New Message
 					</div>					
 					<div class="card-body">
-					<form id="chatForm" action="/newMessage" method="post">
+					<form id="chatForm">
 						<div class="form-group">
 							<textarea id="chatField" class="form-control" autocomplete="off" rows="3"></textarea>
 						</div>

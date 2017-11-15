@@ -27,8 +27,10 @@ app.use(
 	express.static(__dirname + "node_modules/socket.io-client/dist/")
 );
 //nice to have / do later: store session in redis, not memory
-//attach to req.session
+//attaches session data to req.session
 //to destroy session: req.session = null
+//note: I created a session just for practice
+//the session is not explicitly used for any functionality
 app.use(
 	expressSession({
 		name: "chat-session",
@@ -42,6 +44,7 @@ app.use(
 //register routes
 app.get("/", (req, res) => {
 	console.log("In route........................");
+	//learn about the session here
 	// if (req.session) {
 	// 	console.log("session = " + req.session);
 	// 	console.log("session id = " + req.sessionID);
@@ -53,8 +56,7 @@ app.get("/", (req, res) => {
 });
 
 io.on("connection", socket => {
-	console.log("In connection ........................");
-	// if (req.session) {
+	console.log("In socket ........................");
 	console.log("CONNECTION: socket.username = " + socket.username);
 	let whoseOnline = [];
 	let onlineCount = 0;
@@ -62,7 +64,7 @@ io.on("connection", socket => {
 	socket.on("disconnect", () => {
 		console.log("DISCONNECTION: socket.username = " + socket.username);
 
-		//handle scenario when user refresh at login screen
+		//handle scenario when user refresh at login screen and no one is logged on. (specifically this handles deprecated redis call for zrem with undefined key)
 		if (socket.username !== undefined) {
 			redis
 				.removeSortedItem("whoseOnline", socket.username)
@@ -86,10 +88,6 @@ io.on("connection", socket => {
 					console.log(err);
 				});
 		}
-
-		//take username out of redis
-		//update usernames
-		//ie, io.sockets.emit('get users', usernames);
 		console.log("--> user disconnected");
 	});
 
@@ -101,6 +99,7 @@ io.on("connection", socket => {
 		redis
 			.addSortedItem("whoseOnline", socket.username)
 			.then(data => {
+				console.log("result of promise addSortedItem = " + data);
 				return redis.getCount("whoseOnline");
 			})
 			.then(data => {
@@ -123,7 +122,6 @@ io.on("connection", socket => {
 		let msg = data;
 		let username = socket.username;
 		console.log("NEW MESSAGE: socket.username = " + socket.username);
-		// let username = "anon";
 		io.emit("new message", msg, username);
 	});
 });
