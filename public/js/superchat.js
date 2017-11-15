@@ -19,6 +19,7 @@ $(() => {
 		chatTrail.html("");
 	});
 
+	//2 options to submit: 1) press enter
 	//allow 'enter' key === hitting submit button
 	loginForm.keypress(event => {
 		const ENTER_KEY = 13;
@@ -35,6 +36,21 @@ $(() => {
 			loginField.val("");
 			return false;
 		}
+	});
+
+	//2 options to submit: 2) click submit button
+	loginForm.submit(event => {
+		event.preventDefault();
+		socket.emit("new login", loginField.val(), data => {
+			if (data) {
+				loginArea.hide();
+				chatArea.css("display", "flex");
+			}
+		});
+		let html = "Not " + loginField.val() + "? Sign Out";
+		loginSignout.html(html);
+		loginField.val("");
+		return false;
 	});
 
 	//allow 'enter' key === hitting submit button
