@@ -1,10 +1,10 @@
 const express = require("express");
+const app = express();
 const expressHandlebars = require("express-handlebars");
 const bodyParser = require("body-parser");
 const redisClient = require("redis").createClient();
-const io = require("socket.io")(server);
-const app = express();
 const server = require("http").createServer(app);
+const io = require("socket.io")(server);
 
 const hbs = expressHandlebars.create({
   partialsDir: "views/",
@@ -18,6 +18,8 @@ app.use(
   "/socket.io",
   express.static(__dirname + "node_modules/socket.io-client/dist/")
 );
+
+express.static(__dirname + )
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -34,12 +36,15 @@ app.post("/", (req, res) => {
     "Anon",
     "userMessage",
     req.body.userMessage,
+		"room",
+		"Cats"
     (error, result) => {
       if (error) res.send("Error: " + error);
       redisClient.hgetall("message", function(err, object) {
         messageArr.push(object);
+        console.log(object);
         res.render("index", {
-          userMessage: messageArr
+          userMessages: messageArr
         });
       });
     }
