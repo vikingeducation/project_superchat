@@ -24,8 +24,8 @@ let count = 0;
 app.get('/', (req, res) => {
   if (!req.cookies.userName) {
     res.redirect('/login');
+    return true;
   }
-  console.log(req.cookies.userName);
   let params = [];
   promises
     .hgetAllPromise('messages')
@@ -37,16 +37,22 @@ app.get('/', (req, res) => {
       });
     })
     .then(data => {
-      console.log(params);
       let paramsObj = {};
       paramsObj.messages = params;
+      paramsObj.userName = req.cookies.userName;
       res.render('home', paramsObj);
     });
 });
 
+
 app.get('/login', (req, res) => {
   res.render('login');
 });
+
+app.post('/logout', (req, res) => {
+  res.clearCookie('userName');
+  res.redirect('/login');
+})
 
 client.setnx('messageCounter', 0);
 
@@ -58,7 +64,6 @@ app.post('/', (req, res) => {
 
 app.post('/login', (req, res) => {
   res.cookie('userName', req.body.userName);
-  console.log(res.cookies.userName);
   res.redirect('/');
 });
 
@@ -69,7 +74,8 @@ io.on('connection', client => {
       .incrMessageCounter()
       .then(promises.getMessageCounter)
       .then(counter => {
-        obj = { body: message, postedBy: 'Anon', room: 'Cats' };
+        console.log("message before save is " + message.userName)
+        obj = { body: message.body, postedBy: message.userName, room: 'Cats' };
         let strObj = JSON.stringify(obj);
         return promises.newMessagePromise(counter, strObj);
       })
