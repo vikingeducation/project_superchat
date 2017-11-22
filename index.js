@@ -31,7 +31,6 @@ app.get('/', (req, res) => {
     .hgetAllPromise('messages')
     .then(data => {
       if (!data) {
-
         return null;
       }
       let keys = Object.keys(data);
@@ -45,7 +44,6 @@ app.get('/', (req, res) => {
       let paramsObj = {};
       paramsObj.userName = req.cookies.userName;
       if (!data) {
-
         res.render('home', paramsObj);
         return null;
       }
@@ -57,7 +55,6 @@ app.get('/', (req, res) => {
     });
 });
 
-
 app.get('/login', (req, res) => {
   res.render('login');
 });
@@ -65,7 +62,7 @@ app.get('/login', (req, res) => {
 app.post('/logout', (req, res) => {
   res.clearCookie('userName');
   res.redirect('/login');
-})
+});
 
 client.setnx('messageCounter', 0);
 

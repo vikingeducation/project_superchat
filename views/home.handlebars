@@ -6,29 +6,31 @@
     </form>
   </div>
 
-  <div class='row'>
-    <header>Super Chat</header>
-  </div>
+
 
   <div class='row'>
-    <div class='col-sm-3 col-sm-offset-1' id="bodyColumn">
+
+  <div class='col-sm-3 chats'>
+    <div class='row'></div>
+    <div class='row'></div>
+  </div>
+
+<div class='col-sm-6 chats' id='messagesColumn'>
+  <div class='row'>
+    <div class='col-sm-6' id="bodyColumn">
       {{#each messages as |message|}}
       <div class='row'>{{message.body}}</div>
       {{/each}}
     </div>
-    <div class='col-sm-3 col-sm-offset-1' id="postedByColumn">
+    <div class='col-sm-6' id="postedByColumn">
       {{#each messages as |message|}}
       <div class='row'>{{message.postedBy}}</div>
       {{/each}}
     </div>
-    <div class='col-sm-3 col-sm-offset-1' id="roomColumn">
-      {{#each messages as |message|}}
-      <div class='row'>{{message.room}}</div>
-      {{/each}}
-    </div>
   </div>
+</div>
 
-  <div class="row">
+  <div class='col-sm-3 chats' id='newPost'>
     <form id='message-form' action="/" method="post">
       <label>Write Message </label><input id='message-input' type="text" name="newMessage">
       <input type="hidden" name="userName" value="{{userName}}" id="userName">
