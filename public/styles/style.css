@@ -1,20 +1,31 @@
-
-
-.message, .newp {
-    font-family: 'Timmana', sans-serif;
+.message,
+.newp {
+  font-family: "Timmana", sans-serif;
 }
 
+.table-striped {
+  border: 2px solid black;
+  margin-top: -10px;
+}
 
+th,
+tr {
+  text-align: center;
+}
+
+.thead-inverse {
+  align: center;
+}
 
 h1 {
-    font-family: 'Anton', sans-serif;
-    color: white;
+  font-family: "Anton", sans-serif;
+  color: white;
 }
 
 .newp {
-    color:darkolivegreen;
+  color: darkolivegreen;
 }
 
 .jumbotron text-center {
-    background-color: black;
+  background-color: black;
 }
