@@ -4,10 +4,8 @@ let io;
 
 const redisClient = require('redis').createClient();
 
-
 // Testing redis object + stringify
-/*
-let rooms = {
+/*let rooms = {
   "1" : {
     "1": {
       body: "some stuff",
@@ -15,10 +13,9 @@ let rooms = {
       room: "1"
     }
   }
-}
-*/
+}*/
 // ------------------------------
-
+//redisClient.set('rooms', JSON.stringify(rooms));
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -42,6 +39,28 @@ router.get('/', function(req, res, next) {
         console.error(err);
       });
 
+    client.on('newMessage', newMessage => {
+      let master = new Promise((resolve, reject) => {
+        console.log(newMessage);
+        redisClient.get('rooms', (err, data) => {
+          if (err) return reject(err);
+          return resolve(JSON.parse(data));
+        });
+      });
+      master
+        .then(rooms => {
+          let index = (
+            Object.keys(rooms[newMessage.room]).length + 1
+          ).toString();
+          rooms[newMessage.room][index] = newMessage;
+          console.log(rooms, index);
+          io.emit('addMessage', newMessage);
+          redisClient.set('rooms', JSON.stringify(rooms));
+        })
+        .catch(err => {
+          console.error(err);
+        });
+    });
   });
 
   res.render('index', {title: 'Express'});
