@@ -27,6 +27,7 @@ app.get('/', (req, res) => {
     return true;
   }
   let params = [];
+  let roomParams = [];
   promises
     .hgetAllPromise('messages')
     .then(data => {
@@ -41,6 +42,21 @@ app.get('/', (req, res) => {
       return true;
     })
     .then(data => {
+      return promises.hgetAllPromise('rooms')
+    })
+    .then(data => {
+      if (!data) {
+        return null;
+      }
+      console.log("room data is " + data);
+      let keys = Object.keys(data);
+      keys.forEach(key => {
+        let json = JSON.parse(data[key]);
+        roomParams.push(json);
+      });
+      return true;
+    })
+    .then(data => {
       let paramsObj = {};
       paramsObj.userName = req.cookies.userName;
       if (!data) {
@@ -48,6 +64,8 @@ app.get('/', (req, res) => {
         return null;
       }
       paramsObj.messages = params;
+      paramsObj.rooms = roomParams;
+      paramsObj.currentRoom = paramsObj.rooms[0].name;
       res.render('home', paramsObj);
     })
     .catch(err => {
@@ -90,6 +108,22 @@ io.on('connection', client => {
       })
       .then(data => {
         io.emit('addMessage', obj);
+      })
+      .catch(console.error);
+  });
+
+  client.on('newRoom', room => {
+    let obj;
+    promises
+      .incrRoomCounter()
+      .then(promises.getRoomCounter)
+      .then(counter => {
+        obj = { name: room.name };
+        let strObj = JSON.stringify(obj);
+        return promises.newRoomPromise(counter, strObj);
+      })
+      .then(data => {
+        io.emit('addRoom', obj);
       })
       .catch(console.error);
   });

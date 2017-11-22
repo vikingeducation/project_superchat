@@ -10,9 +10,14 @@
 
   <div class='row'>
 
-  <div class='col-sm-3 chats'>
-    <div class='row'></div>
-    <div class='row'></div>
+  <div class='col-sm-3 chats' id="roomsColumn">
+    <form id='room-form' action="/room" method="post">
+      <label>New Room Name</label><input id='room-input' type="text" name="newRoomName">
+      <input type="submit">
+    </form>
+    {{#each rooms as |room|}}
+      <a href="#"><div class='row'>{{room.name}}</div></a>
+    {{/each}}
   </div>
 
 <div class='col-sm-6 chats' id='messagesColumn'>
@@ -34,6 +39,7 @@
     <form id='message-form' action="/" method="post">
       <label>Write Message </label><input id='message-input' type="text" name="newMessage">
       <input type="hidden" name="userName" value="{{userName}}" id="userName">
+      <input type="hidden" name="currentRoom" value="{{currentRoom}}" id="currentRoom">
       <input type="submit">
     </form>
   </div>

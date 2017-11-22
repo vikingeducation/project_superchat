@@ -29,7 +29,15 @@
           message.body=$('#message-input').val();
           message.userName=$('#userName').val();
           socket.emit('newMessage', message);
-        })
+        });
+
+         $("#room\-form").submit((e) => {
+          e.preventDefault();
+          let room={};
+          room.name=$('#room-input').val();
+          room.messages=[];
+          socket.emit('newRoom', room);
+        });
 
         socket.on("addMessage", obj=>{
           console.log(obj);
@@ -39,7 +47,14 @@
           $('#bodyColumn').append(`<div class="row">${body}</div>`);
           $('#roomColumn').append(`<div class="row">${room}</div>`);
           $('#postedByColumn').append(`<div class="row">${postedBy}</div>`);
-        })
+        });
+
+        socket.on("addRoom", obj=>{
+          console.log(obj);
+          let name = obj.name;
+          let messages = obj.messages;
+          $('#roomsColumn').append(`<div class="row">${name}</div>`);
+        });
 
 
 
