@@ -19,9 +19,11 @@ app.use(
   express.static(__dirname + "node_modules/socket.io-client/dist/")
 );
 
-express.static(__dirname + )
+
 
 app.use(bodyParser.urlencoded({ extended: false }));
+
+app.use(express.static(`${__dirname}/public`));
 
 let messageArr = [];
 
@@ -37,7 +39,7 @@ app.post("/", (req, res) => {
     "userMessage",
     req.body.userMessage,
 		"room",
-		"Cats"
+		"Cats",
     (error, result) => {
       if (error) res.send("Error: " + error);
       redisClient.hgetall("message", function(err, object) {

@@ -1,0 +1,20 @@
+
+
+.message, .newp {
+    font-family: 'Timmana', sans-serif;
+}
+
+
+
+h1 {
+    font-family: 'Anton', sans-serif;
+    color: white;
+}
+
+.newp {
+    color:darkolivegreen;
+}
+
+.jumbotron text-center {
+    background-color: black;
+}
