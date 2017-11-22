@@ -51,7 +51,6 @@ app.post("/:room", (req, res) => {
       if (error) res.send("Error: " + error);
       redisClient.hgetall("message", function(err, object) {
         messageArr.push(object);
-        console.log(object);
         res.render("chatroom", {
           userMessages: messageArr,
           chatRooms: chatRooms,
