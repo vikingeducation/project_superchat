@@ -3,15 +3,17 @@ const app = express();
 const router = express.Router();
 const server = require('http').createServer(app);
 const exphbs = require('express-handlebars');
-const redis = require('redis');
-const client = redis.createClient();
+const client = require('./lib/redis_server.js');
 const bodyParser = require('body-parser');
-app.use(bodyParser.urlencoded({ extended: true }));
+const promises = require('./lib/promises.js');
 const io = require('socket.io')(server);
+const cookieParser = require('cookie-parser');
+
+app.use(bodyParser.urlencoded({ extended: true }));
 app.engine('handlebars', exphbs({ defaultLayout: 'main' }));
 app.set('view engine', 'handlebars');
 app.use(express.static(__dirname + '/public'));
-
+app.use(cookieParser());
 app.use(
   '/socket.io',
   express.static(__dirname + 'node_modules/socket.io-client/dist/')
@@ -19,21 +21,14 @@ app.use(
 
 let count = 0;
 
-var hgetAllPromise = hash => {
-  return new Promise((resolve, reject) => {
-    client.hgetall(hash, (err, data) => resolve(data));
-  });
-};
-
-var hmgetPromise = (hash, field) => {
-  return new Promise((resolve, reject) => {
-    client.hmget(hash, field, (err, data) => resolve(data));
-  });
-};
-
 app.get('/', (req, res) => {
+  if (!req.cookies.userName) {
+    res.redirect('/login');
+  }
+  console.log(req.cookies.userName);
   let params = [];
-  hgetAllPromise('messages')
+  promises
+    .hgetAllPromise('messages')
     .then(data => {
       let keys = Object.keys(data);
       keys.forEach(key => {
@@ -49,73 +44,37 @@ app.get('/', (req, res) => {
     });
 });
 
-let getMessageCounter = () => {
-  return new Promise((resolve, reject) => {
-    client.get('messageCounter', (err, data) => {
-      if (err) {
-        console.error(err);
-      }
-      return resolve(data);
-    });
-  });
-};
-
-let incrMessageCounter = () => {
-  return new Promise((resolve, reject) => {
-    client.incr('messageCounter', (err, data) => {
-      if (err) {
-        console.error(err);
-      }
-      return resolve(data);
-    });
-  });
-};
-
-let newMessagePromise = (counter, data) => {
-  return new Promise((resolve, reject) => {
-    client.hmset('messages', counter, data, (err, data) => {
-      if (err) {
-        console.error(err);
-      }
-      return resolve(data);
-    });
-  });
-};
+app.get('/login', (req, res) => {
+  res.render('login');
+});
 
 client.setnx('messageCounter', 0);
 
 app.post('/', (req, res) => {
   let newMessage = req.body.newMessage;
 
-  /*
-
-  incrMessageCounter()
-    .then(getMessageCounter)
-    .then(counter => {
-      let obj = { body: newMessage, postedBy: 'Anon', room: 'Cats' };
-      obj = JSON.stringify(obj);
-      return newMessagePromise(counter, obj);
-    })
-    .then(res.redirect('back'))
-    .catch(console.error);
-
-    */
   res.redirect('back');
+});
 
+app.post('/login', (req, res) => {
+  res.cookie('userName', req.body.userName);
+  console.log(res.cookies.userName);
+  res.redirect('/');
 });
 
 io.on('connection', client => {
   client.on('newMessage', message => {
     let obj;
-    incrMessageCounter()
-      .then(getMessageCounter)
+    promises
+      .incrMessageCounter()
+      .then(promises.getMessageCounter)
       .then(counter => {
         obj = { body: message, postedBy: 'Anon', room: 'Cats' };
         let strObj = JSON.stringify(obj);
-        return newMessagePromise(counter, strObj);
+        return promises.newMessagePromise(counter, strObj);
       })
       .then(data => {
-        io.emit("addMessage", obj)
+        io.emit('addMessage', obj);
       })
       .catch(console.error);
   });
