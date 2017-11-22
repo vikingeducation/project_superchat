@@ -4,6 +4,7 @@
   "description": "Build a realtime multi-room chat application. Make it super.",
   "main": "app.js",
   "dependencies": {
+    "async-redis": "^1.0.0",
     "body-parser": "^1.18.2",
     "cookie-parser": "^1.4.3",
     "express": "^4.16.2",

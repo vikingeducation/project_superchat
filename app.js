@@ -2,14 +2,18 @@ const express = require("express");
 const app = express();
 var server = require("http").createServer(app);
 var io = require("socket.io")(server);
-const redisClient = require("redis").createClient();
+const redisClient = require("async-redis").createClient();
 const expressHandlebars = require("express-handlebars");
 const cookieParser = require("cookie-parser");
 
 app.use(cookieParser());
 
 const bodyParser = require("body-parser");
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({extended: false}));
+
+redisClient.on("error", function(err) {
+  console.log("Error " + err);
+});
 
 const hbs = expressHandlebars.create({
   partialsDir: "views/",
@@ -26,13 +30,21 @@ app.use(
 
 app.use(express.static(__dirname + "/public"));
 
+let firstmessageArr = []; // this is the message array for ./
 app.get("/", (req, res) => {
   redisClient.KEYS("*", (err, keys) => {
-    console.log(keys);
+    keys.forEach(key => {
+      redisClient.hgetall(key, (err, obj) => {
+        firstmessageArr.push(obj);
+      });
+    });
   });
 
   if (req.cookies.username) {
-    res.render("index", { username: req.cookies.username });
+    res.render("index", {
+      username: req.cookies.username,
+      messages: firstmessageArr
+    });
   } else {
     res.render("login", {});
   }
@@ -47,20 +59,7 @@ app.post("/chatroom/signout", (req, res) => {
   res.render("login", {});
 });
 
-var newpost = () => {
-  return new Promise((resolve, reject) => {
-    resolve(io.emit("update", "data"));
-    // io.emit("update", "data", (error, message) => {
-    //   if (error) {
-    //     return reject(error);
-    //   }
-    //   return resolve(message);
-    // });
-  });
-};
-
-let messageArr = [];
-
+let messageArr = []; // this is the message array for ./chatroom/newpost
 app.post("/chatroom/newpost", (req, res) => {
   console.log(req.body.newpost);
 
@@ -70,43 +69,52 @@ app.post("/chatroom/newpost", (req, res) => {
   let randomNum = Math.random();
   let messageId = chatroom + String(randomNum);
 
-  let existingId = redisClient.KEYS(messageId, (err, key) => {
-    if (err) return false;
-    if (key) return true;
-  });
+  //checks to make sure messageiD is unique and if it is set it with hmset
+  redisClient.KEYS(messageId, (err, key) => {
+    if (err) {
+      redisClient.hmset(
+        messageId,
+        {
+          username,
+          content,
+          chatroom
+        },
+        (error, result) => {
+          if (error) res.send("Error: " + error);
+          redisClient.hgetall(messageId, (err, obj) => {
+            messageArr.push(obj);
+            io.emit("update", "data");
+            res.render("index", {
+              messages: messageArr,
+              username: req.cookies.username
+            });
+          });
+        }
+      );
+    } else {
+      messageId = chatroom + String(Math.random());
+      redisClient.hmset(
+        messageId,
+        {
+          username,
+          content,
+          chatroom
+        },
+        (error, result) => {
+          if (error) res.send("Error: " + error);
 
-  while (!existingId) {
-    messageId += String(randomNum);
-  }
-
-  redisClient.hmset(
-    messageId,
-    {
-      username,
-      content,
-      chatroom
-    },
-    (error, result) => {
-      if (error) res.send("Error: " + error);
-
-      redisClient.hgetall(messageId, (err, obj) => {
-        messageArr.push(obj);
-        res.render("index", {
-          messages: messageArr,
-          username: req.cookies.username
-        });
-      });
+          redisClient.hgetall(messageId, (err, obj) => {
+            messageArr.push(obj);
+            io.emit("update", "data");
+            res.render("index", {
+              messages: messageArr,
+              username: req.cookies.username
+            });
+          });
+        }
+      );
     }
-  );
+  });
 });
-// newpost()
-//   .then(message => {
-//     console.log("this is the io.emit message: " + message);
-//     io.emit("update", "data");
-//   })
-//   .then(data => res.redirect("/"))
-//   .catch(error => {
-//     console.log(error);
-//   });
 
 server.listen(3000);
