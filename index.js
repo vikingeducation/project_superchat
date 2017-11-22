@@ -47,35 +47,59 @@ app.get('/', (req, res) => {
       paramsObj.messages = params;
       res.render('home', paramsObj);
     });
-  /*
-  client.getall((err, data) => {
-    //data == 1
-    let dataObj = hmget('messages', data);
-    console.log("dataobj is " + dataObj);
-    let jsonObj = JSON.parse(dataObj);
-    //jsonObj = {body:,postedBy:}
-    params.push(jsonObj);
-  })
-
-  */
 });
+
+let getMessageCounter = () => {
+  return new Promise((resolve, reject) => {
+    client.get('messageCounter', (err, data) => {
+      if (err) {
+        console.error(err);
+      }
+      return resolve(data);
+    });
+  });
+};
+
+let incrMessageCounter = () => {
+  return new Promise((resolve, reject) => {
+    client.incr('messageCounter', (err, data) => {
+      if (err) {
+        console.error(err);
+      }
+      return resolve(data);
+    });
+  });
+};
+
+let newMessagePromise = (counter, data) => {
+  return new Promise((resolve, reject) => {
+    client.hmset('messages', counter, data, (err, data) => {
+      if (err) {
+        console.error(err);
+      }
+      return resolve(data);
+    });
+  });
+};
+
+client.setnx('messageCounter', 0);
 
 app.post('/', (req, res) => {
   let newMessage = req.body.newMessage;
 
-  /*
-  client.hmget('messages', (err, data) => {
-    console.log(err);
-    console.log(data);
-  })
+  incrMessageCounter()
+    .then(getMessageCounter)
+    .then(counter => {
+      let obj = { body: newMessage, postedBy: 'Anon', room: 'Cats' };
+      obj = JSON.stringify(obj);
+      return newMessagePromise(counter, obj);
+    })
+    .then(res.redirect('back'))
+    .catch(console.error);
+});
 
-  */
-  let obj = { body: newMessage, postedBy: '', room: '' };
-  obj = JSON.stringify(obj);
-  client.hmset('messages', '1', obj);
-  client.hmset('messages', '2', obj);
-  console.log(newMessage);
-  console.log(obj);
+io.on('connection', client => {
+  client.on('newMessage', message => {});
 });
 
 //Start server

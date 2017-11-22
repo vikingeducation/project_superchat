@@ -15,11 +15,16 @@
       <div class='row'>{{message.postedBy}}</div>
       {{/each}}
     </div>
+    <div class='col-sm-3 col-sm-offset-1'>
+      {{#each messages as |message|}}
+      <div class='row'>{{message.room}}</div>
+      {{/each}}
+    </div>
   </div>
 
   <div class="row">
-    <form action="/" method="post">
-      <label>Write Message </label><input type="text" name="newMessage">
+    <form id='message-form' action="/" method="post">
+      <label>Write Message </label><input id='message-input' type="text" name="newMessage">
       <input type="submit">
     </form>
   </div>
