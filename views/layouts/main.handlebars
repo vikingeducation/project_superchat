@@ -25,11 +25,8 @@
 
         $("#message\-form").submit((e) => {
           let message={};
-          e.preventDefault();
           message.body=$('#message-input').val();
           message.userName=$('#userName').val();
-          console.log(message);
-          console.log("username before submit is "+message.userName);
           socket.emit('newMessage', message);
         })
 

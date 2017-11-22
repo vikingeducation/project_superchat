@@ -30,17 +30,30 @@ app.get('/', (req, res) => {
   promises
     .hgetAllPromise('messages')
     .then(data => {
+      if (!data) {
+
+        return null;
+      }
       let keys = Object.keys(data);
       keys.forEach(key => {
         let json = JSON.parse(data[key]);
         params.push(json);
       });
+      return true;
     })
     .then(data => {
       let paramsObj = {};
-      paramsObj.messages = params;
       paramsObj.userName = req.cookies.userName;
+      if (!data) {
+
+        res.render('home', paramsObj);
+        return null;
+      }
+      paramsObj.messages = params;
       res.render('home', paramsObj);
+    })
+    .catch(err => {
+      console.log(err);
     });
 });
 
@@ -74,7 +87,6 @@ io.on('connection', client => {
       .incrMessageCounter()
       .then(promises.getMessageCounter)
       .then(counter => {
-        console.log("message before save is " + message.userName)
         obj = { body: message.body, postedBy: message.userName, room: 'Cats' };
         let strObj = JSON.stringify(obj);
         return promises.newMessagePromise(counter, strObj);
