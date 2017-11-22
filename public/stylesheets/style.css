@@ -7,10 +7,19 @@ a {
   color: #00B7FF;
 }
 
+#message-box, #submit-box {
+  margin:8px
+}
+
 .box {
   border:1px solid #938c8c;
   margin:5px;
   padding-left:0px;
+}
+
+#submit {
+  margin-left:auto;
+  color:green;
 }
 
 .side-header {
