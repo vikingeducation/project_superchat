@@ -39,6 +39,12 @@
           socket.emit('newRoom', room);
         });
 
+        $('a').on('click',(e) => {
+          let name = e.target.innerHTML;
+          $('#currentRoom').val(name);
+          console.log(name);
+        });
+
         socket.on("addMessage", obj=>{
           console.log(obj);
           let body = obj.body;
