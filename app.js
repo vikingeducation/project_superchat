@@ -2,14 +2,14 @@ const express = require("express");
 const app = express();
 var server = require("http").createServer(app);
 var io = require("socket.io")(server);
-const redisClient = require("async-redis").createClient();
+const redisClient = require("redis").createClient();
 const expressHandlebars = require("express-handlebars");
 const cookieParser = require("cookie-parser");
-
+//morgan toolkit
 app.use(cookieParser());
 
 const bodyParser = require("body-parser");
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.urlencoded({ extended: false }));
 
 redisClient.on("error", function(err) {
   console.log("Error " + err);
@@ -40,10 +40,23 @@ app.get("/", (req, res) => {
     });
   });
 
+  let allMessageChatrooms = firstmessageArr.map(obj => {
+    return obj.chatroom;
+  });
+
+  var uniqueChatroomsArr = [];
+  allMessageChatrooms.forEach(item => {
+    if (!uniqueChatroomsArr.includes(item)) {
+      uniqueChatroomsArr.push(item);
+    }
+  });
+
   if (req.cookies.username) {
     res.render("index", {
       username: req.cookies.username,
-      messages: firstmessageArr
+      messages: firstmessageArr,
+      chatroomName: req.params.chatroomName,
+      chatroomList: uniqueChatroomsArr
     });
   } else {
     res.render("login", {});
@@ -61,8 +74,6 @@ app.post("/chatroom/signout", (req, res) => {
 
 let messageArr = []; // this is the message array for ./chatroom/newpost
 app.post("/chatroom/newpost", (req, res) => {
-  console.log(req.body.newpost);
-
   let username = req.cookies.username;
   let content = req.body.newpost;
   let chatroom = req.body.chatroomId.toString().toLowerCase();
@@ -84,10 +95,11 @@ app.post("/chatroom/newpost", (req, res) => {
           redisClient.hgetall(messageId, (err, obj) => {
             messageArr.push(obj);
             io.emit("update", "data");
-            res.render("index", {
-              messages: messageArr,
-              username: req.cookies.username
-            });
+            // res.render("index", {
+            //   messages: messageArr,
+            //   username: req.cookies.username
+            // });
+            res.redirect("/chatroom/" + obj.chatroom);
           });
         }
       );
@@ -106,15 +118,69 @@ app.post("/chatroom/newpost", (req, res) => {
           redisClient.hgetall(messageId, (err, obj) => {
             messageArr.push(obj);
             io.emit("update", "data");
-            res.render("index", {
-              messages: messageArr,
-              username: req.cookies.username
-            });
+            // res.render("index", {
+            //   messages: messageArr,
+            //   username: req.cookies.username
+            // });
+            res.redirect("/chatroom/" + obj.chatroom);
           });
         }
       );
     }
   });
+});
+
+app.get("/chatroom/:chatroomName", (req, res) => {
+  let firstmessageArrPromise = () => {
+    return new Promise((resolve, reject) => {
+      if (firstmessageArr.length === 0) {
+        redisClient.KEYS("*", (err, keys) => {
+          keys.forEach(key => {
+            redisClient.hgetall(key, (err, obj) => {
+              firstmessageArr.push(obj);
+            });
+          });
+        });
+      }
+      return resolve(firstmessageArr);
+    });
+  };
+
+  let chatroomMessagesArr;
+
+  firstmessageArrPromise()
+    .then(firstmessageArr => {
+      chatroomMessagesArr = firstmessageArr.filter(obj => {
+        if (obj.chatroom === req.params.chatroomName) {
+          return true;
+        }
+      });
+      return chatroomMessagesArr;
+    })
+    .then(chatroomMessagesArr => {
+      var allMessageChatrooms = firstmessageArr.map(obj => {
+        return obj.chatroom;
+      });
+      return allMessageChatrooms;
+    })
+    .then(allMessageChatrooms => {
+      var uniqueChatroomsArr = [];
+      allMessageChatrooms.forEach(item => {
+        if (!uniqueChatroomsArr.includes(item)) {
+          uniqueChatroomsArr.push(item);
+        }
+      });
+      return uniqueChatroomsArr;
+    })
+    .then(uniqueChatroomsArr => {
+      res.render("index", {
+        username: req.cookies.username,
+        messages: chatroomMessagesArr,
+        chatroomName: req.params.chatroomName,
+        chatroomList: uniqueChatroomsArr
+      });
+    })
+    .catch(err => console.log(err));
 });
 
 server.listen(3000);
