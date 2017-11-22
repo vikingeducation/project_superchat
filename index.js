@@ -20,11 +20,9 @@ app.use(
 );
 
 app.use(bodyParser.urlencoded({ extended: false }));
-
 app.use(express.static(`${__dirname}/public`));
 
 let chatRooms = ["Cats", "Dogs", "Programmers"];
-
 let messageArr = [];
 
 app.get("/", (req, res) => {
