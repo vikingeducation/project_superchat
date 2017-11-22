@@ -1,6 +1,6 @@
 <nav class="navbar navbar-dark bg-dark">
 	<h1 class='white'>SuperChat!</h1>
-  <a id="login" href="/users/login">Login</a>
+	<a id="login" href="/users/login">{{name}}</a>
 </nav>
 <div class='container-fluid'>
 	<div class='row'>
@@ -8,11 +8,13 @@
 			<h5 class = "side-header white">Hello</h4>
 			<div class='' id='message-box'></div>
 		</div>
-		<div class='box post col-md-3'>
-			<h5 class="side-header white">This is the post box</h4>
-			<div class='' id='submit-box'>
-				<textarea id='post-box'></textarea><br>
-				<button id='submit-button'>Submit Post</button>
+		<div class='post col-md-3'>
+			<div class='box'>
+				<h5 class="side-header white">This is the post box</h4>
+				<div class='' id='submit-box'>
+					<textarea id='post-box'></textarea><br>
+					<button id='submit-button'>Submit Post</button>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -31,7 +33,7 @@ const socket = io.connect('http://localhost:3000');
 $('#submit-button').click(()=>{
 	newMessage = {
 		body: $('#post-box')[0].value,
-		author: 'Gene',
+		author: $('#login').html(),
 		room: '1'
 	}
 	$('#post-box')[0].value = '';

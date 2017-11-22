@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 let io;
+let cookieParser = require('cookie-parser');
+let bodyParser = require('body-parser');
 
 const redisClient = require('redis').createClient();
 
@@ -16,6 +18,10 @@ const redisClient = require('redis').createClient();
 }*/
 // ------------------------------
 //redisClient.set('rooms', JSON.stringify(rooms));
+router.post('/', function(req, res, next){
+	res.cookie('username', req.body.user);
+	res.redirect('/');
+});
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -62,8 +68,12 @@ router.get('/', function(req, res, next) {
         });
     });
   });
-
-  res.render('index', {title: 'Express'});
+	/*(if(!req.cookies){
+		req.cookies = {};
+	}*/
+  let userName = req.cookies.username || 'login';
+  console.log(res.cookie);
+  res.render('index', {name: userName});
 });
 
 module.exports = router;
