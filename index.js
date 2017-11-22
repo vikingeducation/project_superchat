@@ -72,4 +72,13 @@ app.post("/:room", (req, res) => {
   );
 });
 
+io.on('connection', client => {
+  console.log("New connection!")
+
+client.on('submit', () => {
+    io.emit('messages', )
+  })
+
+})
+
 server.listen(3000);
