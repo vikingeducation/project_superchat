@@ -1,0 +1,48 @@
+<div class="box">
+  <div class="box--title">Chat Rooms</div>
+  <div class="box--content">
+  <ul>
+  <li>Chat Room:</li>
+  <li>Chat Room:</li>
+  <li>Chat Room:</li>
+  </ul>
+  </div>
+</div>
+
+<div class="box">
+  <div class="box--title">
+    Room name
+  </div>
+  <div class="box--content">
+  <ul>
+  <li>Body:</li>
+  <li>Username: </li>
+  <li>Room Posted in:</li>
+  </ul>
+  </div>
+</div>
+
+<div class="box">
+  <div class="box--title">Chat</div>
+  <div class="box--content">
+  <form action="/chatroom/newpost" method="POST">
+  <input type="text" name="newpost" id="newpost" placeholder="Chat here!">
+  <input type="submit" value="Submit" method="post">
+  </form>
+  </div>
+</div>
+
+<div class="box">
+  <div class="box--title">Username</div>
+  <div class="box--content">
+  {{username}}
+  <form action="/chatroom/signout" method="POST">
+  <input type="submit" value="Sign Out" method="post">
+  </form>
+  </div>
+</div>
+
+<script>
+
+
+</script>
