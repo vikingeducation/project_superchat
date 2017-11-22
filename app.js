@@ -43,4 +43,9 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
+app.use(
+      "/socket.io",
+        express.static(__dirname + "node_modules/socket.io-client/dist/")
+);
+
 module.exports = app;
