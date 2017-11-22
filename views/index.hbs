@@ -1,14 +1,21 @@
-<div class="container">
-<div class = "row">
-  <div class="darkBG col-sm-6">test</div>
-  <div class="darkerBG col-sm-6">test2</div>
-</div>
-</div>
+<nav class="navbar navbar-dark bg-dark">
+	<h1 class='white'>SuperChat!</h1>
+</nav>
+<div class='container-fluid'>
+	<div class='row'>
+		<div class='col-md-3'>
+			<h4>Hello</h4>
+			<p>Is this working?o;alwke jhga;ls kdjga;lw skhejdg;al kshjdlkjg fa;lkshj g;lkahjas d;lkdgja; wlwkrshjge; lakhjseg ;lask jdg;l</p>
+		</div>
+		<div class='col-md-3'>
+			<h4>This is the post box</h4>
+			<p>Is it working</p>
+		</div>
+	</div>
+	<script>
+const socket = io.connect('http://localhost:3000');
 
-<script>
-   const socket = io.connect('http://localhost:3000');
-
-   socket.on("loadMessages", (message) => {
-     console.log(JSON.stringify(message));
-   })
-</script>
+	socket.on("loadMessages", (message) => {
+	console.log(JSON.stringify(message));
+})
+	</script>
