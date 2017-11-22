@@ -87,6 +87,8 @@ client.setnx('messageCounter', 0);
 app.post('/', (req, res) => {
   let newMessage = req.body.newMessage;
 
+  /*
+
   incrMessageCounter()
     .then(getMessageCounter)
     .then(counter => {
@@ -96,10 +98,27 @@ app.post('/', (req, res) => {
     })
     .then(res.redirect('back'))
     .catch(console.error);
+
+    */
+  res.redirect('back');
+
 });
 
 io.on('connection', client => {
-  client.on('newMessage', message => {});
+  client.on('newMessage', message => {
+    let obj;
+    incrMessageCounter()
+      .then(getMessageCounter)
+      .then(counter => {
+        obj = { body: message, postedBy: 'Anon', room: 'Cats' };
+        let strObj = JSON.stringify(obj);
+        return newMessagePromise(counter, strObj);
+      })
+      .then(data => {
+        io.emit("addMessage", obj)
+      })
+      .catch(console.error);
+  });
 });
 
 //Start server
