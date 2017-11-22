@@ -7,17 +7,13 @@ let bodyParser = require('body-parser');
 const redisClient = require('redis').createClient();
 
 // Testing redis object + stringify
-/*let rooms = {
+let rooms = {
   "1" : {
-    "1": {
-      body: "some stuff",
-      author: "Gene",
-      room: "1"
     }
-  }
-}*/
+}
 // ------------------------------
-//redisClient.set('rooms', JSON.stringify(rooms));
+redisClient.setnx('rooms', JSON.stringify(rooms));
+
 router.post('/', function(req, res, next){
 	res.cookie('username', req.body.user);
 	res.redirect('/');
