@@ -21,7 +21,7 @@
     var socket = io.connect('http://localhost:3000')
 
     socket.on('update' (data) => {
-      console.log('socket.on ran');
+      console.log('socket.on ran', data);
       location.reload(true)
     })
   </script>

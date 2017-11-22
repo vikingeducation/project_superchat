@@ -14,11 +14,13 @@
     Room name
   </div>
   <div class="box--content">
+  {{#each messages as |message|}}
   <ul>
-  <li>Body:</li>
-  <li>Username: </li>
-  <li>Room Posted in:</li>
+  <li>Username:{{message.username}}</li>
+  <li>Content:{{message.content}}</li>
+  <li>Room Posted in:{{message.chatroom}}</li>
   </ul>
+  {{/each}}
   </div>
 </div>
 
@@ -26,6 +28,7 @@
   <div class="box--title">Chat</div>
   <div class="box--content">
   <form action="/chatroom/newpost" method="POST">
+  <input type="text" name="chatroomId" placeholder="Chatroom!">
   <input type="text" name="newpost" id="newpost" placeholder="Chat here!">
   <input type="submit" value="Submit" method="post">
   </form>
