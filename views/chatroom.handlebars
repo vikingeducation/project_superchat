@@ -30,24 +30,16 @@
           </tr>
         </thead>
         <tbody>
-          {{#each userMessages as |userMessage|}}
-          <tr>
-            <th>{{userMessage.user}}</th>
-          </tr>
-          <tr>
-            <td>{{userMessage.userMessage}}</td>
-          </tr>
-          {{/each}}
         </tbody>
       </table>
     </div>
     <div class="col-sm-4">
-      <form method="post" action="/{{currentRoom}}">
+      <form id="myForm">
         <div class="form-group">
           <label for="comment"><div class="newp"><h4>New Post:</h4></div></label>
           <textarea class="form-control" rows="5" id="comment" name="userMessage"></textarea>
         </div>
-        <button type="submit" class="btn btn-primary btn-lg">Submit</button>
+        <button type="submit" class="btn btn-primary btn-lg" name="">Submit</button>
       </form>
     </div>
   </div>
