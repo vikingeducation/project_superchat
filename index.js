@@ -9,7 +9,6 @@ const cookieParser = require("cookie-parser");
 
 const hbs = expressHandlebars.create({ defaultLayout: "main" });
 let chatRooms = ["Cats", "Dogs", "Programmers"];
-let newUsername = "";
 
 app.engine("handlebars", hbs.engine);
 app.set("view engine", "handlebars");
@@ -25,8 +24,6 @@ app.get("/", (req, res) => {
   if (req.cookies.nameInput) {
     res.render("index", { chatRooms: chatRooms });
   } else {
-    newUsername = req.cookies.nameInput;
-    console.log(req.cookies.nameInput);
     res.render("newUser");
   }
 });
@@ -38,9 +35,8 @@ app.get("/:room", (req, res) => {
   });
 });
 
-app.post("/", (req, res) => {
-  res.cookie("nameInput", req.params.nameInput);
-  console.log(req.cookies.nameInput);
+app.post("/postform", (req, res) => {
+  res.cookie("nameInput", req.body.newName);
   res.redirect("/");
 });
 
@@ -51,7 +47,7 @@ io.on("connection", client => {
         redisClient.hmset(
           "message",
           "user",
-          newUsername,
+          "Anon",
           "userMessage",
           data,
           (err, result) => (err ? reject(err) : resolve(result))
