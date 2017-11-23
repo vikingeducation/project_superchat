@@ -137,6 +137,7 @@ app.post("/chatroom/newpost", (req, res) => {
 });
 
 app.get("/chatroom/:chatroomName", (req, res) => {
+  //this doesn't work yet.
   let firstmessageArrPromise = () => {
     return new Promise((resolve, reject) => {
       resolve();
