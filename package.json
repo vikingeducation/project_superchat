@@ -18,6 +18,7 @@
   "homepage": "https://github.com/eliashantula/project_superchat#readme",
   "dependencies": {
     "body-parser": "^1.18.2",
+    "cookie-parser": "^1.4.3",
     "expres": "0.0.5",
     "express": "^4.16.2",
     "express-handlebars": "^3.0.0",

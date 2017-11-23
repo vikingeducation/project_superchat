@@ -12,7 +12,6 @@
   <script src="/socket.io/socket.io.js"></script>
 </head>
 
-
 {{{body}}}
 
 <script>
@@ -29,7 +28,6 @@ socket.on("messages", object => {
   let $td = $("<td>").text(object.userMessage);
   $("tbody").eq(1).append("<tr>").append($th).append("<tr>").append($td);
 });
-
 </script>
 
 </html>
