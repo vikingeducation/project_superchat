@@ -1,21 +1,20 @@
 var express = require('express');
 var router = express.Router();
-let io;
-let cookieParser = require('cookie-parser');
+let cookierParser = require('cookie-parser');
 let bodyParser = require('body-parser');
-
 const redisClient = require('redis').createClient();
 
 // Testing redis object + stringify
 let rooms = {
-  '1': {},
-};
+  "1" : {
+    }
+}
 // ------------------------------
 redisClient.setnx('rooms', JSON.stringify(rooms));
 
-router.post('/', function(req, res, next) {
-  res.cookie('username', req.body.user);
-  res.redirect('/');
+router.post('/', function(req, res, next){
+	res.cookie('username', req.body.user);
+	res.redirect('/');
 });
 
 /* GET home page. */
@@ -23,7 +22,6 @@ router.get('/', function(req, res, next) {
   io = require('socket.io')(req.connection.server);
 
   io.on('connection', client => {
-    console.log('connection up');
 
     let message = new Promise((resolve, reject) => {
       redisClient.get('rooms', (err, data) => {
@@ -34,13 +32,13 @@ router.get('/', function(req, res, next) {
 
     message
       .then(data => {
-        client.emit('loadMessages', data);
+        client.emit('loadRooms', data);
       })
       .catch(err => {
         console.error(err);
       });
 
-    client.on('newMessage', newMessage => {
+    client.on('newRoom', newMessage => {
       let master = new Promise((resolve, reject) => {
         console.log(newMessage);
         redisClient.get('rooms', (err, data) => {
@@ -50,12 +48,10 @@ router.get('/', function(req, res, next) {
       });
       master
         .then(rooms => {
-          let index = (
-            Object.keys(rooms[newMessage.room]).length + 1
-          ).toString();
-          rooms[newMessage.room][index] = newMessage;
+          let index = (Object.keys(rooms).length + 1).toString();
+          rooms[index] = newMessage;
           console.log(rooms, index);
-          io.emit('addMessage', newMessage);
+          io.emit('addRoom', newMessage);
           redisClient.set('rooms', JSON.stringify(rooms));
         })
         .catch(err => {
@@ -63,12 +59,19 @@ router.get('/', function(req, res, next) {
         });
     });
   });
-  /*(if(!req.cookies){
+	/*(if(!req.cookies){
 		req.cookies = {};
 	}*/
   let userName = req.cookies.username || 'login';
   console.log(res.cookie);
   res.render('index', {name: userName});
 });
+
+
+/* GET users listing. */
+router.get('/', function(req, res, next) {
+  res.render('', {});
+});
+
 
 module.exports = router;

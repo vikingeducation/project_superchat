@@ -1,0 +1,50 @@
+<nav class="navbar navbar-dark bg-dark">
+	<h1 class='white'>SuperChat!</h1>
+	<a id="login" href="/users/login">{{name}}</a>
+</nav>
+<div class='container-fluid'>
+	<div class='row'>
+		<div class='box thread col-md-3'>
+			<h5 class = "side-header white">Rooms</h4>
+			<div class='' id='message-box'></div>
+		</div>
+		<div class='post col-md-3'>
+			<div class='box'>
+				<h5 class="side-header white">Create room</h4>
+				<div class='' id='submit-box'>
+					<textarea id='room-name'></textarea><br>
+					<button id='submit-button'>Submit</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+const socket = io.connect('http://localhost:3000');
+
+	socket.on("loadRooms", (message) => {
+	//let keys = Object.keys(message['1']);
+	htmlVar = '<ul>';
+	for(key in message){
+		htmlVar += `<li>${message[key]}</li><hr>`;
+		console.log(key);
+	}
+	$('#message-box').html(htmlVar);
+})
+$('#submit-button').click(()=>{
+	newMessage = {
+		body: $('#room-name')[0].value,
+	}
+	$('#room-name')[0].value = '';
+	socket.emit('newRoom', newMessage);
+});
+
+socket.on("addRoom", (message) => {
+    
+	htmlVar = `<li>${message}</li>` + $('#message-box').html();
+
+	$('#message-box').html(htmlVar);
+})
+
+
+</script>
