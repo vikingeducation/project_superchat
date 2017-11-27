@@ -1,0 +1,47 @@
+<div class='container'>
+  <div class='row'>
+    <h3>{{userName}}</h3>
+    <form action="/logout" method="post">
+      <input type="submit" value="Logout">
+    </form>
+  </div>
+
+
+
+  <div class='row'>
+
+  <div class='col-sm-3 chats' id="roomsColumn">
+    <form id='room-form' action="/room" method="post">
+      <label>New Room Name</label><input id='room-input' type="text" name="newRoomName">
+      <input type="submit">
+    </form>
+    {{#each rooms as |room|}}
+      <a href="#"><div class='row'>{{room.name}}</div></a>
+    {{/each}}
+  </div>
+
+<div class='col-sm-6 chats' id='messagesColumn'>
+  <div class='row'>
+    <div class='col-sm-6' id="bodyColumn">
+      {{#each messages as |message|}}
+      <div class='row'>{{message.body}}</div>
+      {{/each}}
+    </div>
+    <div class='col-sm-6' id="postedByColumn">
+      {{#each messages as |message|}}
+      <div class='row'>{{message.postedBy}}</div>
+      {{/each}}
+    </div>
+  </div>
+</div>
+
+  <div class='col-sm-3 chats' id='newPost'>
+    <form id='message-form' action="/" method="post">
+      <label>Write Message </label><input id='message-input' type="text" name="newMessage">
+      <input type="hidden" name="userName" value="{{userName}}" id="userName">
+      <input type="hidden" name="currentRoom" value="{{currentRoom}}" id="currentRoom">
+      <input type="submit">
+    </form>
+  </div>
+
+</div>
