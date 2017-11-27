@@ -1,0 +1,45 @@
+<body>
+<div class="jumbotron text-center">
+  <h1>Super Chat</h1>
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm-4">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th><h3 class="message">Available Chat Rooms</h3></th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each chatRooms as |chatRoom|}}
+          <tr>
+            <th><a href="/{{chatRoom}}">{{chatRoom}}</a></th>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+    <div class="col-sm-4">
+      <table class="thead-inverse">
+        <thead>
+          <tr>
+            <th><h3 class="message">Messages for {{currentRoom}}</h3></th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <div class="col-sm-4">
+      <form id="myForm">
+        <div class="form-group">
+          <label for="comment"><div class="newp"><h4>New Post:</h4></div></label>
+          <textarea class="form-control" rows="5" id="comment" name="userMessage"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary btn-lg" name="">Submit</button>
+      </form>
+    </div>
+  </div>
+</div>
+</body>
