@@ -1,0 +1,47 @@
+<div class="box">
+  <div class="box--title">Chat Rooms</div>
+  <div class="box--content">
+  <h2>Current Chat Room: {{chatroomName}}</h2>
+  {{#each chatroomList as |chatroom|}}
+  <ul>
+  <li> <a href="http://localhost:3000/chatroom/{{chatroom}}">{{chatroom}} </a></li>
+  </ul>
+  {{/each}}
+  </div>
+</div>
+
+<div class="box">
+  <div class="box--title">
+    Message Log
+  </div>
+  <div class="box--content">
+  {{#each messages as |message|}}
+  <ul>
+  <li>Username:{{message.username}}</li>
+  <li>Content:{{message.content}}</li>
+  <li>Room Posted in:{{message.chatroom}}</li>
+  </ul>
+  {{/each}}
+  </div>
+</div>
+
+<div class="box">
+  <div class="box--title">Chat</div>
+  <div class="box--content">
+  <form action="/chatroom/newpost" method="POST">
+  <input type="text" name="chatroomId" placeholder="Chatroom!">
+  <input type="text" name="newpost" id="newpost" placeholder="Chat here!">
+  <input type="submit" value="Submit" method="post">
+  </form>
+  </div>
+</div>
+
+<div class="box">
+  <div class="box--title">Username</div>
+  <div class="box--content">
+  {{username}}
+  <form action="/chatroom/signout" method="POST">
+  <input type="submit" value="Sign Out" method="post">
+  </form>
+  </div>
+</div>

@@ -1,0 +1,29 @@
+{
+  "name": "project_superchat",
+  "version": "1.0.0",
+  "description": "Build a realtime multi-room chat application. Make it super.",
+  "main": "app.js",
+  "dependencies": {
+    "async-redis": "^1.0.0",
+    "body-parser": "^1.18.2",
+    "cookie-parser": "^1.4.3",
+    "express": "^4.16.2",
+    "express-handlebars": "^3.0.0",
+    "redis": "^2.8.0",
+    "socket.io": "^2.0.4"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/edwinyung/project_superchat.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/edwinyung/project_superchat/issues"
+  },
+  "homepage": "https://github.com/edwinyung/project_superchat#readme"
+}
