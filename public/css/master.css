@@ -31,6 +31,12 @@ a {
   padding: 5px 15px;
 }
 
+.message-window {
+  padding: 25px 20px;
+  text-align:center;
+}
+
+
 .clear {
   clear: both;
 }

@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/Visiona/project_superchat#readme",
   "dependencies": {
+    "async-redis": "^1.0.0",
     "body-parser": "^1.18.2",
     "express": "^4.16.2",
     "express-handlebars": "^3.0.0",
