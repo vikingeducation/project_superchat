@@ -9,6 +9,7 @@ If you have [installed node](https://nodejs.org/en/download/) on your computer, 
 ```
 $ npm init
 $ npm install express --save
+$ redis-server     //in another tab
 $ npm start
 ```
 

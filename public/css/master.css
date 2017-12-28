@@ -1,0 +1,47 @@
+.big-words {
+  font-size: 45px;
+}
+
+nav {
+  background-color: #222;
+  color: #ddd;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+a {
+  text-decoration: none;
+}
+
+.chat {
+  border: 1px solid #444;
+  margin: 10px;
+}
+
+.window-title {
+  background-color: #222;
+  color: #ddd;
+  padding: 0 15px 0 15px;
+  /*position: relative;
+  left: 0;*/
+  float: left;
+}
+
+.chat-row {
+  padding: 5px 15px;
+}
+
+.clear {
+  clear: both;
+}
+
+h5 {
+  color: #333;
+  margin-bottom: 2px;
+}
+
+p {
+  color: #777;
+  font-size: 14px;
+  margin-bottom: 2px;
+}
