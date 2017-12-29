@@ -16,14 +16,13 @@ a {
 .chat {
   border: 1px solid #444;
   margin: 10px;
+  max-height: 400px;
 }
 
 .window-title {
   background-color: #222;
   color: #ddd;
   padding: 0 15px 0 15px;
-  /*position: relative;
-  left: 0;*/
   float: left;
 }
 

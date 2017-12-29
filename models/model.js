@@ -7,26 +7,35 @@ redisClient.on('connect', ()=> {
   console.log('connected to Redis');
 })
 
-let idx = 2;
-let idy = 2;
-let idz = 2;
+redisClient.set('idx', 0)
+redisClient.set('idy', 0)
+redisClient.set('idz', 0)
+let idx = redisClient.get('idx');
+let idy = redisClient.get('idy');
+let idz = redisClient.get('idz');
 
 const createMessage = async (body, userId, roomId) => {
   redisClient.hmset(`message-${idx}`, 'body', body, 'authorId', userId, 'room', roomId, 'createdAt', new Date());
-  idx += 1;
+  await redisClient.incr('idx')
+  console.log('created id is: ' + idx)
   roomMessageIds = await redisClient.hget('room-' + roomId, 'messages');
-  roomMessageIds = roomMessageIds.split(',');
-  roomMessageIds.push(idx);
+  if (roomMessageIds.length > 0) {
+    roomMessageIds = roomMessageIds.split(',');
+    roomMessageIds.push(idx);
+    roomMessageIds = roomMessageIds.join(',');
+  } else {
+    roomMessageIds = idx;
+  }
   redisClient.hset('room-' + roomId, 'messages', roomMessageIds);
 }
 const createUser = (userName) => {
   redisClient.hmset(`user-${idy}`, 'userName', userName, 'createdAt', new Date());
-  idy += 1;
+  redisClient.incr('idy')
 }
 
 const createRoom = (roomName) => {
   redisClient.hmset(`room-${idz}`, 'roomName', roomName, 'messages', '', 'createdAt', new Date());
-  idz += 1;
+  redisClient.incr('idz')
 }
 
 const getUserName = async (userId) => {
@@ -39,6 +48,12 @@ const getMessageAuthor = async (messageId) => {
 }
 
 const getUserMessages = async (userId) => {
+  // let msgsKeys = await redisClient.keys('message-*');
+  // console.log(msgsKeys)
+  // await redisClient.del(msgsKeys);
+  // return
+  // console.log('messages deleted')
+
   let msgsKeys = await redisClient.keys('message-*');
   const msgs = [];
 
@@ -59,17 +74,21 @@ const getRoomMessages = async (roomId) => {
 }
 
 const getRoomMessagesByAuthor = async (roomId) => {
-  let messages = await getRoomMessages(roomId);
-  console.log('messages are: ' + messages)
-  let userMessagesInRoom = await {};
-  if (!messages) {
+  let messageIds = await getRoomMessages(roomId);
+  let userMessagesInRoom = await [];
+  let createdAt = 0;
+  if (!messageIds) {
     return
   }
-  messages = messages.slice(1,-1).split(',');
-  for( let id of messages ) {
+  messageIds = messageIds.split(',');
+  console.log('ids are: ' + messageIds)
+  for( let id of messageIds ) {
     let author = await getMessageAuthor(id);
-    console.log('user messages in room: ' + await getMessageBody(id))
-    userMessagesInRoom[author] = await getMessageBody(id);
+    userMessagesInRoom[createdAt] = {'author': author,
+                                        'body': await getMessageBody(id)
+                                      }
+    createdAt += 1;
+    console.log(userMessagesInRoom)
   }
   return await userMessagesInRoom;
 }
