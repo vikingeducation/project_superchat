@@ -4,15 +4,21 @@
 //   $('#' + selector).last().text(totalClicks);
 // })
 
-var $button = $('button');
 
 var socket = io.connect('http://localhost:3000');
-$button.on('click', ()=> {
-  socket.emit('click', {
-    'body': $('textarea').text(),
-    'author': 'Anonymous'
-  })
-});
+socket.on('chat', (body, userId, roomId)=> {
+  $('.chat.room > .clear').after('<div class="chat-row">' +  '<h5 id="output-author">' + userId + '</h5>' + '<p id="output-msg">' + body + '</p><hr></div>');
+})
+
+
+
+// var $button = $('button');
+// $button.on('click', ()=> {
+//   socket.emit('click', {
+//     'body': $('textarea').text(),
+//     'author': 'Anonymous'
+//   })
+// });
 
 // socket.on('chat', (data)=> {
 //

@@ -17,6 +17,7 @@ a {
   border: 1px solid #444;
   margin: 10px;
   max-height: 400px;
+  overflow: auto;
 }
 
 .window-title {

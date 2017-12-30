@@ -57,8 +57,8 @@ app.get('/:roomId', async (req, res, next)=> {
     let roomName = await getRoomName(roomId);
     let roomMessages = await getRoomMessagesByAuthor(roomId);
     let rooms = {'History': 100}; //getRoomStats(roomId)
-    console.log('GET /:ROOMID ' + roomMessages)
-    // io.sockets.emit('message', roomId, roomMessages);
+    console.log('GET /:ROOMID ' + roomMessages);
+
     res.render('chat', { rooms, roomName, roomId, roomMessages })
   } catch(e) {
     console.log('error');
@@ -70,6 +70,7 @@ app.post('/:roomId', (req, res)=> {
   let roomId = req.params.roomId;
   let body = req.body.body;
   createMessage(body, userId, roomId);
+  io.sockets.emit('chat', body, userId, roomId);
   res.redirect('back');
 })
 
@@ -83,4 +84,5 @@ app.post('/:roomId', (req, res)=> {
 // });
 
 
-app.listen(3000);
+// app.listen(3000);
+server.listen(3000);

@@ -7,35 +7,45 @@ redisClient.on('connect', ()=> {
   console.log('connected to Redis');
 })
 
-redisClient.set('idx', 0)
-redisClient.set('idy', 0)
-redisClient.set('idz', 0)
-let idx = redisClient.get('idx');
-let idy = redisClient.get('idy');
-let idz = redisClient.get('idz');
+// redisClient.set('idy', 0);
+// redisClient.set('idz', 0);
+//
+// if (redisClient.get('idx') ) {
+//   redisClient.set('idx', 0);
+// }
+let idx = 0;
 
 const createMessage = async (body, userId, roomId) => {
-  redisClient.hmset(`message-${idx}`, 'body', body, 'authorId', userId, 'room', roomId, 'createdAt', new Date());
-  await redisClient.incr('idx')
-  console.log('created id is: ' + idx)
   roomMessageIds = await redisClient.hget('room-' + roomId, 'messages');
   if (roomMessageIds.length > 0) {
     roomMessageIds = roomMessageIds.split(',');
-    roomMessageIds.push(idx);
+    idx = parseInt( roomMessageIds[0]) + 1;
+    roomMessageIds.unshift(idx);
     roomMessageIds = roomMessageIds.join(',');
   } else {
+    idx = 0;
     roomMessageIds = idx;
   }
+  redisClient.hmset(`message-${idx}`, 'body', body, 'authorId', userId, 'room', roomId, 'createdAt', new Date());
   redisClient.hset('room-' + roomId, 'messages', roomMessageIds);
+  idx += 1;
+
+
+  // let idx = await redisClient.get('idx');
+  console.log('idx just after setting in redis is - ' + idx)
+  // await redisClient.incr('idx')
+  console.log('created id is: ' + idx)
 }
 const createUser = (userName) => {
+  let idy = redisClient.get('idy');
   redisClient.hmset(`user-${idy}`, 'userName', userName, 'createdAt', new Date());
-  redisClient.incr('idy')
+  redisClient.incr('idy');
 }
 
 const createRoom = (roomName) => {
+  let idz = redisClient.get('idz');
   redisClient.hmset(`room-${idz}`, 'roomName', roomName, 'messages', '', 'createdAt', new Date());
-  redisClient.incr('idz')
+  redisClient.incr('idz');
 }
 
 const getUserName = async (userId) => {
