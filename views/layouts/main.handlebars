@@ -14,8 +14,14 @@
 
     <nav class="navbar navbar-inverse bg-inverse">
       <h1 class="navbar-brand mb-0 big-words">SUPERCHAT</h1>
-      <a class="navbar-brand" href="#">Sign in</a>
-
+      {{#if login.username }}
+        <div class="navbar-brand">
+          <h4 class="username">{{ login.username }}</h4>
+          <a class="" href="#">Sign Out</a>
+        </div>
+      {{else}}
+        <a class="navbar-brand username" href="#">Sign In</a>
+      {{/if}}
     </nav>
 
     <div class="container-fluid">
