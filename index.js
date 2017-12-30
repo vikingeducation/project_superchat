@@ -11,7 +11,7 @@ const io = require('socket.io')(server);
 app.use(
   "/socket.io",
   express.static(__dirname + "node_modules/socket.io-client/dist/")
-);;
+);
 
 //HANDLEBARS
 const exphbs = require('express-handlebars');
@@ -29,64 +29,120 @@ const {
   createMessage,
   createUser,
   createRoom,
-  getRoomName,
   getUserMessages,
   getRoomMessages,
   getRooms,
+  clearDatabase,
+  getRoomsWithStats,
   getRoomMessagesWithAuthors } = require('./models/model')
-let userId = 0; //before cookies are added
 
 
-
-// app.get('/', async (req, res, next)=> {
-//   try {
-//     let rooms = {'History': 100}; //getRoomStats(roomId)
-//     let roomId = 1; // it should be available after choosing my chat room number
-//     res.render('chat', { rooms, roomId })
-//   } catch(e) {
-//     console.log('error');
-//     next(e);
-//   }
-// })
-
-app.get('/:roomId', async (req, res, next)=> {
-  const login = req.cookies.login || {};
-  try {
-    if (!login.username) {
-      res.render('login')
-    } else {
-      let roomId = 1
-      // await getUserMessages(0);
-      // return
-      // let roomId = req.body.roomId;
-      console.log('room id in router ' + roomId)
-      let roomName = await getRoomName(roomId);
-      let roomMessages = await getRoomMessagesWithAuthors(roomId);
-      let rooms = {'History': 100}; //getRoomStats(roomId)
-      console.log('GET /:ROOMID ' + roomMessages);
-
-      res.render('chat', { login, rooms, roomName, roomId, roomMessages })
-    }
-  } catch(e) {
-    console.log('error');
-    next(e);
-  }
-})
+app.get('/login', (req, res)=> {
+  res.render('login')
+});
 
 app.post('/login', (req, res)=> {
   let login = {
     'username': req.body.login } || {};
   createUser(login.username);
   res.cookie('login', login );
+  res.redirect('/rooms');
+});
+
+app.get('/rooms', async (req, res, next)=> {
+  const login = req.cookies.login || {};
+  let allRooms = await getRooms();
+  try {
+    if (!login.username) {
+      res.redirect('/login')
+    } else {
+      res.render('rooms', { login, allRooms })
+    }
+  } catch(e) {
+    next(e);
+  }
+});
+
+app.get('/rooms/create', async (req, res, next)=> {
+  const login = req.cookies.login || {};
+  let allRooms = await getRooms();
+  try {
+    if (!login.username) {
+      res.redirect('/login')
+    } else {
+      res.render('create_room', { login, allRooms })
+    }
+  } catch(e) {
+    next(e);
+  }
+});
+
+app.post('/rooms/create', (req, res)=> {
+  let login = { 'username': req.body.login } || {};
+  let roomName = req.body.roomName;
+  createRoom(roomName, login.username);
+  io.sockets.emit('room', roomName);
   res.redirect('back');
 })
 
-app.post('/:roomId', (req, res)=> {
+
+
+
+app.get('/room/:roomName', async (req, res, next)=> {
+  // clearDatabase();
+  const login = req.cookies.login || {};
+  let roomName = req.params.roomName;
+  let allRooms = await getRooms();
+  try {
+    if (!login.username) {
+      res.redirect('/login')
+    } else {
+      // console.log(allRooms)
+      // console.log('includes functions is: ' + allRooms.includes(roomName) )
+      if (!roomName || !allRooms.includes(roomName) ) {
+        console.log('in condition');
+        res.redirect('/creates');
+      } else {
+        let roomMessages = await getRoomMessagesWithAuthors(roomName);
+        res.render('chat', { login, rooms, roomName, roomName, roomMessages })
+      }
+    }
+  } catch(e) {
+    next(e);
+  }
+})
+
+
+
+
+
+app.get('/creates', async (req, res, next) => {
+  console.log('and in /create am i here?')
+  const login = req.cookies.login || {};
+  console.log('do we have roomName? - ' + roomName)
+  try {
+    if (!login.username) {
+      res.render('login')
+    }
+    if (!roomName || !allRooms.includes(roomName) ) {
+      let roomMessages = {};
+    } else {
+      let roomMessages = await getRoomMessagesWithAuthors(roomName);
+    }
+      res.render('create_room', { login, roomMessages })
+  } catch(e) {
+    next(e);
+  }
+})
+
+
+
+app.post('/:roomName', (req, res)=> {
   let userName = req.cookies.login.username;
-  let roomId = req.params.roomId;
+  let roomName = req.params.roomName;
   let body = req.body.body;
-  createMessage(body, userName, roomId);
-  io.sockets.emit('chat', body, userName, roomId);
+  createMessage(body, userName, roomName);
+  io.sockets.emit('chat', body, userName, roomName);
   res.redirect('back');
 })
 

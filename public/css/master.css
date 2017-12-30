@@ -9,8 +9,9 @@ nav {
   margin-right: 20px;
 }
 
-a.username {
+a.username:hover, a.username:link, {
   text-decoration: none;
+  color: #3399FF;
 }
 
 .chat {
@@ -42,6 +43,10 @@ a.username {
 
 .chat-row {
   padding: 5px 15px;
+}
+
+.new-room {
+  color: #5ae29a;
 }
 
 .message-window {

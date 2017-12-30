@@ -7,16 +7,12 @@ redisClient.on('connect', ()=> {
   console.log('connected to Redis');
 })
 
-// redisClient.set('idy', 0);
-// redisClient.set('idz', 0);
-//
-// if (redisClient.get('idx') ) {
-//   redisClient.set('idx', 0);
-// }
+
 let idx = 0;
 
-const createMessage = async (body, userName, roomId) => {
-  roomMessageIds = await redisClient.hget('room-' + roomId, 'messages');
+const createMessage = async (body, userName, roomName) => {
+  roomMessageIds = await redisClient.hget('room-' + roomName, 'messages');
+  let members = await redisClient.hget('room-' + roomName, 'members');
   if (roomMessageIds.length > 0) {
     roomMessageIds = roomMessageIds.split(',');
     idx = parseInt( roomMessageIds[0]) + 1;
@@ -26,8 +22,11 @@ const createMessage = async (body, userName, roomId) => {
     idx = 0;
     roomMessageIds = idx;
   }
-  redisClient.hmset(`message-${idx}`, 'body', body, 'authorId', userName, 'room', roomId, 'createdAt', new Date());
-  redisClient.hset('room-' + roomId, 'messages', roomMessageIds);
+  redisClient.hmset(`message-${idx}`, 'body', body, 'authorId', userName, 'room', roomName, 'createdAt', new Date());
+  if (!members.includes(userName)) {
+    members += `,${userName}`;
+  }
+  redisClient.hset('room-' + roomName, 'messages', roomMessageIds, 'members', members);
   idx += 1;
 
 
@@ -36,6 +35,10 @@ const createMessage = async (body, userName, roomId) => {
   // await redisClient.incr('idx')
   console.log('created id is: ' + idx)
 }
+
+
+
+
 const createUser = (userName) => {
   // let idy = redisClient.get('idy');
   if ( !findUser(userName) ) {
@@ -44,10 +47,10 @@ const createUser = (userName) => {
   // redisClient.incr('idy');
 }
 
-const createRoom = (roomName) => {
-  let idz = redisClient.get('idz');
-  redisClient.hmset(`room-${idz}`, 'roomName', roomName, 'messages', '', 'createdAt', new Date());
-  redisClient.incr('idz');
+const createRoom = (roomName, userName) => {
+  // let idz = redisClient.get('idz');
+  redisClient.hmset(`room-${roomName}`, 'messages', '', 'members', userName, 'createdAt', new Date());
+  // redisClient.incr('idz');
 }
 
 // const getUserName = async (userName) => {
@@ -58,6 +61,20 @@ const getMessageAuthor = async (messageId) => {
   return await redisClient.hget(`message-${messageId}`, 'authorId');
   // let login = await redisClient.hget(`message-${messageId}`, 'authorId');
   // return await getUserName(login);
+}
+
+
+const clearDatabase = async () => {
+  let msgsKeys = await redisClient.keys('message-*');
+  let userKeys = await redisClient.keys('user-*');
+  let uKeys = await redisClient.keys('u-*');
+  await redisClient.del('room-1');
+  let roomKeys = await redisClient.keys('room-*');
+  await redisClient.del(msgsKeys);
+  await redisClient.del(userKeys);
+  await redisClient.del(uKeys);
+  await redisClient.del(roomKeys);
+  console.log('clearing completed')
 }
 
 const getUserMessages = async (userName) => {
@@ -82,12 +99,12 @@ const getMessageBody = async (id) => {
   return await redisClient.hget(`message-${id}`, 'body');
 }
 
-const getRoomMessages = async (roomId) => {
-  return await redisClient.hget(`room-${roomId}`, 'messages');
+const getRoomMessages = async (roomName) => {
+  return await redisClient.hget(`room-${roomName}`, 'messages');
 }
 
-// const getRoomMessagesByAuthor = async (roomId) => {
-//   let messageIds = await getRoomMessages(roomId);
+// const getRoomMessagesByAuthor = async (roomName) => {
+//   let messageIds = await getRoomMessages(roomName);
 //   let userMessagesInRoom = await [];
 //   let createdAt = 0;
 //   if (!messageIds) {
@@ -106,8 +123,9 @@ const getRoomMessages = async (roomId) => {
 //   return await userMessagesInRoom;
 // } ---- by room?????
 
-const getRoomMessagesWithAuthors = async (roomId) => {
-  let messageIds = await getRoomMessages(roomId);
+const getRoomMessagesWithAuthors = async (roomName) => {
+  let messageIds = await getRoomMessages(roomName);
+  console.log('room messages are : ' + messageIds)
   messageIds = messageIds.split(',');
   let messagesByAuthor = await [];
   let index = 0;
@@ -126,13 +144,35 @@ const getRoomMessagesWithAuthors = async (roomId) => {
   return await messagesByAuthor;
 }
 
-const getRooms = () => {
-
+const getRooms = async () => {
+  const regex = /[^room-](.*)/g;
+  let rooms = await [];
+  let roomArr = await redisClient.keys('room-*');
+  for( let name of roomArr ) {
+    rooms.push( regex.exec(name) );
+  };
+  return rooms;
 }
 
-const getRoomName = async (roomId) => {
-  return await redisClient.hget(`room-${roomId}`, 'roomName')
+// const getRoomStats = (roomName) = {
+//
+//   redisClient.hget(`message-${messageId}`, 'authorId');
+// }
+
+const getRoomsWithStats = async () => {
+  let allRoomsWithStats = {};
+  let allRooms = getRooms();
+  for( let room of allRooms ) {
+    let users = await redisClient.hget(`room-${room}`, 'members');
+    allRoomsWithStats[room] = users.length;
+  }
+  return allRoomsWithStats;
 }
+
+
+// const getRoomName = async (roomName) => {
+//   return await redisClient.hget(`room-${roomName}`, 'roomName')
+// }
 
 const findUser = async (userName) => {
   return await redisClient.keys(`u-${userName}`)
@@ -143,9 +183,9 @@ module.exports = {
   createMessage,
   createUser,
   createRoom,
-  getRoomName,
   getUserMessages,
   getRoomMessages,
   getRooms,
-  getRoomMessagesWithAuthors
+  getRoomMessagesWithAuthors,
+  clearDatabase
 }

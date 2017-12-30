@@ -1,0 +1,52 @@
+<div class="row">
+
+  <div class="col">
+
+    <div class="chat rooms">
+      <div class="window-title">
+        CHAT ROOMS
+      </div>
+      <div class="clear"></div>
+      <div class="chat-row">
+        <h5><a class="new-room" href="/create">Create New Room</a></h5>
+        <p>Start a New Chat Room</p>
+        <hr>
+      </div>
+      {{#each allRooms }}
+        <div class="chat-row">
+          <h5>{{ @key }}</h5>
+          <p>{{ this }} Members</p>
+          <hr>
+        </div>
+      {{/each}}
+    </div>
+
+  </div>
+
+  <div class="col">
+
+    <div class="chat login">
+
+      <div class="window-title">
+        NEW ROOM
+      </div>
+      <div class="clear"></div>
+      <div class="message-window">
+        <form action="/login" method="post">
+          <div class="form-group">
+            <label class="sr-only" for="username">Room Name</label>
+            <input name="login" id="username" class="form-control" placeholder="...">
+            <!-- <input type="text" name="userName" value={{ userName }} hidden> -->
+          </div>
+          <button type="submit" name="button" class="btn btn-success" method="post">Save</button>
+        </form>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="col"></div>
+
+
+</div>
