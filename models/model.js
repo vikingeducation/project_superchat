@@ -23,6 +23,8 @@ const createMessage = async (body, userName, roomName) => {
     roomMessageIds = idx;
   }
   redisClient.hmset(`message-${idx}`, 'body', body, 'authorId', userName, 'room', roomName, 'createdAt', new Date());
+  console.log('members testuj: ' + members);
+  console.log('userName testuj: ' + userName);
   if (!members.includes(userName)) {
     members += `,${userName}`;
   }
@@ -145,12 +147,15 @@ const getRoomMessagesWithAuthors = async (roomName) => {
 }
 
 const getRooms = async () => {
-  const regex = /[^room-](.*)/g;
+  const regex = /[^room-](w+)/g;
   let rooms = await [];
   let roomArr = await redisClient.keys('room-*');
   for( let name of roomArr ) {
-    rooms.push( regex.exec(name) );
-  };
+    let reg = name.match(/[^room-](.*)/g)
+    rooms.push( reg[0] );
+    };
+  console.log('rooms are: ' + rooms);
+  console.log('roomArr is: ' + roomArr)
   return rooms;
 }
 
@@ -160,12 +165,16 @@ const getRooms = async () => {
 // }
 
 const getRoomsWithStats = async () => {
-  let allRoomsWithStats = {};
-  let allRooms = getRooms();
-  for( let room of allRooms ) {
-    let users = await redisClient.hget(`room-${room}`, 'members');
-    allRoomsWithStats[room] = users.length;
-  }
+  let allRoomsWithStats = await {};
+  let allRooms = await getRooms();
+    for( let room of allRooms ) {
+        let users = await redisClient.hget(`room-${room}`, 'members');
+        if (users) {
+          users = users.split(',');
+          allRoomsWithStats[room] = users.length;
+        }
+    }
+  console.log('rooms with stats is: ' + allRoomsWithStats)
   return allRoomsWithStats;
 }
 
@@ -187,5 +196,6 @@ module.exports = {
   getRoomMessages,
   getRooms,
   getRoomMessagesWithAuthors,
+  getRoomsWithStats,
   clearDatabase
 }

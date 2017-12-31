@@ -9,15 +9,17 @@
       </div>
       <div class="clear"></div>
       <div class="chat-row">
-        <h5><a class="new-room" href="/create">Create New Room</a></h5>
+        <h5><a class="new-room" href="/rooms/create">Create New Room</a></h5>
         <p>Start a New Chat Room</p>
         <hr>
       </div>
-      <div class="chat-row">
-        <h5>{{ @key }}</h5>
-        <p>{{ this }} Members</p>
-        <hr>
-      </div>
+      {{#each allRooms}}
+        <div class="chat-row">
+          <h5>{{ @key }}</h5>
+          <p>{{ this }} Members</p>
+          <hr>
+        </div>
+      {{/each}}
     </div>
   </div>
   {{#if roomName }}
@@ -27,6 +29,9 @@
         <div class="window-title">
           {{ roomName }}
         </div>
+        <a class="window-closure" href="/rooms">
+          CLOSE
+        </a>
         <div class="clear"></div>
         {{#each roomMessages}}
           <div class="chat-row">
@@ -47,10 +52,10 @@
       </div>
       <div class="clear"></div>
       <div class="message-window">
-        <form action="/{{ roomId }}" method="post">
+        <form action="/rooms/{{ roomName }}" method="post">
           <div class="form-group">
             <textarea name="body" rows="8" class="form-control" placeholder="..."></textarea>
-            <input type="text" name="roomId" value={{ roomId }} hidden>
+            <!-- <input type="hidden" name="roomId" value={{ roomName }}> -->
           </div>
           <button type="submit" name="button" class="btn btn-success" method="post">Send</button>
         </form>
@@ -59,23 +64,6 @@
     </div>
 
   </div>
-  {{else}}
-    <div class="chat login">
-      <div class="window-title">
-        NEW CHAT ROOM
-      </div>
-      <div class="clear"></div>
-
-      <div class="message-window">
-        <form action="/create" method="post">
-          <div class="form-group">
-            <label class="sr-only" for="roomname">Room Name</label>
-            <input name="roomName" id="roomname" class="form-control" placeholder="...">
-            <!-- <input type="text" name="userName" value={{ userName }} hidden> -->
-          </div>
-          <button type="submit" name="button" class="btn btn-success" method="post">Save</button>
-        </form>
-      </div>
   {{/if}}
 
 </div>

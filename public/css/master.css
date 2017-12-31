@@ -17,8 +17,8 @@ a.username:hover, a.username:link, {
 .chat {
   border: 1px solid #444;
   margin: 10px;
-  max-height: 400px;
-  overflow: auto;
+  height: 400px;
+  overflow-y: auto;
 }
 
 .chat.login {
@@ -39,6 +39,15 @@ a.username:hover, a.username:link, {
   color: #ddd;
   padding: 0 15px 0 15px;
   float: left;
+}
+
+.window-closure {
+  border: 1px solid #222;
+  color: #aaa;
+  padding: 0 15px 0 15px;
+  float: right;
+  margin-top: -1px;
+  margin-right: -1px;
 }
 
 .chat-row {
