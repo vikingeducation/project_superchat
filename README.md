@@ -2,9 +2,13 @@
 # Super Chat
 Superchat is, basically, a series of chat rooms—only it must also be super. It's super-ness will be conveyed primarily through its live-updating interface, built upon a Redis store. Its super-ness might also exhibit itself vis à vis its aesthetics (though some may dismiss these efforts as superficial).
 
+<p align="center">
+  <img src="/public/img/live_view.png" width="650"/>
+</p>
+
 ## Getting Started
 
-If you have [installed node](https://nodejs.org/en/download/) on your computer, type the following commands
+If you have [installed node](https://nodejs.org/en/download/) on your computer, type the following commands. User Node version newer than 6.5.
 
 ```
 $ npm init
