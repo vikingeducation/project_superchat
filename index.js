@@ -29,7 +29,6 @@ const {
   createMessage,
   createUser,
   createRoom,
-  getUserMessages,
   getRoomMessages,
   getRooms,
   clearDatabase,
@@ -38,6 +37,11 @@ const {
 
 
 app.get('/login', (req, res)=> {
+  res.render('login')
+});
+
+app.get('/logout', (req, res)=> {
+  req.cookies.login = {};
   res.render('login')
 });
 
@@ -53,18 +57,11 @@ app.post('/login', (req, res)=> {
 
 app.get('/rooms', async (req, res, next)=> {
   const login = req.cookies.login || {};
-  let rooms = await getRooms();
-  let allRooms = {};
-  console.log('checing rooms ...' + rooms + '...')
-  if (rooms.length > 0) {
-    console.log('testing');
-    allRooms = await getRoomsWithStats();
-  }
+  let allRooms = await getRoomsWithStats();
   try {
     if (!login.username) {
       res.redirect('/login')
     } else {
-      console.log('rooms are - in GET' + allRooms['Cooking']);
       res.render('rooms', { login, allRooms })
     }
   } catch(e) {
@@ -74,12 +71,7 @@ app.get('/rooms', async (req, res, next)=> {
 
 app.get('/rooms/create', async (req, res, next)=> {
   const login = req.cookies.login || {};
-  let rooms = await getRooms();
-  let allRooms = {};
-  console.log('checing rooms ...' + rooms + '...')
-  if (rooms.length > 0) {
-    let allRooms = await getRoomsWithStats();
-  }
+  let allRooms = await getRoomsWithStats();
   try {
     if (!login.username) {
       res.redirect('/login')
@@ -93,8 +85,6 @@ app.get('/rooms/create', async (req, res, next)=> {
 
 app.post('/rooms/create', (req, res)=> {
   let login = req.cookies.login || {};
-  console.log('what is login' + login)
-  console.log('what is login.username' + login.username)
   let roomName = req.body.roomName;
   if (login.username) {
     createRoom(roomName, login.username);
@@ -110,12 +100,9 @@ app.get('/rooms/:roomName', async (req, res, next)=> {
   const login = req.cookies.login || {};
   let roomName = req.params.roomName;
   let rooms = await getRooms();
-  let allRooms = {};
   let roomMessages = {};
   try {
-    if (rooms.length > 0) {
-      allRooms = await getRoomsWithStats();
-    }
+    let allRooms = await getRoomsWithStats();
     if (!login.username) {
       res.redirect('/login')
     } else {
@@ -140,19 +127,6 @@ app.post('/rooms/:roomName', (req, res)=> {
   res.redirect('back');
 })
 
-
-
-
-
-
-// io.on('connection', client => {
-//   console.log('Client connected...');
-//
-//   socket.on('chat', async (data)=> {
-//     await io.sockets.emit('chat', data);
-//   })
-//
-// });
 
 
 // app.listen(3000);
