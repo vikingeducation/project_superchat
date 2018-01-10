@@ -1,0 +1,16 @@
+<h1>Superchat</h1>
+
+{{!-- create a room for each roomName --}}
+<div class="room">
+
+   {{room.name}}
+   {{room.messages}}
+   {{room.authors}}
+</div> 
+
+<div class="new-post">
+   <form action="post">
+      <textarea id="new-post"></textarea>
+      <button type="submit">Send</button>
+   </form>
+</div>
