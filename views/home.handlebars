@@ -2,10 +2,11 @@
 
 {{!-- create a room for each roomName --}}
 <div class="room">
-
+{{#each room as |room|}}
    {{room.name}}
    {{room.messages}}
    {{room.authors}}
+{{/each}}
 </div> 
 
 <div class="new-post">
