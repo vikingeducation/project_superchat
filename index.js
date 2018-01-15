@@ -8,6 +8,7 @@ const urlencodedParser = bodyParser.urlencoded({ extended: false });
 // functions
 const { getAllUsernames } = require('./lib/users');
 const { generateUserInfo } = require('./lib/generate');
+const { getDisplayInfo, associateRoomsMessages } = require('./lib/data-display');
 
 const cookieParser = require('cookie-parser');
 app.use(cookieParser());
@@ -33,12 +34,36 @@ const io = require('socket.io')(server);
 // Routes
 app.get('/', (req, res) => {
    let view;
-   if(req.cookies.username) {
+   let username = req.cookies.username;
+   if(username) {
       view = 'home';
    } else {
       view = 'login';
    }
+   generateUserInfo(username);
+   getDisplayInfo(username, (err, data) => {
+      if(err) {
+         console.error(err);
+      }
 
+      // array of message objects
+      let messages = data.messages;
+      messages.forEach((message) => {
+         console.dir(message);
+      });
+      // array of room names
+      let roomNames = data.rooms;
+      console.log('Room names: ' + roomNames);
+      
+      associateRoomsMessages(roomNames, messages, (err, hbsArray) => {
+         hbsArray.forEach((obj) => {
+            console.dir(obj);
+         });
+      });
+
+
+   });
+   // console.dir(displayData);
    let room = {
       name: 'roomName',
       messages: ['hello', 'hey there', 'testing'],
