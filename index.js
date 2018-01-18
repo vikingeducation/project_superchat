@@ -8,7 +8,8 @@ const urlencodedParser = bodyParser.urlencoded({ extended: false });
 // functions
 const { getAllUsernames } = require('./lib/users');
 const { generateUserInfo } = require('./lib/generate');
-const { getDisplayInfo, associateRoomsMessages } = require('./lib/data-display');
+const { getDisplayInfo, associateRoomsMessages, sortRooms } = require('./lib/data-display');
+const { helper } = require('./lib/helpers');
 
 const cookieParser = require('cookie-parser');
 app.use(cookieParser());
@@ -17,8 +18,13 @@ app.use(cookieParser());
 app.use('/public', express.static(path.join(__dirname, "/public")));
 
 const exphbs = require('express-handlebars');
+const handlebars = exphbs.create({
+   helpers: {
+      helper: helper
+   }
+});
 
-app.engine('handlebars', exphbs({defaultLayout: 'main'}));
+app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
 
 const redis = require('redis');
@@ -53,14 +59,11 @@ app.get('/', (req, res) => {
       });
       // array of room names
       let roomNames = data.rooms;
-      console.log('Room names: ' + roomNames);
-      
-      associateRoomsMessages(roomNames, messages, (err, hbsArray) => {
-         hbsArray.forEach((obj) => {
-            console.dir(obj);
-         });
-      });
+      let rooms = sortRooms(messages);
 
+      res.render(view, { rooms: rooms,
+                         messages: messages })
+      
 
    });
    // console.dir(displayData);
@@ -69,7 +72,8 @@ app.get('/', (req, res) => {
       messages: ['hello', 'hey there', 'testing'],
       authors: ['catperson', 'dogperson', 'robot']
    };
-   res.render(view, { room: room });
+   res.render(view, { room: room, 
+                      parameter: 'parameter'});
 });
 
 
