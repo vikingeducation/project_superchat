@@ -2,10 +2,14 @@
    border: 3px solid #000000;
 }
 
-
 /* Positioning */
+.container {
+   display: flex;
+   background-color: #a4af8ae3;
+}
 
 
 /* Display and Box Model */
+
 
 /* Other */

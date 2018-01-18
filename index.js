@@ -46,34 +46,31 @@ app.get('/', (req, res) => {
    } else {
       view = 'login';
    }
-   generateUserInfo(username);
    getDisplayInfo(username, (err, data) => {
       if(err) {
          console.error(err);
       }
-
       // array of message objects
       let messages = data.messages;
-      messages.forEach((message) => {
-         console.dir(message);
-      });
+      
       // array of room names
       let roomNames = data.rooms;
+      
       let rooms = sortRooms(messages);
-
+      
       res.render(view, { rooms: rooms,
-                         messages: messages })
+                         messages: messages });
       
 
    });
    // console.dir(displayData);
-   let room = {
-      name: 'roomName',
-      messages: ['hello', 'hey there', 'testing'],
-      authors: ['catperson', 'dogperson', 'robot']
-   };
-   res.render(view, { room: room, 
-                      parameter: 'parameter'});
+   // let room = {
+   //    name: 'roomName',
+   //    messages: ['hello', 'hey there', 'testing'],
+   //    authors: ['catperson', 'dogperson', 'robot']
+   // };
+   // res.render(view, { room: room, 
+   //                    parameter: 'parameter'});
 });
 
 
