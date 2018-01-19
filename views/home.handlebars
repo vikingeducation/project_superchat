@@ -1,20 +1,23 @@
 <h1>Superchat</h1>
 
 {{!-- create a room for each roomName --}}
-<div class="room">
-   {{helper parameter}}
-</div> 
+{{#each results as |result|}}
+   <div class="room">
+      <p>{{result.room}}</p>
+   {{#each result.messages as |message|}}
+      <div class="message">
+         {{message.message}}
+      </div>
+      <div class="user">
+         {{message.user}}
+      </div>
+   {{/each}}
+   </div>
+{{/each}}
 
 <div class="new-post">
    <form action="post">
       <textarea id="new-post"></textarea>
       <button type="submit">Send</button>
    </form>
-</div>
-
-<div class="container">
-   <div class="item" id="1"></div>
-   <div class="item" id="2"></div>
-   <div class="item" id="3"></div>
-   <div class="item" id="4"></div>
 </div>

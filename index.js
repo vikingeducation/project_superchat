@@ -15,16 +15,11 @@ const cookieParser = require('cookie-parser');
 app.use(cookieParser());
 
 // Serve public middleware
-app.use('/public', express.static(path.join(__dirname, "/public")));
+app.use("/public", express.static(path.join(__dirname, "/public")));
 
 const exphbs = require('express-handlebars');
-const handlebars = exphbs.create({
-   helpers: {
-      helper: helper
-   }
-});
 
-app.engine('handlebars', handlebars.engine);
+app.engine('handlebars', exphbs({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
 
 const redis = require('redis');
@@ -52,14 +47,13 @@ app.get('/', (req, res) => {
       }
       // array of message objects
       let messages = data.messages;
-      
       // array of room names
       let roomNames = data.rooms;
-      
       let rooms = sortRooms(messages);
+      // console.dir(messages);
+      let results = helper(rooms, messages);
       
-      res.render(view, { rooms: rooms,
-                         messages: messages });
+      res.render(view, { results: results });
       
 
    });
