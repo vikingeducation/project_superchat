@@ -57,16 +57,12 @@ app.get('/', (req, res) => {
       
 
    });
-   // console.dir(displayData);
-   // let room = {
-   //    name: 'roomName',
-   //    messages: ['hello', 'hey there', 'testing'],
-   //    authors: ['catperson', 'dogperson', 'robot']
-   // };
-   // res.render(view, { room: room, 
-   //                    parameter: 'parameter'});
 });
 
+app.get('/log-out', ((req, res) => {
+   res.clearCookie('username');
+   res.redirect('/');
+}));
 
 
 // need to fix username exists/view issue
@@ -79,7 +75,7 @@ app.post('/login', urlencodedParser, (req, res) => {
          // make sure username doesn't already exist
          if(usernames.includes(req.body.username)) {
             // error that username exists
-            res.render('login');
+            res.render('login', { error: 'This username has been taken, please try again.'});
          } else {
             generateUserInfo(req.body.username);
             res.redirect('/');

@@ -1,18 +1,28 @@
 .room {
    border: 3px solid #000000;
-   background-color: blue;
+   margin: 10px;
 }
 
+h1 {
+   text-align: center;
+}
 
+h2 {
+   text-align: center;
+}
 .message {
-   background-color: rgb(150, 150, 206);
+   color: gray;
 }
 
-Positioning */
- .container-fluid {
-   display: flex;
-   background-color: #a4af8ae3;
+.user {
+   color: gray;
 }
+
+/* Positioning */
+ .container-fluid {
+   background-color: #dce6c6e3;
+}
+
 
 /* Display and Box Model */
 
