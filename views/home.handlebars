@@ -1,19 +1,28 @@
-<h1>Superchat</h1>
-
+<div class="container-fluid">
+<div class="row">
+<h1 class="col">Superchat</h1>
+</div>
 {{!-- create a room for each roomName --}}
-{{#each results as |result|}}
-   <div class="room">
-      <p>{{result.room}}</p>
-   {{#each result.messages as |message|}}
-      <div class="message">
-         {{message.message}}
-      </div>
-      <div class="user">
-         {{message.user}}
+   {{#each results as |result|}}
+      <div class="room row justify-content-center">
+         <div class="col-12">
+            <h2>{{result.room}}</h2>
+         </div>
+      {{#each result.messages as |message|}}
+         <div class="message col-12">
+            <div class="row justify-content-center">
+               {{message.message}}
+            </div>
+         </div>
+         <div class="user row justify-content-center">
+            <div class="col-12">
+            {{message.user}}
+            </div>
+         </div>
+      {{/each}}
       </div>
    {{/each}}
-   </div>
-{{/each}}
+</div>
 
 <div class="new-post">
    <form action="post">

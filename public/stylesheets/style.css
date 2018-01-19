@@ -1,13 +1,18 @@
 .room {
    border: 3px solid #000000;
+   background-color: blue;
+}
+
+
+.message {
+   background-color: rgb(150, 150, 206);
 }
 
 /* Positioning */
-.container {
+.container-fluid {
    display: flex;
    background-color: #a4af8ae3;
 }
-
 
 /* Display and Box Model */
 
