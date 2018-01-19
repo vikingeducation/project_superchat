@@ -2,14 +2,33 @@
   <head>
     <meta charset="UTF-8">
     <title>Superchat</title>
-    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
     <script src="/socket.io/socket.io.js"></script>
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
-    <link href="../../public/stylesheets/style.css" rel="stylesheet" type="text/css"></link>
+
+    <!-- Bootstrap core CSS -->
+    <link href="public/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="public/css/simple-sidebar.css" rel="stylesheet">
+
+    <link href="public/stylesheets/style.css" rel="stylesheet" type="text/css">
+    
   </head>
 
   <body>
      {{{ body }}}
+
+     <!-- Bootstrap core JavaScript -->
+    <script src="public/vendor/jquery/jquery.min.js"></script>
+    <script src="public/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Menu Toggle Script -->
+    <script>
+    $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+    </script>
+    <script src="../../public/javascript/scripts.js"></script>
+
   </body>
-  <script src="../../public/javascript/scripts.js"></script>
 </html>

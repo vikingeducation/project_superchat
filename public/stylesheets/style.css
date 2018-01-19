@@ -8,8 +8,8 @@
    background-color: rgb(150, 150, 206);
 }
 
-/* Positioning */
-.container-fluid {
+Positioning */
+ .container-fluid {
    display: flex;
    background-color: #a4af8ae3;
 }
