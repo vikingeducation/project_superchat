@@ -20,15 +20,23 @@
       <h1 class="col">Superchat</h1>
    </div>
 
-   <div class="row">
+   <div class="row justify-content-center">
       <div class="col">
-         <button type="menu" id="menu-toggle">Toggle Menu</button> 
+         <button type="menu" id="menu-toggle">Menu</button> 
+         <br>
       </div>
    </div>
 
-   <div class="new-post row justify-content-left">
-      <form action="post col-sm-12">
-         <textarea id="new-post"></textarea>
+   <div class="new-post row">
+      <form action="/new/user" method="post" class="col-sm-12">
+         <h2>New Post</h2>
+         <select id="roomname" name="roomname">
+            {{#each results as |result|}}
+               <option value="{{result.room}}">{{result.room}}</option>
+            {{/each}}
+         </select>
+         <br>
+         <textarea name="roomname" id="new-post"></textarea>
          <br>
          <button type="submit">Send</button>
       </form>
@@ -37,7 +45,7 @@
 {{!-- create a room for each roomName --}}
    {{#each results as |result|}}
       <div class="room row justify-content-center">
-         <div class="col-sm-12">
+         <div class="col-sm-6">
             <h2>{{result.room}}</h2>
          </div>
 

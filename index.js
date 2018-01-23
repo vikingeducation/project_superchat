@@ -7,7 +7,7 @@ const urlencodedParser = bodyParser.urlencoded({ extended: false });
 
 // functions
 const { getAllUsernames } = require('./lib/users');
-const { generateUserInfo } = require('./lib/generate');
+const { generateUserInfo, generateMessageInfo } = require('./lib/generate');
 const { getDisplayInfo, associateRoomsMessages, sortRooms } = require('./lib/data-display');
 const { helper } = require('./lib/helpers');
 
@@ -31,11 +31,15 @@ app.use('/socket.io', express.static(__dirname + 'node_modules/socket.io-client/
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
 
+io.on('connection', () => {
+   // emit when there's a new message
+});
 
 // Routes
 app.get('/', (req, res) => {
    let view;
    let username = req.cookies.username;
+   // can also do if(!username) {redirect}
    if(username) {
       view = 'home';
    } else {
@@ -70,13 +74,14 @@ app.post('/login', urlencodedParser, (req, res) => {
    let view;
    // if user entered a valid username
    if(req.body.username) {
-      res.cookie('username', req.body.username);
       getAllUsernames().then((usernames) => {
          // make sure username doesn't already exist
+         // could just ask redis - faster 
          if(usernames.includes(req.body.username)) {
             // error that username exists
             res.render('login', { error: 'This username has been taken, please try again.'});
          } else {
+            res.cookie('username', req.body.username);
             generateUserInfo(req.body.username);
             res.redirect('/');
          } 
@@ -85,8 +90,11 @@ app.post('/login', urlencodedParser, (req, res) => {
 
 });
 
-app.post('/new', (req, res) => {
+app.post('/new/user',  urlencodedParser, (req, res) => {
    // submit data 
+   let roomName = req.body.roomname[0];
+   let message = req.body.roomname[1];
+   generateMessageInfo(message, req.cookies.username, roomName);
    res.redirect('back');
 });
 

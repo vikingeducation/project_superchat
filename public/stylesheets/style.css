@@ -1,6 +1,13 @@
+.container-fluid {
+  background-color: #dce6c6e3;
+}
+
+
 .room {
    border: 3px solid #000000;
    margin: 10px;
+   padding: 0px 5px 0px 5px;
+   background-color: #e7e7e7
 }
 
 h1 {
@@ -19,9 +26,6 @@ h2 {
 }
 
 /* Positioning */
- .container-fluid {
-   background-color: #dce6c6e3;
-}
 
 
 /* Display and Box Model */
