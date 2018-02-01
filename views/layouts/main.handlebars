@@ -1,0 +1,39 @@
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Superchat</title>
+    <script src="/socket.io/socket.io.js"></script>
+
+    <!-- Bootstrap core CSS -->
+    <link href="public/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="public/css/simple-sidebar.css" rel="stylesheet">
+
+    <link href="public/stylesheets/style.css" rel="stylesheet" type="text/css">
+    
+  </head>
+
+  <body>
+     {{{ body }}}
+
+     <!-- Bootstrap core JavaScript -->
+    <script src="public/vendor/jquery/jquery.min.js"></script>
+    <script src="public/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Menu Toggle Script -->
+    <script>
+    $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+
+    $("#new-post").click(function() {
+      // emit messages on click
+    });
+      // listener new messages from server
+    </script>
+    <script src="../../public/javascript/scripts.js"></script>
+
+  </body>
+</html>

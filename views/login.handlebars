@@ -1,0 +1,13 @@
+<div class="login">
+   <h2 class="login-text">Login to Chat:</h2>
+   <div class="login-form">
+      <form action="/login" method="POST">
+         {{#if error}}
+            {{error}}
+         {{/if}}
+         <label for="username">Name</label>
+         <input name="username" type="text">
+         <button type="submit" id="submit-name">Submit name</button>
+      </form>
+   </div>
+</div>

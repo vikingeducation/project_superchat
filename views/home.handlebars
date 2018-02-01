@@ -1,0 +1,69 @@
+<div id="wrapper">
+<div class="container-fluid">
+
+
+<div id="sidebar-wrapper">
+
+   <ul class="sidebar-nav">
+      <li class="sidebar-brand"><a href="/">Superchat</a></li>
+      {{#each results as |result|}}
+         <li><a href="{{result.room}}">{{result.room}}</a></li>
+      {{/each}}
+      <li><a href="log-out">Log Out</a></li>
+   </ul>
+</div>
+
+
+
+<div class="page-content-wrapper">
+   <div class="row">
+      <h1 class="col">Superchat</h1>
+   </div>
+
+   <div class="row justify-content-center">
+      <div class="col">
+         <button type="menu" id="menu-toggle">Menu</button> 
+         <br>
+      </div>
+   </div>
+
+   <div class="new-post row">
+      <form action="/new/user" method="post" class="col-sm-12">
+         <h2>New Post</h2>
+         <select id="roomname" name="roomname">
+            {{#each results as |result|}}
+               <option value="{{result.room}}">{{result.room}}</option>
+            {{/each}}
+         </select>
+         <br>
+         <textarea name="roomname" id="new-post"></textarea>
+         <br>
+         <button type="submit">Send</button>
+      </form>
+   </div>
+
+{{!-- create a room for each roomName --}}
+   {{#each results as |result|}}
+      <div class="room row justify-content-center">
+         <div class="col-sm-6">
+            <h2>{{result.room}}</h2>
+         </div>
+
+      {{#each result.messages as |message|}}
+         <div class="message col-sm-12">
+            <div class="row justify-content-center">
+               {{message.message}}
+            </div>
+         </div>
+
+         <div class="user row justify-content-center">
+            <div class="col-sm-12">
+            -{{message.user}}
+            </div>
+         </div>
+      {{/each}}
+      </div>
+   {{/each}}
+</div>
+</div>
+</div>
