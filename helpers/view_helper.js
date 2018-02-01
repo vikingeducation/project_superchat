@@ -7,7 +7,7 @@ const getFormattedTime = (d) => {
   var minutes = d.getUTCMinutes();
 
   // 0 padding for minutes under 10
-  if (minutes < 10) { minutes = `0${minutes}` }
+  if (minutes < 10) { minutes = `0${minutes}`; }
 
   if (hours > 12) {
     return `${ hours - 12 }:${minutes}pm UTC`;
