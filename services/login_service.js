@@ -1,5 +1,5 @@
-const redis = require('redis');
-const redisClient = redis.createClient();
+const RedisHelper = require('../helpers/RedisHelper');
+const redisClient = RedisHelper.createClient();
 
 var Login = {};
 

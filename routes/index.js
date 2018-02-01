@@ -4,7 +4,7 @@ const ChatRooms = require('../lib/chat_rooms');
 const login = require('../services/login_service');
 
 /* GET home page. */
-router.get('/', (req, res, next) => {
+router.get('/', (req, res) => {
   const username = req.cookies.currentUser;
   const activeRoom = (req.cookies.chatRoom || 'General').replace(' ', '-');
 
