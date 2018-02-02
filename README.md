@@ -4,7 +4,7 @@ A realtime multi-room chat application built using Node/Express and websockets.
 
 ![Superchat Demo](https://s3.amazonaws.com/demo-gifs-asaloff/superchat.gif)
 
-[Demo](https://react-djello.herokuapp.com/) - (Hosted free on heroku and may be sleeping. Could take 30 seconds the first time to load)
+[Demo](https://node-express-live-chat.herokuapp.com) - (Hosted free on heroku and may be sleeping. Could take 30 seconds the first time to load)
 
 ### Technologies Used
 
