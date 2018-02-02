@@ -11,7 +11,6 @@ const bluebird = require('bluebird');
 bluebird.promisifyAll(redis.RedisClient.prototype);
 bluebird.promisifyAll(redis.Multi.prototype);
 
-
 const index = require('./routes/index');
 
 const app = express();
@@ -56,4 +55,15 @@ app.use((err, req, res, next) => {
   res.render('error');
 });
 
-module.exports = app;
+const server = require('http').createServer(app);
+
+
+const io = require('socket.io')(server);
+
+module.exports = { app, io };
+
+const socket = require('./lib/socket_service');
+socket.setup(io);
+
+server.listen(process.env.PORT || '3000');
+

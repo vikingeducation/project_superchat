@@ -4,7 +4,7 @@ const redisClient = RedisHelper.createClient();
 var Login = {};
 
 Login.addUser = username => {
-  const io = require('../bin/www');
+  const { io } = require('../app');
 
   return new Promise((resolve, reject) => {
     redisClient.sismember('users', username, (err, existing) => {
