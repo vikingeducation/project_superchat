@@ -45,7 +45,7 @@ app.use((req, res, next) => {
 });
 
 // error handler
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
@@ -56,7 +56,8 @@ app.use((err, req, res, next) => {
 });
 
 const server = require('http').createServer(app);
-
+const PORT = process.env.PORT || '3000'
+server.listen(PORT, () => console.log(`Listening on ${ PORT }`));
 
 const io = require('socket.io')(server);
 
@@ -64,6 +65,4 @@ module.exports = { app, io };
 
 const socket = require('./lib/socket_service');
 socket.setup(io);
-
-server.listen(process.env.PORT || '3000');
 
