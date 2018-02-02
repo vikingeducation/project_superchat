@@ -1,0 +1,23 @@
+<div class="modal fade" id="newChat" tabindex="-1" role="dialog" aria-labelledby="newChatLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="newChatLabel">
+          New Chat Room
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" class="pull-right">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </h4>
+      </div>
+      <div class="modal-body">
+        <input type="text" name="roomName" placeholder="Name" class="form-control" id="room-name" required/>
+        <small id="room-name-error" class="text-danger hidden">Please provide a room name</small>
+        <small id="room-already-exists" class="text-danger hidden">That room already exists</small>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary pull-left" id="save-chat-room">Save Chat Room</button>
+        <button type="button" class="btn btn-secondary pull-left" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,56 @@
+{{> new_chat_modal}}
+<div class="box col-sm-3" id="chat-room-box" >
+  <h3 id="chat-main-title">Chat Rooms</h3>
+  <div id="chat-scroller">
+    <section class="chat-room clickable" id="new-chatroom">
+      <p>
+        <span class="glyphicon glyphicon-plus"></span>
+        <b>New Chat Room</b>
+      </p>
+      <small>Create a new chat room</small>
+    </section>
+    <div id="chat-list"></div>
+      {{#each rooms}}
+        {{> room}}
+      {{/each}}
+    </div>
+  </div>
+</div>
+
+<div class="box col-sm-6 col-sm-offset-1" id="messages-box">
+  <h3 id="messages-title">{{chatRoomName}}
+    {{#if isMember}}
+      <a href="#" class="pull-right leave-link">
+        <small id="leave-{{activeRoom}}_{{username}}">Leave Chat</small>
+      </a>
+    {{/if}}
+  </h3>
+  {{#if isMember}}
+    <div id="messages-scroller-{{activeRoom}}" class="messages-scroller">
+      {{#if messages}}
+        {{#each messages as |message|}}
+          {{addHr ../messages message}}
+          {{> message}}
+        {{/each}}
+      {{else}}
+        <h4 id="no-message-alert-{{activeRoom}}" class="no-message-alert">There are no messages yet. You can add one below.</h4>
+      {{/if}}
+    </div>
+
+    <div id="new-message-section">
+      <hr>
+        <form id="new-message-form" class="form-inline clearfix" method="POST">
+          <label class="sr-only" for="message">New Message</label>
+          <div class="form-group col-sm-9" id="textarea-message">
+            <textarea rows="1" type="text" class="form-control" id="message" placeholder="New Message" name="message" required></textarea>
+          </div>
+          <input type="submit" class="btn btn-default" value="Send"></input>
+        </form>
+    </div>
+  {{else}}
+    <p id="member-alert">You need to be a member to chat.
+      <a href="#" id="join-{{activeRoom}}_{{username}}" class="join-link">Join</a>
+    </p>
+  {{/if}}
+</div>
+
