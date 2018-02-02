@@ -56,13 +56,13 @@ app.use((err, req, res) => {
 });
 
 const server = require('http').createServer(app);
-const PORT = process.env.PORT || '3000'
-server.listen(PORT, () => console.log(`Listening on ${ PORT }`));
+const PORT = process.env.PORT || '3000';
 
-const io = require('socket.io')(server);
+const io = require('socket.io').listen(server);
+
+server.listen(PORT, () => console.log(`Listening on ${ PORT }`));
 
 module.exports = { app, io };
 
 const socket = require('./lib/socket_service');
 socket.setup(io);
-
