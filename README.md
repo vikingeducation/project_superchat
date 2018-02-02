@@ -1,12 +1,26 @@
-# project_superchat
-Build a realtime multi-room chat application. Make it super.
+# Realtime Chat App
 
-- completed by Aaron Saloff
+A realtime multi-room chat application built using Node/Express and websockets.
 
-To run:
+![Superchat Demo](https://s3.amazonaws.com/demo-gifs-asaloff/superchat.gif)
 
-`npm install`, then `npm start`.
+[Demo](https://react-djello.herokuapp.com/) - (Hosted free on heroku and may be sleeping. Could take 30 seconds the first time to load)
 
-It runs on `localhost:3000`
+### Technologies Used
+
+- Node.js
+- Express.js
+- Redis (data store)
+- Bootstrap
+- Handlebars (view engine)
+- socket.io (realtime page updates)
+
+### Usage
+
+- Login using any username
+- Open two seperate browsers to see live chat updates
+
+Feel free to get in touch with any feedback or questions. aaronsaloff@gmail.com
+
 
 
