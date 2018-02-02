@@ -3,7 +3,7 @@ $(document).ready(() => {
   scrollToBottom();
   var username = getCookie('currentUser');
 
-  var socket = io.connect('http://localhost:3000');
+  var socket = io.connect();
 
   $('#new-message-form').submit((e) => {
     e.preventDefault();
