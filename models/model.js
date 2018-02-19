@@ -1,5 +1,14 @@
 const asyncRedis = require("async-redis");
-const redisClient = asyncRedis.createClient(process.env.REDISCLOUD_URL, {no_ready_check: true});
+if (process.env.REDISTOGO_URL) {
+    // redistogo connection
+    var rtg   = require("url").parse(process.env.REDISTOGO_URL);
+    var redis = require("redis").createClient(rtg.port, rtg.hostname);
+
+    redis.auth(rtg.auth.split(":")[1]);
+} else {
+    // var redis = require("redis").createClient();
+    const redisClient = asyncRedis.createClient();
+}
 redisClient.on('connect', ()=> {
   console.log('connected to Redis');
 })
