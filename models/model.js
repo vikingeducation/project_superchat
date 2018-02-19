@@ -1,9 +1,9 @@
 const asyncRedis = require("async-redis");
 if (process.env.REDISTOGO_URL) {
     // redistogo connection
-    var rtg   = require("url").parse(process.env.REDISTOGO_URL);
-    var redis = require("redis").createClient(rtg.port, rtg.hostname);
-
+    const rtg   = require("url").parse(process.env.REDISTOGO_URL);
+    // const redis = require("redis").createClient(rtg.port, rtg.hostname);
+    const redisClient = asyncRedis.createClient(rtg.port, rtg.hostname);
     redis.auth(rtg.auth.split(":")[1]);
 } else {
     // var redis = require("redis").createClient();
