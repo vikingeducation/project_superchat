@@ -4,7 +4,7 @@ if (process.env.REDISTOGO_URL) {
     const rtg   = require("url").parse(process.env.REDISTOGO_URL);
     // const redis = require("redis").createClient(rtg.port, rtg.hostname);
     const redisClient = asyncRedis.createClient(rtg.port, rtg.hostname);
-    redis.auth(rtg.auth.split(":")[1]);
+    redisClient.auth(rtg.auth.split(":")[1]);
 } else {
     // var redis = require("redis").createClient();
     const redisClient = asyncRedis.createClient();
