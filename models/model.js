@@ -1,13 +1,15 @@
 const asyncRedis = require("async-redis");
+const redisClient;
+
 if (process.env.REDISTOGO_URL) {
     // redistogo connection
     const rtg   = require("url").parse(process.env.REDISTOGO_URL);
     // const redis = require("redis").createClient(rtg.port, rtg.hostname);
-    const redisClient = asyncRedis.createClient(rtg.port, rtg.hostname);
+    redisClient = asyncRedis.createClient(rtg.port, rtg.hostname);
     redisClient.auth(rtg.auth.split(":")[1]);
 } else {
     // var redis = require("redis").createClient();
-    const redisClient = asyncRedis.createClient();
+    redisClient = asyncRedis.createClient();
 }
 redisClient.on('connect', ()=> {
   console.log('connected to Redis');
