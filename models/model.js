@@ -1,5 +1,5 @@
 const asyncRedis = require("async-redis");
-const redisClient = null;
+let redisClient = null;
 
 if (process.env.REDISTOGO_URL) {
     // redistogo connection
