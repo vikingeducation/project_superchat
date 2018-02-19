@@ -1,0 +1,31 @@
+{
+  "name": "project_superchat",
+  "version": "1.0.0",
+  "description": "Superchat is, basically, a series of chat rooms—only it must also be super. It's super-ness will be conveyed primarily through its live-updating interface, built upon a Redis store. Its super-ness might also exhibit itself vis à vis its aesthetics (though some may dismiss these efforts as superficial).",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Visiona/project_superchat.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Visiona/project_superchat/issues"
+  },
+  "homepage": "https://github.com/Visiona/project_superchat#readme",
+  "dependencies": {
+    "async-redis": "^1.0.0",
+    "body-parser": "^1.18.2",
+    "cookie-parser": "^1.4.3",
+    "express": "^4.16.2",
+    "express-handlebars": "^3.0.0",
+    "nodemon": "^1.14.3",
+    "redis": "^2.8.0",
+    "socket.io": "^2.0.4",
+    "socket.io-client": "^2.0.4"
+  }
+}

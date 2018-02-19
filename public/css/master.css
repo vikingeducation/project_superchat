@@ -1,0 +1,89 @@
+.big-words {
+  font-size: 45px;
+}
+
+nav {
+  background-color: #222;
+  color: #ddd;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+hr {
+  margin-top: 7px;
+  margin-bottom: 7px;
+  border: 0;
+  clear:both;
+  height: 1px;
+  border-top: 1px solid rgba(0,0,0,.1);
+}
+
+a.username:hover, a.username:link, {
+  text-decoration: none;
+  color: #3399FF;
+}
+
+.chat {
+  border: 1px solid #444;
+  margin: 10px;
+  height: 400px;
+  overflow-y: auto;
+}
+
+.chat.login {
+  height: 200px;
+}
+
+.username {
+  text-align: center;
+  margin-bottom: 0;
+}
+
+.chat.login form {
+
+}
+
+.window-title {
+  background-color: #222;
+  color: #ddd;
+  padding: 0 15px 0 15px;
+  float: left;
+}
+
+.window-closure {
+  border: 1px solid #222;
+  color: #aaa;
+  padding: 0 15px 0 15px;
+  float: right;
+  margin-top: -1px;
+  margin-right: -1px;
+}
+
+.chat-row {
+  padding: 5px 15px;
+}
+
+.new-room {
+  color: #5ae29a;
+}
+
+.message-window {
+  padding: 25px 20px;
+  text-align:center;
+}
+
+
+.clear {
+  clear: both;
+}
+
+h5 {
+  color: #333;
+  margin-bottom: 2px;
+}
+
+p {
+  color: #777;
+  font-size: 14px;
+  margin-bottom: 2px;
+}

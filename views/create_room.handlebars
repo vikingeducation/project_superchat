@@ -1,0 +1,31 @@
+<div class="row">
+
+  <div class="col">
+    {{>rooms allRooms=allRooms }}
+  </div>
+
+  <div class="col">
+
+    <div class="chat login">
+
+      <div class="window-title">
+        NEW ROOM
+      </div>
+      <div class="clear"></div>
+      <div class="message-window">
+        <form action="/rooms/create" method="post">
+          <div class="form-group">
+            <label class="sr-only" for="roomName">Room Name</label>
+            <input name="roomName" id="roomName" class="form-control" placeholder="...">
+          </div>
+          <button type="submit" name="button" class="btn btn-success" method="post">Save</button>
+        </form>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="col"></div>
+
+
+</div>

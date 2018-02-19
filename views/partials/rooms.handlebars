@@ -1,0 +1,18 @@
+<div class="chat rooms">
+  <div class="window-title">
+    CHAT ROOMS
+  </div>
+  <div class="clear"></div>
+  <div class="chat-row">
+    <h5><a class="new-room" href="rooms/create">Create New Room</a></h5>
+    <p>Start a New Chat Room</p>
+    <hr>
+  </div>
+  {{#each allRooms }}
+    <div class="chat-row">
+      <h5><a href="/rooms/{{@key }}">{{ @key }}</a></h5>
+      <p>{{ this }} Members</p>
+      <hr>
+    </div>
+  {{/each}}
+</div>

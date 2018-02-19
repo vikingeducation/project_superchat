@@ -1,0 +1,51 @@
+<div class="row">
+
+
+  <div class="col">
+    {{>rooms allRooms=allRooms }}
+  </div>
+
+  {{#if roomName }}
+    <div class="col">
+
+      <div class="chat room">
+        <div class="window-title">
+          {{ roomName }}
+        </div>
+        <a class="window-closure" href="/rooms">
+          CLOSE
+        </a>
+        <div class="clear"></div>
+        {{#each roomMessages}}
+          <div class="chat-row">
+            <h5 id="output-author">{{ this.author }}</h5>
+            <p id="output-msg">{{ this.body }}</p>
+            <hr>
+          </div>
+        {{/each}}
+
+      </div>
+    </div>
+
+  <div class="col">
+
+    <div class="chat window">
+      <div class="window-title">
+        NEW POST
+      </div>
+      <div class="clear"></div>
+      <div class="message-window">
+        <form action="/rooms/{{ roomName }}" method="post">
+          <div class="form-group">
+            <textarea name="body" rows="8" class="form-control" placeholder="..."></textarea>
+          </div>
+          <button type="submit" name="button" class="btn btn-success" method="post">Send</button>
+        </form>
+
+      </div>
+    </div>
+
+  </div>
+  {{/if}}
+
+</div>
