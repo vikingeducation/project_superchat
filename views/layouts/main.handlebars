@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>SUPERCHAT</title>
+  <!-- Latest compiled and minified CSS -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g=" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link rel="stylesheet" href="/styles/styles.css">
+  <script src="/socket.io/socket.io.js"></script>
+
+</head>
+
+
+<body>
+  {{{body}}}
+</body>
+
+<script>
+
+var socket = io();
+
+$(document).ready( () => {
+
+  //messages SOCKETS
+  $('.form').submit(function(){
+    var msg = $('#m').val();
+    var usr = $('.title').attr('id');
+    var room = $('#room').html()
+    socket.emit('chat message', { msg, usr, room } );
+    $('#m').val('');
+    return false;
+  });
+
+  socket.on('chat message', function(chat){
+    console.log('room ', chat.room)
+    var appendee = `${chat.usr}: ${chat.msg}`;
+    $('#messages').append($('<li>').text(appendee));
+  })
+
+
+  //room SOCKETS
+  $('.roomform').submit(function() {
+    socket.emit('new room', $('#roominput').val());
+    $('#roominput').val();
+    return false;
+  })
+
+  socket.on('new room', function(room){
+    var appendee = `<a href="/rooms/` + '{{username}}' + `/chat/${room}">${room}</a>`;
+    $('#rooms').append($('<li>').html(appendee))
+  })
+
+});
+
+</script>
+
+
+</html>

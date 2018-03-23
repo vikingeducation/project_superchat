@@ -1,0 +1,70 @@
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+body {
+	font: 13px Helvetica, Arial;
+	background-color: grey;
+	color: white;
+}
+.form {
+	background: #000;
+	padding: 3px;
+	position: fixed;
+	bottom: 0;
+	width: 100%;
+	color: black;
+}
+#m {
+	border: 0;
+	padding: 10px;
+	width: 90%;
+	margin-right: 0.5%;
+}
+form button {
+	width: 9%;
+	background: rgb(130, 224, 255);
+	border: none;
+	padding: 10px;
+}
+#messages {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+#messages li {
+	padding: 5px 10px;
+}
+#messages li:nth-child(odd) {
+	background: #eee;
+	color: black;
+}
+
+.logout {
+	position: fixed;
+	top: 0;
+	right: 0;
+	width: 100px;
+}
+
+.logout button {
+	width: 100%;
+}
+
+.box {
+	background-color: lightgrey;
+}
+
+.box div {
+	padding: 10px;
+}
+
+li {
+	list-style: none;
+}
+
+a {
+	font-size: 35px;
+	padding 20px;
+}
